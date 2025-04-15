@@ -23,7 +23,8 @@
     "zone.js": "~0.15.0"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "^19.1.4",
+    "@angular-devkit/build-angular": "^19.2.7",
+    "@angular/build": "^19.2.7",
     "@angular/cli": "^19.1.4",
     "@angular/compiler-cli": "^19.1.0",
     "@types/jasmine": "~5.1.0",
@@ -33,6 +34,10 @@
     "karma-coverage": "~2.2.0",
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.1.0",
-    "typescript": "~5.7.2"
+    "typescript": "~5.7.2",
+    "vite": "6.2.6"
+  },
+  "overrides": {
+    "vite": "6.2.6"
   }
 }
