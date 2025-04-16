@@ -1,0 +1,16 @@
+/* Footer */
+.footer {
+  margin-top: 60px;
+  padding: 20px;
+  border-top: 1px solid #ccc;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  font-size: 14px;
+}
+
+.footer-links a {
+  margin: 0 10px;
+  text-decoration: none;
+  color: #000;
+}
