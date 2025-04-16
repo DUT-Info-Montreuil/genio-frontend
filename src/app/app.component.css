@@ -1,0 +1,34 @@
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  font-family: sans-serif;
+}
+
+/* === Wrapper principal === */
+.page-wrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+/* === Main Content (accueil) === */
+.main-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* <-- Centre verticalement */
+  align-items: center;
+  padding: 40px 20px 80px; /* <-- Ajoute du padding en bas */
+  text-align: center;
+}
+
+.main-content h1 {
+  margin-bottom: 40px;
+}

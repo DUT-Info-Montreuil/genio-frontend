@@ -1,0 +1,14 @@
+<nav class="navbar">
+  <div class="logo">
+    <a routerLink="/">Logo</a>
+  </div>
+  <div class="nav-links">
+    <ng-container *ngIf="isAccueilOrPubliquePage(); else privateLinks">
+      <a routerLink="/inscription">S’enregistrer</a>
+      <a routerLink="/connexion">Se connecter</a>
+    </ng-container>
+    <ng-template #privateLinks>
+      <a routerLink="/deconnexion">Se déconnecter</a>
+    </ng-template>
+  </div>
+</nav>

@@ -1,50 +1,72 @@
-.header {
-  display: flex;
-  justify-content: space-between;
-  padding: 20px;
-  background: #eee;
-}
-
-.logo {
-  font-weight: bold;
-}
-
-.auth-links a {
-  margin-left: 15px;
-  text-decoration: none;
-  color: black;
-}
-
-.main-content {
-  text-align: center;
-  padding: 40px;
-}
-
-.form {
+.auth-page {
+  height: 100vh;
   display: flex;
   flex-direction: column;
+  justify-content: center;
   align-items: center;
-  max-width: 300px;
-  margin: auto;
+  overflow: hidden; /* empêche de scroller */
+  padding: 20px;
+  box-sizing: border-box;
 }
 
-.form input {
-  margin: 10px 0;
-  padding: 10px;
+.auth-container {
+  max-height: calc(100vh - 160px);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   width: 100%;
+  max-width: 400px;
+  text-align: center;
 }
 
-.form button {
-  padding: 10px;
-  width: 100%;
+.auth-container h2 {
+  margin-bottom: 20px;
+  font-weight: 400;
+  font-size: 1.6rem;
+}
+
+/* === Formulaire === */
+.auth-container form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.auth-container input {
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.auth-container button {
   background-color: #333;
   color: white;
   border: none;
+  padding: 12px;
+  font-size: 14px;
+  border-radius: 4px;
   cursor: pointer;
+  transition: background 0.3s;
 }
 
-.form p {
+.auth-container button:hover {
+  background-color: #555;
+}
+
+
+/* === Lien connexion === */
+.login-link {
   margin-top: 10px;
-  font-size: 0.9em;
-  color: gray;
+  display: inline-block;
+  color: #333;
+  font-size: 14px;
+  text-decoration: underline;
+}
+
+
+@media (max-width: 500px) {
+  .auth-container {
+    max-width: 90%;
+  }
 }

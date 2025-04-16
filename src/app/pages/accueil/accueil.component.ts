@@ -1,14 +1,15 @@
 import { Component } from '@angular/core';
 import {RouterLink} from '@angular/router';
+import {CommonModule} from '@angular/common';
 
 @Component({
   selector: 'app-accueil',
   imports: [
-    RouterLink
+    RouterLink,CommonModule
   ],
   templateUrl: './accueil.component.html',
   standalone: true,
-  styleUrl: './accueil.component.css'
+  styleUrls: ['./accueil.component.css']
 })
 export class AccueilComponent {
 
