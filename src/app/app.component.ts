@@ -3,10 +3,11 @@ import { RouterOutlet } from '@angular/router';
 import {FooterComponent} from './shared/footer/footer.component';
 import {InscriptionComponent} from './pages/inscription/inscription.component';
 import {NavbarComponent} from './shared/navbar/navbar.component';
+import {ConnexionComponent} from './pages/connexion/connexion.component';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, FooterComponent, InscriptionComponent, NavbarComponent],
+  imports: [RouterOutlet, FooterComponent,NavbarComponent],
   templateUrl: './app.component.html',
   standalone: true,
   styleUrl: './app.component.css'

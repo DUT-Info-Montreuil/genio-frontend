@@ -1,0 +1,107 @@
+<main class="modeles-container">
+  <div class="actions-par-role">
+    <a [routerLink]="'/consulter-modeles'" [ngClass]="{'active-link': router.url === '/consulter-modeles'}">Consulter</a>
+    <a *ngIf="role !== 'CONSULTANT'" [routerLink]="'/visualiser'" [ngClass]="{'active-link': router.url === '/visualiser'}">Visualiser</a>
+    <a *ngIf="role === 'GESTIONNAIRE'" [routerLink]="'/gerer'" [ngClass]="{'active-link': router.url === '/gerer'}">Gérer</a>
+  </div>
+
+  <div class="top-section">
+    <p class="role-info">
+      Connecté en tant que :
+      <strong [ngClass]="{
+        'role-gestionnaire': role === 'GESTIONNAIRE',
+        'role-exploitant': role === 'EXPLOITANT',
+        'role-consultant': role === 'CONSULTANT'
+      }">
+        {{ role === 'GESTIONNAIRE' ? 'Gestionnaire' : (role === 'EXPLOITANT' ? 'Exploitant' : 'Consultant') }}
+      </strong>
+    </p>
+
+    <div class="filters-zone">
+      <div class="input-icon">
+        <i class="fas fa-search"></i>
+        <input type="text" placeholder="Rechercher un modèle" />
+      </div>
+      <div class="input-icon">
+        <i class="fas fa-calendar-alt"></i>
+        <input type="date" />
+      </div>
+    </div>
+  </div>
+
+  <div class="table-controls">
+    <div class="entries-per-page">
+      <span>Entrées par page</span>
+      <select [(ngModel)]="entriesPerPage" (change)="goToPage(1)">
+        <option [value]="10">10</option>
+        <option [value]="25">25</option>
+        <option [value]="50">50</option>
+      </select>
+    </div>
+    <div class="global-search">
+      <label>Rechercher :</label>
+      <input type="text" placeholder="Filtrer" />
+    </div>
+  </div>
+
+  <div class="table-wrapper">
+    <table class="models-table">
+      <thead>
+      <tr>
+        <th>Nom du modèle</th>
+        <th class="center">Année</th>
+        <th class="center">Format</th>
+        <th class="center actions-col">Actions</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let modele of paginatedModeles">
+        <td>{{ modele.nom }}</td>
+        <td class="center">{{ modele.annee }}</td>
+        <td class="center">Document</td>
+        <td class="center actions-col">
+          <button class="btn-icon view" (click)="openDetails(modele)">
+            <i class="fas fa-eye fa-lg"></i>
+          </button>
+          <button class="btn-icon edit" [disabled]="role !== 'GESTIONNAIRE'" [routerLink]="['/modifier-modele', modele.id]">
+            <i class="fas fa-edit fa-lg"></i>
+          </button>
+          <button class="btn-icon delete" [disabled]="role !== 'GESTIONNAIRE'">
+            <i class="fas fa-trash-alt fa-lg"></i>
+          </button>
+          <button class="btn-icon add" [disabled]="role !== 'GESTIONNAIRE'" [routerLink]="['/ajouter-modele']">
+            <i class="fas fa-plus fa-lg"></i>
+          </button>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+
+    <div class="table-footer">
+      <span>Affichage de {{ (currentPage - 1) * entriesPerPage + 1 }} à {{ currentPage * entriesPerPage > modeles.length ? modeles.length : currentPage * entriesPerPage }} sur {{ modeles.length }} entrées</span>
+      <div class="pagination">
+        <button (click)="goToPage(currentPage - 1)" [disabled]="currentPage === 1">&#8249;</button>
+        <button *ngFor="let page of [].constructor(totalPages); let i = index"
+                (click)="goToPage(i + 1)"
+                [class.active]="currentPage === (i + 1)">
+          {{ i + 1 }}
+        </button>
+        <button (click)="goToPage(currentPage + 1)" [disabled]="currentPage === totalPages">&#8250;</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" *ngIf="showModal && selectedModel">
+    <div class="modal-content">
+      <h3>Détails du modèle</h3>
+      <ul>
+        <li><strong>Nom :</strong> {{ selectedModel.nomAffiche }}</li>
+        <li><strong>Année :</strong> {{ selectedModel.annee }}</li>
+        <li><strong>Format :</strong> Document</li>
+        <li><strong>Description :</strong> {{ selectedModel.description }}</li>
+        <li><strong>Statut :</strong> {{ selectedModel.utilise ? 'Utilisé dans une convention' : 'Non encore utilisé' }}</li>
+      </ul>
+      <button (click)="closeModal()">Fermer</button>
+    </div>
+  </div>
+</main>
