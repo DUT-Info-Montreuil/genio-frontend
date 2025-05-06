@@ -4,7 +4,7 @@ import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { AuthService } from '../../services/auth.service';
 import { Router, RouterLink } from '@angular/router';
-import { NgClass, NgFor, NgIf } from '@angular/common';
+import {DatePipe, NgClass, NgFor, NgIf} from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
 @Component({
@@ -12,7 +12,7 @@ import { FormsModule } from '@angular/forms';
   templateUrl: './consulter-modele-tous.component.html',
   styleUrls: ['./consulter-modele-tous.component.css'],
   standalone: true,
-  imports: [NgClass, NgIf, NgFor, FormsModule, RouterLink]
+  imports: [NgClass, NgIf, NgFor, FormsModule, RouterLink, DatePipe]
 })
 export class ConsulterModeleTousComponent implements OnInit {
   modeles: any[] = [];
@@ -167,9 +167,10 @@ export class ConsulterModeleTousComponent implements OnInit {
           next: (res) => {
             this.selectedModel = {
               ...data,
-              annee,
+              format: 'docx',
               nomAffiche: this.formatNom(data.nom),
-              description: `Document officiel pour les conventions de l’année ${annee}.`,
+              dateCreation: data.dateCreation || 'Non précisée',
+              taille: this.getFormattedSize(data.fichierBinaire?.length || 0),
               utilise: res.isUsed
             };
             this.showModal = true;
@@ -179,6 +180,10 @@ export class ConsulterModeleTousComponent implements OnInit {
       },
       error: () => alert("Impossible de charger les détails du modèle.")
     });
+  }
+
+  getFormattedSize(bytes: number): string {
+    return (bytes / 1024).toFixed(1) + ' Ko';
   }
 
   showFallbackModel(data: any) {
@@ -192,6 +197,17 @@ export class ConsulterModeleTousComponent implements OnInit {
     };
     this.showModal = true;
   }
+
+  expectedVariables: string[] = [
+    "annee", "NOM_ORGANISME", "ADR_ORGANISME", "NOM_REPRESENTANT_ORG",
+    "QUAL_REPRESENTANT_ORG", "NOM_DU_SERVICE", "TEL_ORGANISME", "MEL_ORGANISME",
+    "LIEU_DU_STAGE", "NOM_ETUDIANT1", "PRENOM_ETUDIANT", "SEXE_ETUDIANT",
+    "DATE_NAIS_ETUDIANT", "ADR_ETUDIANT", "TEL_ETUDIANT", "MEL_ETUDIANT",
+    "SUJET_DU_STAGE", "DATE_DEBUT_STAGE", "DATE_FIN_STAGE", "STA_DUREE",
+    "_STA_JOURS_TOT", "_STA_HEURES_TOT", "TUT_IUT", "TUT_IUT_MEL",
+    "PRENOM_ENCADRANT", "NOM_ENCADRANT", "FONCTION_ENCADRANT",
+    "TEL_ENCADRANT", "MEL_ENCADRANT", "NOM_CPAM", "Stage_Professionnel", "STA_REMU_HOR"
+  ];
 
   closeModal() {
     this.showModal = false;

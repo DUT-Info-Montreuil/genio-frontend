@@ -2,7 +2,6 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  background: linear-gradient(145deg, #e0ecf7, #f4f9ff);
   min-height: calc(100vh - 160px);
   padding: 60px 20px;
 }

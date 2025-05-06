@@ -1,33 +1,31 @@
 <main class="modeles-container">
 
-  <!-- Cloche de notification pour le gestionnaire -->
-  <div *ngIf="isGestionnaire" class="notif-wrapper">
-    <button class="notif-btn" (click)="ouvrirPopup()">
-      <i class="fas fa-bell"></i>
-      <span class="badge" [ngClass]="{ 'rouge': utilisateurs.length > 0, 'vert': utilisateurs.length === 0 }">
-        {{ utilisateurs.length }}
-      </span>
-    </button>
+  <div class="top-header">
+    <div class="actions-par-role">
+      <a [routerLink]="'/consulter-modeles'" [ngClass]="{'active-link': router.url === '/consulter-modeles'}">Consulter</a>
+      <a *ngIf="!isConsultant" [routerLink]="'/visualiser'" [ngClass]="{'active-link': router.url === '/visualiser'}">Visualiser</a>
+      <a *ngIf="isGestionnaire" [routerLink]="'/gerer'" [ngClass]="{'active-link': router.url === '/gerer'}">Gérer</a>
+    </div>
 
-    <div class="popup-notifs" *ngIf="popupVisible">
-      <p *ngIf="utilisateurs.length === 0">Aucune demande de validation.</p>
-      <ul *ngIf="utilisateurs.length > 0">
-        <li *ngFor="let user of utilisateurs">
-          {{ user.nom }} {{ user.prenom }} - {{ user.email }}
-          <button (click)="activer(user)">Activer</button>
-        </li>
-      </ul>
+    <div class="notif-wrapper" *ngIf="isGestionnaire">
+      <button class="notif-btn" (click)="ouvrirPopup()" title="Demandes d'habilitation en attente">
+        <i class="fas fa-bell"></i>
+        <span class="badge" [ngClass]="{ 'rouge': utilisateurs.length > 0, 'vert': utilisateurs.length === 0 }">
+          {{ utilisateurs.length }}
+        </span>
+      </button>
+      <div class="popup-notifs" *ngIf="popupVisible">
+        <p *ngIf="utilisateurs.length === 0">Aucune demande de validation.</p>
+        <ul *ngIf="utilisateurs.length > 0">
+          <li *ngFor="let user of utilisateurs">
+            {{ user.nom }} {{ user.prenom }} - {{ user.email }}
+            <button (click)="activer(user)">Activer</button>
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 
-  <!-- Liens par rôle -->
-  <div class="actions-par-role">
-    <a [routerLink]="'/consulter-modeles'" [ngClass]="{'active-link': router.url === '/consulter-modeles'}">Consulter</a>
-    <a *ngIf="!isConsultant" [routerLink]="'/visualiser'" [ngClass]="{'active-link': router.url === '/visualiser'}">Visualiser</a>
-    <a *ngIf="isGestionnaire" [routerLink]="'/gerer'" [ngClass]="{'active-link': router.url === '/gerer'}">Gérer</a>
-  </div>
-
-  <!-- Affichage du rôle connecté -->
   <p class="role-info">
     Connecté en tant que :
     <strong [ngClass]="{
@@ -38,32 +36,29 @@
       {{ isGestionnaire ? 'Gestionnaire' : (isExploitant ? 'Exploitant' : 'Consultant') }}
     </strong>
   </p>
-
-  <!-- Filtres -->
   <div class="filters-wrapper">
     <div class="filters-zone">
       <div class="input-icon">
         <i class="fas fa-file-alt"></i>
-        <input id="searchText" type="text" placeholder="Modèle" [(ngModel)]="searchText" (input)="applyFilters()" />
+        <input type="text" placeholder="Modèle" [(ngModel)]="searchText" (input)="applyFilters()" />
       </div>
       <div class="input-icon">
         <i class="fas fa-calendar-alt"></i>
-        <input id="searchYear" type="number" min="2000" max="2099" placeholder="Année" [(ngModel)]="searchYear" (input)="applyFilters()" />
+        <input type="number" min="2000" max="2099" placeholder="Année" [(ngModel)]="searchYear" (input)="applyFilters()" />
       </div>
-      <div class="input-icon">
+      <div class="input-icon large-input">
         <i class="fas fa-search"></i>
-        <input id="advancedSearch" type="text" placeholder="Recherche avancée" [(ngModel)]="advancedSearch" (input)="applyFilters()" />
+        <input type="text" placeholder="Recherche avancée" [(ngModel)]="advancedSearch" (input)="applyFilters()" />
       </div>
     </div>
 
     <div class="reset-icon">
-      <button type="button" class="reset-btn" (click)="resetFilters()">
+      <button class="reset-btn" (click)="resetFilters()">
         <i class="fas fa-sync-alt"></i> Réinitialiser
       </button>
     </div>
   </div>
 
-  <!-- Pagination top -->
   <div class="table-controls">
     <div class="entries-per-page">
       <span>Entrées par page</span>
@@ -75,7 +70,6 @@
     </div>
   </div>
 
-  <!-- Tableau des modèles -->
   <div class="table-wrapper">
     <table class="models-table">
       <thead>
@@ -101,7 +95,6 @@
       </tbody>
     </table>
 
-    <!-- Footer avec pagination -->
     <div class="table-footer">
       <span>
         Affichage de {{ (currentPage - 1) * entriesPerPage + 1 }} à
@@ -120,16 +113,39 @@
     </div>
   </div>
 
-  <!-- Modal détail modèle -->
   <div class="modal-overlay" *ngIf="showModal">
-    <div class="modal-content">
-      <h3>{{ selectedModel.nomAffiche }}</h3>
-      <ul>
-        <li><strong>Année :</strong> {{ selectedModel.annee }}</li>
-        <li><strong>Description :</strong> {{ selectedModel.description }}</li>
-        <li><strong>Statut :</strong> {{ selectedModel.utilise ? 'Utilisé dans une convention' : 'Non encore utilisé' }}</li>
-      </ul>
-      <button (click)="closeModal()">Fermer</button>
+    <div class="modal-card">
+      <h3>Détails du modèle</h3>
+
+      <div class="modal-section">
+        <strong>Nom du fichier :</strong> {{ selectedModel.nom }}
+      </div>
+
+      <div class="modal-section">
+        <strong>Année :</strong> {{ selectedModel.annee }}
+      </div>
+
+      <div class="modal-section">
+        <strong>Format :</strong> {{ selectedModel.format }}
+      </div>
+
+      <div class="modal-section">
+        <strong>Statut :</strong>
+        <span [ngClass]="{ 'used': selectedModel.utilise, 'unused': !selectedModel.utilise }">
+        {{ selectedModel.utilise ? 'Utilisé dans une convention' : 'Non encore utilisé' }}
+      </span>
+      </div>
+
+      <div class="modal-section">
+        <details>
+          <summary><strong>Variables attendues ({{ expectedVariables.length }})</strong></summary>
+          <ul class="variables-list">
+            <li *ngFor="let variable of expectedVariables">{{ variable }}</li>
+          </ul>
+        </details>
+      </div>
+
+      <button class="modal-close-btn" (click)="closeModal()">Fermer</button>
     </div>
   </div>
 </main>
