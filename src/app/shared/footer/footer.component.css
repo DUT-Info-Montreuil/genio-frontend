@@ -1,9 +1,23 @@
 .footer {
-  padding: 1.5rem 2rem;
-  background-color: #f9f9f9;
-  color: #333;
+  padding: 1rem 1.5rem;
+  background-color: #002744;
+  color: #ffffff;
   width: 100%;
   flex-shrink: 0;
+  font-size: 0.95rem;
+}
+
+.footer a {
+  color: #ffffff;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.footer a:hover,
+.footer a:focus {
+  color: #90caf9;
+  text-decoration: underline;
+  outline: none;
 }
 
 .footer-container {
@@ -17,21 +31,23 @@
   justify-content: center;
   align-items: center;
   flex-wrap: wrap;
-  gap: 2rem;
-  margin-bottom: 1rem;
+  gap: 1.5rem;
+  margin-bottom: 0.5rem;
   position: relative;
 }
 
 .footer-logo {
   position: absolute;
-  left: 2rem;
+  left: 1rem;
   font-weight: bold;
+  color: #ffffff;
+  font-size: 1.1rem;
 }
 
 .footer-links-center {
   display: flex;
   justify-content: center;
-  gap: 2rem;
+  gap: 1.2rem;
   flex-wrap: wrap;
 }
 
@@ -40,8 +56,8 @@
   justify-content: space-between;
   align-items: center;
   flex-wrap: wrap;
+  border-top: 1px solid #39536b;
   padding-top: 0.5rem;
-  border-top: 1px solid #eee;
 }
 
 .footer-left,
@@ -51,11 +67,22 @@
   gap: 1rem;
 }
 
-.footer a {
-  text-decoration: none;
-  color: #555;
+/* Si le contenu est trop court, on pousse le footer en bas */
+html, body {
+  height: 100%;
 }
 
-.footer a:hover {
-  text-decoration: underline;
+body {
+  display: flex;
+  flex-direction: column;
+}
+
+app-root {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+main {
+  flex-grow: 1;
 }

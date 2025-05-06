@@ -1,16 +1,13 @@
 import { Component } from '@angular/core';
-import {Router, RouterLink} from '@angular/router';
-import {NgIf} from '@angular/common';
+import { Router, RouterLink } from '@angular/router';
+import { NgIf } from '@angular/common';
 
 @Component({
   selector: 'app-navbar',
-  templateUrl: './navbar.component.html',
   standalone: true,
-  imports: [
-    RouterLink,
-    NgIf
-  ],
-  styleUrls: ['./navbar.component.css']
+  templateUrl: './navbar.component.html',
+  styleUrls: ['./navbar.component.css'],
+  imports: [RouterLink, NgIf]
 })
 export class NavbarComponent {
   currentRoute: string = '';

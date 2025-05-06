@@ -3,8 +3,8 @@ import { Router } from '@angular/router';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
-import {AuthService} from '../../services/auth.service';
-
+import { AuthService } from '../../services/auth.service';
+import {NgIf} from '@angular/common';
 
 interface LoginResponse {
   message: string;
@@ -13,13 +13,15 @@ interface LoginResponse {
 @Component({
   selector: 'app-connexion',
   standalone: true,
-  imports: [FormsModule, RouterLink],
+  imports: [FormsModule, RouterLink, NgIf],
   templateUrl: './connexion.component.html',
   styleUrl: './connexion.component.css'
 })
 export class ConnexionComponent {
-  username = '';
+  email = '';
   password = '';
+  showPassword = false;
+  loginError = '';
 
   constructor(
     private http: HttpClient,
@@ -27,9 +29,15 @@ export class ConnexionComponent {
     private authService: AuthService
   ) {}
 
+  togglePasswordVisibility() {
+    this.showPassword = !this.showPassword;
+  }
+
   onSubmit() {
+    this.loginError = '';
+
     const body = new URLSearchParams();
-    body.set('username', this.username.trim());
+    body.set('email', this.email.trim());
     body.set('password', this.password);
 
     this.http.post('http://localhost:8080/auth/login', body.toString(), {
@@ -42,14 +50,13 @@ export class ConnexionComponent {
         }).subscribe({
           next: user => {
             this.authService.setUser(user);
-
             this.router.navigate(['/consulter-modeles']);
           },
-          error: () => alert("Erreur de profil")
+          error: () => this.loginError = "Erreur lors de la récupération du profil"
         });
       },
       error: (err) => {
-        alert(err.error?.message || "Erreur inconnue");
+        this.loginError = err.error?.message || "Identifiants invalides";
       }
     });
   }

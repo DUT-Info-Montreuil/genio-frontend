@@ -1,14 +1,56 @@
 <div class="auth-page">
-  <div class="auth-container">
-    <h2>Inscription à GenioService</h2>
-    <form>
-      <input type="email" placeholder="Email">
-      <input type="password" placeholder="Password">
-      <button type="submit">S’enregistrer</button>
+  <div class="auth-card">
+    <h2>
+      <i class="fas fa-user-plus me-2" aria-hidden="true"></i>
+      Inscription à <span class="brand">GenioService</span>
+    </h2>
+
+    <form (ngSubmit)="onRegister()" novalidate>
+      <div class="form-group position-relative">
+        <i class="fas fa-user icon-left"></i>
+        <input type="text" class="form-control" name="prenom" placeholder="Prénom" [(ngModel)]="prenom" required autocomplete="given-name" />
+      </div>
+
+      <div class="form-group position-relative">
+        <i class="fas fa-user icon-left"></i>
+        <input type="text" class="form-control" name="nom" placeholder="Nom" [(ngModel)]="nom" required autocomplete="family-name" />
+      </div>
+
+      <div class="form-group position-relative">
+        <i class="fas fa-envelope icon-left"></i>
+        <input type="email" class="form-control" name="email" placeholder="Adresse e-mail" [(ngModel)]="email" required autocomplete="email" />
+      </div>
+
+      <div class="form-group position-relative">
+        <i class="fas fa-lock icon-left"></i>
+        <input [type]="showPassword ? 'text' : 'password'" class="form-control" name="password" placeholder="Mot de passe" [(ngModel)]="password" required autocomplete="new-password" />
+        <button type="button" class="toggle-password" (click)="showPassword = !showPassword">
+          <i [class]="showPassword ? 'fas fa-eye-slash' : 'fas fa-eye'"></i>
+        </button>
+      </div>
+
+      <div class="form-group position-relative">
+        <i class="fas fa-lock icon-left"></i>
+        <input [type]="showConfirmPassword ? 'text' : 'password'" class="form-control" name="confirmPassword" placeholder="Confirmer le mot de passe" [(ngModel)]="confirmPassword" required autocomplete="new-password" />
+        <button type="button" class="toggle-password" (click)="showConfirmPassword = !showConfirmPassword">
+          <i [class]="showConfirmPassword ? 'fas fa-eye-slash' : 'fas fa-eye'"></i>
+        </button>
+      </div>
+
+      <p class="error-message" *ngIf="error">{{ error }}</p>
+      <p class="success-message" *ngIf="message">{{ message }}</p>
+
+      <button type="submit" class="btn btn-login">S’enregistrer</button>
     </form>
-    <p class="conditions">
-      En créant un compte, vous acceptez nos conditions d'utilisation et notre politique de confidentialité.
+
+    <p class="conditions mt-3">
+      En créant un compte, vous acceptez nos
+      <a href="/conditions">conditions d'utilisation</a> et notre
+      <a href="/confidentialite">politique de confidentialité</a>.
     </p>
-    <a class="login-link" routerLink="/connexion">Se connecter</a>
+
+    <div class="register-link">
+      <a routerLink="/connexion">Se connecter</a>
+    </div>
   </div>
 </div>

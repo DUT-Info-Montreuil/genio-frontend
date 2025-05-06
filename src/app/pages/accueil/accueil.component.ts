@@ -5,7 +5,7 @@ import {CommonModule} from '@angular/common';
 @Component({
   selector: 'app-accueil',
   imports: [
-    RouterLink,CommonModule
+    RouterLink, CommonModule
   ],
   templateUrl: './accueil.component.html',
   standalone: true,

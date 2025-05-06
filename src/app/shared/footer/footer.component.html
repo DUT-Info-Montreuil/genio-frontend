@@ -1,24 +1,24 @@
-<footer class="footer">
+<footer class="footer" role="contentinfo" aria-label="Pied de page">
   <div class="footer-container">
     <div class="footer-top">
       <div class="footer-logo">
-        <a routerLink="/"><strong>Logo</strong></a>
+        <a routerLink="/" aria-label="Accueil GenioService"><strong>Logo</strong></a>
       </div>
-      <div class="footer-links-center">
-        <a href="/plan-du-site">Plan du site</a>
-        <a href="/a-propos">À propos</a>
-        <a href="/contact">Contact</a>
-      </div>
+      <nav class="footer-links-center" aria-label="Liens utiles">
+        <a routerLink="/plan-du-site">Plan du site</a>
+        <a routerLink="/a-propos">À propos</a>
+        <a routerLink="/contact">Contact</a>
+      </nav>
     </div>
 
     <div class="footer-bottom">
       <div class="footer-left">
         <small>© 2025 GenioService. Tous droits réservés</small>
       </div>
-      <div class="footer-right">
-        <a href="/donnees-personnelles">Données personnelles</a>
-        <a href="/mentions-legales">Mentions légales</a>
-      </div>
+      <nav class="footer-right" aria-label="Liens légaux">
+        <a routerLink="/donnees-personnelles">Données personnelles</a>
+        <a routerLink="/mentions-legales">Mentions légales</a>
+      </nav>
     </div>
   </div>
 </footer>

@@ -1,37 +1,76 @@
-import { Component } from '@angular/core';
-import { AuthService } from '../../services/auth.service';
-import { Router } from '@angular/router';
+// ✅ consulter-modele-tous.component.ts (fichier complet)
+
+import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { NgIf, NgClass, NgFor } from '@angular/common';
-import { RouterLink } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
+import { Router, RouterLink } from '@angular/router';
+import { NgClass, NgFor, NgIf } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-consulter-modele-tous',
-  standalone: true,
   templateUrl: './consulter-modele-tous.component.html',
-  styleUrl: './consulter-modele-tous.component.css',
-  imports: [NgIf, NgClass, NgFor, RouterLink, FormsModule]
+  styleUrls: ['./consulter-modele-tous.component.css'],
+  standalone: true,
+  imports: [NgClass, NgIf, NgFor, FormsModule, RouterLink]
 })
-export class ConsulterModeleTousComponent {
+export class ConsulterModeleTousComponent implements OnInit {
   modeles: any[] = [];
+  filteredModeles: any[] = [];
   selectedModel: any = null;
   showModal = false;
-  role: string = '';
-  entriesPerPage = 10;
+
+  searchText = '';
+  searchYear = '';
+  advancedSearch = '';
+  entriesPerPage = 5;
   currentPage = 1;
 
+  isGestionnaire = false;
+  isExploitant = false;
+  isConsultant = false;
+
+  utilisateurs: any[] = [];
+  popupVisible = false;
+
   constructor(
-    public authService: AuthService,
-    public router: Router,
-    private http: HttpClient
+    private authService: AuthService,
+    private http: HttpClient,
+    public router: Router
   ) {}
 
   ngOnInit() {
-    this.role = this.authService.getRole();
+    this.isGestionnaire = this.authService.isGestionnaire();
+    this.isExploitant = this.authService.isExploitant();
+    this.isConsultant = this.authService.isConsultant();
+
+    this.loadModeles();
+
+    if (this.isGestionnaire) {
+      this.http.get<any[]>('http://localhost:8080/api/utilisateurs/non-actifs')
+        .subscribe(data => this.utilisateurs = data);
+    }
+  }
+
+  ouvrirPopup() {
+    this.popupVisible = !this.popupVisible;
+  }
+
+  activer(user: any) {
+    this.http.put(`http://localhost:8080/api/utilisateurs/${user.id}/role-activation`, null, {
+      params: {
+        role: 'CONSULTANT',
+        actif: 'true'
+      }
+    }).subscribe(() => {
+      this.utilisateurs = this.utilisateurs.filter(u => u.id !== user.id);
+    });
+  }
+
+  loadModeles() {
     this.http.get<any[]>('http://localhost:8080/conventionServices').subscribe({
       next: (data) => {
-        this.modeles = data.map(m => {
+        const mapped = data.map(m => {
           const annee = m.annee || this.extractAnneeFromNom(m.nom);
           return {
             ...m,
@@ -41,25 +80,83 @@ export class ConsulterModeleTousComponent {
             utilise: m.utilise ?? false
           };
         });
+        this.modeles = mapped;
+        this.filteredModeles = [...mapped];
+        this.currentPage = 1;
       },
       error: () => alert("Erreur lors du chargement des modèles.")
     });
   }
 
-  get paginatedModeles() {
-    const start = (this.currentPage - 1) * this.entriesPerPage;
-    const end = start + this.entriesPerPage;
-    return this.modeles.slice(start, end);
+  applyFilters() {
+    const text = this.searchText.toLowerCase().trim();
+    const year = this.searchYear?.toString().trim();
+    const adv = this.advancedSearch.toLowerCase().trim();
+
+    this.filteredModeles = this.modeles.filter(m => {
+      const nom = m.nom?.toLowerCase() || '';
+      const nomAffiche = m.nomAffiche?.toLowerCase() || '';
+      const annee = m.annee?.toString() || '';
+      const desc = m.description?.toLowerCase() || '';
+      const statut = m.utilise ? 'utilisé dans une convention' : 'non encore utilisé';
+
+      return (
+        (nom.includes(text) || nomAffiche.includes(text)) &&
+        (!year || annee === year) &&
+        (!adv || `${nomAffiche} ${annee} ${desc} ${statut}`.includes(adv))
+      );
+    });
+
+    this.currentPage = 1;
   }
 
-  get totalPages() {
-    return Math.ceil(this.modeles.length / this.entriesPerPage);
+  resetFilters() {
+    this.searchText = '';
+    this.searchYear = '';
+    this.advancedSearch = '';
+    this.entriesPerPage = 5;
+    this.filteredModeles = [...this.modeles];
+    this.currentPage = 1;
+  }
+
+  setEntriesPerPage(value: number) {
+    this.entriesPerPage = value;
+    this.currentPage = 1;
+    this.applyFilters();
+  }
+
+  get paginatedModeles() {
+    const start = (this.currentPage - 1) * this.entriesPerPage;
+    return this.filteredModeles.slice(start, start + this.entriesPerPage);
+  }
+
+  get totalPages(): number {
+    return Math.ceil(this.filteredModeles.length / this.entriesPerPage);
   }
 
   goToPage(page: number) {
     if (page >= 1 && page <= this.totalPages) {
       this.currentPage = page;
     }
+  }
+
+  get visiblePages(): number[] {
+    const pages: number[] = [];
+    const total = this.totalPages;
+
+    if (total <= 5) {
+      for (let i = 1; i <= total; i++) pages.push(i);
+    } else {
+      if (this.currentPage <= 3) {
+        pages.push(1, 2, 3);
+      } else if (this.currentPage >= total - 2) {
+        pages.push(total - 2, total - 1, total);
+      } else {
+        pages.push(this.currentPage - 1, this.currentPage, this.currentPage + 1);
+      }
+    }
+
+    return pages;
   }
 
   openDetails(modele: any) {
@@ -77,20 +174,23 @@ export class ConsulterModeleTousComponent {
             };
             this.showModal = true;
           },
-          error: () => {
-            this.selectedModel = {
-              ...data,
-              annee,
-              nomAffiche: this.formatNom(data.nom),
-              description: `Document officiel pour les conventions de l’année ${annee}.`,
-              utilise: false
-            };
-            this.showModal = true;
-          }
+          error: () => this.showFallbackModel(data)
         });
       },
       error: () => alert("Impossible de charger les détails du modèle.")
     });
+  }
+
+  showFallbackModel(data: any) {
+    const annee = data.annee || this.extractAnneeFromNom(data.nom);
+    this.selectedModel = {
+      ...data,
+      annee,
+      nomAffiche: this.formatNom(data.nom),
+      description: `Document officiel pour les conventions de l’année ${annee}.`,
+      utilise: false
+    };
+    this.showModal = true;
   }
 
   closeModal() {

@@ -1,49 +1,81 @@
 <main class="modeles-container">
-  <div class="actions-par-role">
-    <a [routerLink]="'/consulter-modeles'" [ngClass]="{'active-link': router.url === '/consulter-modeles'}">Consulter</a>
-    <a *ngIf="role !== 'CONSULTANT'" [routerLink]="'/visualiser'" [ngClass]="{'active-link': router.url === '/visualiser'}">Visualiser</a>
-    <a *ngIf="role === 'GESTIONNAIRE'" [routerLink]="'/gerer'" [ngClass]="{'active-link': router.url === '/gerer'}">Gérer</a>
+
+  <!-- Cloche de notification pour le gestionnaire -->
+  <div *ngIf="isGestionnaire" class="notif-wrapper">
+    <button class="notif-btn" (click)="ouvrirPopup()">
+      <i class="fas fa-bell"></i>
+      <span class="badge" [ngClass]="{ 'rouge': utilisateurs.length > 0, 'vert': utilisateurs.length === 0 }">
+        {{ utilisateurs.length }}
+      </span>
+    </button>
+
+    <div class="popup-notifs" *ngIf="popupVisible">
+      <p *ngIf="utilisateurs.length === 0">Aucune demande de validation.</p>
+      <ul *ngIf="utilisateurs.length > 0">
+        <li *ngFor="let user of utilisateurs">
+          {{ user.nom }} {{ user.prenom }} - {{ user.email }}
+          <button (click)="activer(user)">Activer</button>
+        </li>
+      </ul>
+    </div>
   </div>
 
-  <div class="top-section">
-    <p class="role-info">
-      Connecté en tant que :
-      <strong [ngClass]="{
-        'role-gestionnaire': role === 'GESTIONNAIRE',
-        'role-exploitant': role === 'EXPLOITANT',
-        'role-consultant': role === 'CONSULTANT'
-      }">
-        {{ role === 'GESTIONNAIRE' ? 'Gestionnaire' : (role === 'EXPLOITANT' ? 'Exploitant' : 'Consultant') }}
-      </strong>
-    </p>
+  <!-- Liens par rôle -->
+  <div class="actions-par-role">
+    <a [routerLink]="'/consulter-modeles'" [ngClass]="{'active-link': router.url === '/consulter-modeles'}">Consulter</a>
+    <a *ngIf="!isConsultant" [routerLink]="'/visualiser'" [ngClass]="{'active-link': router.url === '/visualiser'}">Visualiser</a>
+    <a *ngIf="isGestionnaire" [routerLink]="'/gerer'" [ngClass]="{'active-link': router.url === '/gerer'}">Gérer</a>
+  </div>
 
+  <!-- Affichage du rôle connecté -->
+  <p class="role-info">
+    Connecté en tant que :
+    <strong [ngClass]="{
+      'role-gestionnaire': isGestionnaire,
+      'role-exploitant': isExploitant,
+      'role-consultant': isConsultant
+    }">
+      {{ isGestionnaire ? 'Gestionnaire' : (isExploitant ? 'Exploitant' : 'Consultant') }}
+    </strong>
+  </p>
+
+  <!-- Filtres -->
+  <div class="filters-wrapper">
     <div class="filters-zone">
       <div class="input-icon">
-        <i class="fas fa-search"></i>
-        <input type="text" placeholder="Rechercher un modèle" />
+        <i class="fas fa-file-alt"></i>
+        <input id="searchText" type="text" placeholder="Modèle" [(ngModel)]="searchText" (input)="applyFilters()" />
       </div>
       <div class="input-icon">
         <i class="fas fa-calendar-alt"></i>
-        <input type="date" />
+        <input id="searchYear" type="number" min="2000" max="2099" placeholder="Année" [(ngModel)]="searchYear" (input)="applyFilters()" />
       </div>
+      <div class="input-icon">
+        <i class="fas fa-search"></i>
+        <input id="advancedSearch" type="text" placeholder="Recherche avancée" [(ngModel)]="advancedSearch" (input)="applyFilters()" />
+      </div>
+    </div>
+
+    <div class="reset-icon">
+      <button type="button" class="reset-btn" (click)="resetFilters()">
+        <i class="fas fa-sync-alt"></i> Réinitialiser
+      </button>
     </div>
   </div>
 
+  <!-- Pagination top -->
   <div class="table-controls">
     <div class="entries-per-page">
       <span>Entrées par page</span>
-      <select [(ngModel)]="entriesPerPage" (change)="goToPage(1)">
+      <select [(ngModel)]="entriesPerPage" (change)="setEntriesPerPage(entriesPerPage)">
+        <option [value]="5">5</option>
         <option [value]="10">10</option>
-        <option [value]="25">25</option>
-        <option [value]="50">50</option>
+        <option [value]="15">15</option>
       </select>
-    </div>
-    <div class="global-search">
-      <label>Rechercher :</label>
-      <input type="text" placeholder="Filtrer" />
     </div>
   </div>
 
+  <!-- Tableau des modèles -->
   <div class="table-wrapper">
     <table class="models-table">
       <thead>
@@ -60,44 +92,40 @@
         <td class="center">{{ modele.annee }}</td>
         <td class="center">Document</td>
         <td class="center actions-col">
-          <button class="btn-icon view" (click)="openDetails(modele)">
-            <i class="fas fa-eye fa-lg"></i>
-          </button>
-          <button class="btn-icon edit" [disabled]="role !== 'GESTIONNAIRE'" [routerLink]="['/modifier-modele', modele.id]">
-            <i class="fas fa-edit fa-lg"></i>
-          </button>
-          <button class="btn-icon delete" [disabled]="role !== 'GESTIONNAIRE'">
-            <i class="fas fa-trash-alt fa-lg"></i>
-          </button>
-          <button class="btn-icon add" [disabled]="role !== 'GESTIONNAIRE'" [routerLink]="['/ajouter-modele']">
-            <i class="fas fa-plus fa-lg"></i>
-          </button>
+          <button class="btn-icon view" (click)="openDetails(modele)"><i class="fas fa-eye"></i></button>
+          <button class="btn-icon edit" [disabled]="!isGestionnaire" [routerLink]="['/modifier-modele', modele.id]"><i class="fas fa-edit"></i></button>
+          <button class="btn-icon delete" [disabled]="!isGestionnaire"><i class="fas fa-trash-alt"></i></button>
+          <button class="btn-icon add" [disabled]="!isGestionnaire" [routerLink]="['/ajouter-modele']"><i class="fas fa-plus"></i></button>
         </td>
       </tr>
       </tbody>
     </table>
 
+    <!-- Footer avec pagination -->
     <div class="table-footer">
-      <span>Affichage de {{ (currentPage - 1) * entriesPerPage + 1 }} à {{ currentPage * entriesPerPage > modeles.length ? modeles.length : currentPage * entriesPerPage }} sur {{ modeles.length }} entrées</span>
+      <span>
+        Affichage de {{ (currentPage - 1) * entriesPerPage + 1 }} à
+        {{ currentPage * entriesPerPage > filteredModeles.length ? filteredModeles.length : currentPage * entriesPerPage }}
+        sur {{ filteredModeles.length }} entrées
+      </span>
       <div class="pagination">
-        <button (click)="goToPage(currentPage - 1)" [disabled]="currentPage === 1">&#8249;</button>
-        <button *ngFor="let page of [].constructor(totalPages); let i = index"
-                (click)="goToPage(i + 1)"
-                [class.active]="currentPage === (i + 1)">
-          {{ i + 1 }}
-        </button>
-        <button (click)="goToPage(currentPage + 1)" [disabled]="currentPage === totalPages">&#8250;</button>
+        <button (click)="goToPage(currentPage - 1)" [disabled]="currentPage === 1">❮</button>
+        <button *ngIf="currentPage > 3" (click)="goToPage(1)">1</button>
+        <span *ngIf="currentPage > 4">...</span>
+        <button *ngFor="let page of visiblePages" (click)="goToPage(page)" [class.active]="currentPage === page">{{ page }}</button>
+        <span *ngIf="currentPage < totalPages - 3">...</span>
+        <button *ngIf="currentPage < totalPages - 2" (click)="goToPage(totalPages)">{{ totalPages }}</button>
+        <button (click)="goToPage(currentPage + 1)" [disabled]="currentPage === totalPages">❯</button>
       </div>
     </div>
   </div>
 
-  <div class="modal-overlay" *ngIf="showModal && selectedModel">
+  <!-- Modal détail modèle -->
+  <div class="modal-overlay" *ngIf="showModal">
     <div class="modal-content">
-      <h3>Détails du modèle</h3>
+      <h3>{{ selectedModel.nomAffiche }}</h3>
       <ul>
-        <li><strong>Nom :</strong> {{ selectedModel.nomAffiche }}</li>
         <li><strong>Année :</strong> {{ selectedModel.annee }}</li>
-        <li><strong>Format :</strong> Document</li>
         <li><strong>Description :</strong> {{ selectedModel.description }}</li>
         <li><strong>Statut :</strong> {{ selectedModel.utilise ? 'Utilisé dans une convention' : 'Non encore utilisé' }}</li>
       </ul>

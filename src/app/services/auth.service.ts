@@ -26,7 +26,7 @@ export class AuthService {
     return this.role === 'EXPLOITANT';
   }
 
-  isConsultation(): boolean {
-    return this.role === 'CONSULTATION';
+  isConsultant(): boolean {
+    return this.role === 'CONSULTANT';
   }
 }
