@@ -28,27 +28,34 @@ export class InscriptionComponent {
 
   constructor(private http: HttpClient) {}
 
+  isSubmitting = false;
+
   onRegister(): void {
     this.message = '';
     this.error = '';
+    this.isSubmitting = true;
 
     if (!this.prenom.trim() || !this.nom.trim()) {
       this.error = 'Le prénom et le nom sont obligatoires.';
+      this.isSubmitting = false;
       return;
     }
 
     if (!this.email.match(this.emailRegex)) {
       this.error = "L'adresse e-mail est invalide.";
+      this.isSubmitting = false;
       return;
     }
 
     if (!this.password.match(this.passwordRegex)) {
       this.error = 'Le mot de passe doit contenir au moins 8 caractères, une majuscule, un chiffre et un caractère spécial.';
+      this.isSubmitting = false;
       return;
     }
 
     if (this.password !== this.confirmPassword) {
       this.error = 'Les mots de passe ne correspondent pas.';
+      this.isSubmitting = false;
       return;
     }
 
@@ -61,11 +68,14 @@ export class InscriptionComponent {
       next: (res: any) => {
         this.message = res.message || 'Utilisateur créé avec succès.';
         this.error = '';
+        this.isSubmitting = false;
       },
       error: (err) => {
         this.error = err.error?.error || 'Une erreur est survenue.';
         this.message = '';
+        this.isSubmitting = false;
       }
     });
   }
+
 }

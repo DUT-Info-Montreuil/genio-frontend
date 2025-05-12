@@ -31,6 +31,15 @@
   margin-top: 40px;
 }
 
+.visually-hidden {
+  position: absolute;
+  left: -9999px;
+  top: auto;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
 .card-link {
   text-decoration: none;
   outline: none;
@@ -47,12 +56,13 @@
   flex-direction: column;
   overflow: hidden;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
+  animation: fadeInUp 0.6s ease forwards;
 }
 
-.card:focus,
+.card:focus-within,
 .card:hover {
   transform: scale(1.03);
-  box-shadow: 0 0 0 3px #1976d2;
+  box-shadow: 0 0 0 4px #0d47a1;
 }
 
 .card img {
@@ -73,16 +83,39 @@
   text-align: center;
 }
 
-.card h2 {
+.card h3 {
   font-size: 1.3rem;
   color: #0d47a1;
   margin-bottom: 8px;
+  transition: color 0.3s ease;
 }
 
 .card p {
   font-size: 1rem;
   color: #455a64;
   line-height: 1.5;
+  transition: color 0.3s ease;
+}
+
+.card:hover h3,
+.card:focus-within h3 {
+  color: #1976d2;
+}
+
+.card:hover p,
+.card:focus-within p {
+  color: #263238;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @media (max-width: 768px) {
@@ -98,5 +131,13 @@
 
   .card img {
     height: 200px;
+  }
+
+  .card h3 {
+    font-size: 1.1rem;
+  }
+
+  .card p {
+    font-size: 0.95rem;
   }
 }
