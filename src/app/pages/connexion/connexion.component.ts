@@ -1,21 +1,17 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
-import {NgIf} from '@angular/common';
-
-interface LoginResponse {
-  message: string;
-}
+import {NgClass, NgIf} from '@angular/common';
 
 @Component({
   selector: 'app-connexion',
   standalone: true,
-  imports: [FormsModule, RouterLink, NgIf],
+  imports: [FormsModule, RouterLink, NgIf, NgClass],
   templateUrl: './connexion.component.html',
-  styleUrl: './connexion.component.css'
+  styleUrls: ['./connexion.component.css','../../../assets/styles/auth-shared.css'],
 })
 export class ConnexionComponent {
   email = '';
@@ -23,11 +19,28 @@ export class ConnexionComponent {
   showPassword = false;
   loginError = '';
 
+  isSubmitting = false;
+
+  successMessage = '';
+
   constructor(
     private http: HttpClient,
     private router: Router,
-    private authService: AuthService
+    private authService: AuthService,
+    private route: ActivatedRoute
   ) {}
+
+  ngOnInit() {
+    this.route.queryParams.subscribe(params => {
+      if (params['resetSuccess'] === 'true') {
+        this.successMessage = 'Votre mot de passe a été réinitialisé. Veuillez vous reconnecter.';
+        if (params['email']) {
+          this.email = params['email'];
+        }
+        setTimeout(() => this.successMessage = '', 5000);
+      }
+    });
+  }
 
   togglePasswordVisibility() {
     this.showPassword = !this.showPassword;
@@ -35,6 +48,7 @@ export class ConnexionComponent {
 
   onSubmit() {
     this.loginError = '';
+    this.isSubmitting = true;
 
     const body = new URLSearchParams();
     body.set('email', this.email.trim());
@@ -50,13 +64,18 @@ export class ConnexionComponent {
         }).subscribe({
           next: user => {
             this.authService.setUser(user);
+            this.isSubmitting = false;
             this.router.navigate(['/consulter-modeles']);
           },
-          error: () => this.loginError = "Erreur lors de la récupération du profil"
+          error: () => {
+            this.loginError = "Erreur lors de la récupération du profil";
+            this.isSubmitting = false;
+          }
         });
       },
       error: (err) => {
         this.loginError = err.error?.message || "Identifiants invalides";
+        this.isSubmitting = false;
       }
     });
   }

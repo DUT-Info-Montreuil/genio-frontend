@@ -1,0 +1,50 @@
+import { Component } from '@angular/core';
+import {FormsModule} from '@angular/forms';
+import {NgClass, NgIf} from '@angular/common';
+import {RouterLink} from '@angular/router';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+
+
+@Component({
+  selector: 'app-mot-de-passe-oublie',
+  imports: [
+    FormsModule,
+    NgClass,
+    RouterLink,
+    NgIf
+  ],
+  templateUrl: './mot-de-passe-oublie.component.html',
+  standalone: true,
+  styleUrls: ['./mot-de-passe-oublie.component.css', '../../../assets/styles/auth-shared.css'],
+})
+export class MotDePasseOublieComponent {
+  email = '';
+  resetError = '';
+  resetSuccess = '';
+  isSubmitting = false;
+
+  constructor(private http: HttpClient) {}
+
+  onSubmit() {
+    this.resetError = '';
+    this.resetSuccess = '';
+    this.isSubmitting = true;
+
+    this.http.post('http://localhost:8080/auth/mot-de-passe-oublie', {
+      email: this.email.trim()
+    }, {
+      headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+    }).subscribe({
+      next: () => {
+        this.resetSuccess = 'Un e-mail de réinitialisation a été envoyé si votre adresse est enregistrée.';
+        this.isSubmitting = false;
+      },
+      error: (err) => {
+        this.resetError = err.error?.message || "Erreur lors de la demande.";
+        this.isSubmitting = false;
+      }
+    });
+  }
+
+
+}

@@ -12,7 +12,7 @@ import { FormsModule } from '@angular/forms';
   templateUrl: './consulter-modele-tous.component.html',
   styleUrls: ['./consulter-modele-tous.component.css'],
   standalone: true,
-  imports: [NgClass, NgIf, NgFor, FormsModule, RouterLink, DatePipe]
+  imports: [NgClass, NgIf, NgFor, FormsModule, RouterLink]
 })
 export class ConsulterModeleTousComponent implements OnInit {
   modeles: any[] = [];

@@ -27,7 +27,9 @@ export class NavbarComponent {
       '/contact',
       '/mentions-legales',
       '/donnees-personnelles',
-      '/plan-du-site'
+      '/plan-du-site',
+      '/reset-password',
+      '/mot-de-passe-oublie'
     ].includes(this.currentRoute);
   }
 }

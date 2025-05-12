@@ -9,7 +9,7 @@ import { HttpClient } from '@angular/common/http';
   standalone: true,
   imports: [RouterLink, FormsModule, CommonModule],
   templateUrl: './inscription.component.html',
-  styleUrls: ['./inscription.component.css']
+  styleUrls: ['./inscription.component.css','../../../assets/styles/auth-shared.css']
 })
 export class InscriptionComponent {
   prenom = '';
@@ -24,7 +24,7 @@ export class InscriptionComponent {
   error = '';
 
   emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-  passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
+  passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{12,}$/;
 
   constructor(private http: HttpClient) {}
 
@@ -48,7 +48,7 @@ export class InscriptionComponent {
     }
 
     if (!this.password.match(this.passwordRegex)) {
-      this.error = 'Le mot de passe doit contenir au moins 8 caractères, une majuscule, un chiffre et un caractère spécial.';
+      this.error = 'Le mot de passe doit contenir au moins 12 caractères, une majuscule, un chiffre et un caractère spécial.';
       this.isSubmitting = false;
       return;
     }

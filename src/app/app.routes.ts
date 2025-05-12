@@ -10,6 +10,8 @@ import { PlanDuSiteComponent } from './pages/plan-du-site/plan-du-site.component
 import {ConsulterModeleTousComponent} from './pages/consulter-modele-tous/consulter-modele-tous.component';
 import { DetailsModeleComponent } from './pages/details-modele/details-modele.component';
 import { ModifierModeleComponent } from './pages/modifier-modele/modifier-modele.component';
+import { MotDePasseOublieComponent } from './pages/mot-de-passe-oublie/mot-de-passe-oublie.component';
+import {ResetPasswordComponent} from './pages/reset-password/reset-password.component';
 
 
 
@@ -24,5 +26,7 @@ export const routes: Routes = [
   { path: 'plan-du-site', component: PlanDuSiteComponent },
   {path: 'consulter-modeles', component: ConsulterModeleTousComponent},
   { path: 'details-modele/:id', component: DetailsModeleComponent },
-  { path: 'modifier-modele/:id', component: ModifierModeleComponent }
+  { path: 'modifier-modele/:id', component: ModifierModeleComponent },
+  { path: 'mot-de-passe-oublie', component: MotDePasseOublieComponent },
+  { path: 'reset-password', component: ResetPasswordComponent },
 ];
