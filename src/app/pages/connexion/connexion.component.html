@@ -6,17 +6,20 @@
     </h2>
 
     <p *ngIf="loginError" class="error-message" id="loginError" role="alert" aria-live="assertive">{{ loginError }}</p>
-    <p *ngIf="successMessage" class="success-message">{{ successMessage }}</p>
-    <form (ngSubmit)="onSubmit()" aria-label="Formulaire de connexion" role="form">
+    <p *ngIf="successMessage" class="success-message" role="status" aria-live="polite">{{ successMessage }}</p>
+
+    <form (ngSubmit)="onSubmit()" aria-label="Formulaire de connexion" role="group">
       <div class="form-group-inline">
         <label for="email">Adresse e-mail</label>
         <div class="input-wrapper">
           <i class="fas fa-envelope icon-left" aria-hidden="true"></i>
           <input type="email" id="email" name="email"
                  [(ngModel)]="email"
-                 placeholder="exemple@gmail.com"
+                 placeholder="exemple@domaine.com"
                  required autocomplete="email"
-                 [attr.aria-describedby]="loginError ? 'loginError' : null" />
+                 [attr.aria-describedby]="loginError ? 'loginError' : null"
+                 [attr.aria-invalid]="loginError ? 'true' : 'false'"
+                 [attr.aria-errormessage]="loginError ? 'loginError' : null" />
         </div>
       </div>
 
@@ -25,9 +28,11 @@
         <div class="input-wrapper">
           <i class="fas fa-lock icon-left" aria-hidden="true"></i>
           <input [type]="showPassword ? 'text' : 'password'" id="password"
-                 name="password" placeholder="••••••••"
+                 name="password" placeholder="Votre mot de passe"
                  [(ngModel)]="password" required autocomplete="current-password"
-                 [attr.aria-describedby]="loginError ? 'loginError' : null" />
+                 [attr.aria-describedby]="loginError ? 'loginError' : null"
+                 [attr.aria-invalid]="loginError ? 'true' : 'false'"
+                 [attr.aria-errormessage]="loginError ? 'loginError' : null" />
           <button type="button" class="toggle-password"
                   (click)="togglePasswordVisibility()"
                   [attr.aria-label]="showPassword ? 'Masquer le mot de passe' : 'Afficher le mot de passe'">
@@ -39,6 +44,7 @@
       <button type="submit" class="btn-login" [disabled]="isSubmitting" [ngClass]="{ 'loading': isSubmitting }">
         Se connecter
       </button>
+
       <div class="register-link">
         <a routerLink="/mot-de-passe-oublie"><strong>Mot de passe oublié ?</strong></a>
       </div>

@@ -336,7 +336,6 @@ body {
   background-color: #1565c0;
 }
 
-/* Responsive */
 @media (max-width: 768px) {
   .modeles-container {
     padding: 20px;

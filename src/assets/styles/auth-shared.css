@@ -147,6 +147,24 @@
   position: relative;
 }
 
+.btn-login:focus-visible {
+  outline: 3px solid #90caf9;
+  outline-offset: 3px;
+}
+
+::placeholder {
+  color: #607d8b;
+  opacity: 1;
+}
+
+input:-ms-input-placeholder {
+  color: #607d8b;
+}
+
+input::-ms-input-placeholder {
+  color: #607d8b;
+}
+
 .btn-login:hover {
   background-color: #1565c0;
   transform: scale(1.01);
@@ -169,6 +187,8 @@
   border-radius: 50%;
   animation: spin 0.8s linear infinite;
 }
+
+
 
 @keyframes spin {
   0% { transform: rotate(0); }
