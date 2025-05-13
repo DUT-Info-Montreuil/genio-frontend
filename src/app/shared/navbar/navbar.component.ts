@@ -11,10 +11,12 @@ import { NgIf } from '@angular/common';
 })
 export class NavbarComponent {
   currentRoute: string = '';
+  navbarOpen = false;
 
   constructor(private router: Router) {
     router.events.subscribe(() => {
       this.currentRoute = this.router.url;
+      this.navbarOpen = false;
     });
   }
 
@@ -31,5 +33,9 @@ export class NavbarComponent {
       '/reset-password',
       '/mot-de-passe-oublie'
     ].includes(this.currentRoute);
+  }
+
+  toggleNavbar(): void {
+    this.navbarOpen = !this.navbarOpen;
   }
 }

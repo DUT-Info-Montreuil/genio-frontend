@@ -1,8 +1,19 @@
 <nav class="navbar" role="navigation" aria-label="Menu principal">
   <div class="logo">
-    <a routerLink="/">Logo</a>
+    <a routerLink="/" aria-label="Accueil GenioService">
+      <img src="assets/images/logo.png" alt="GenioService Logo">
+    </a>
   </div>
-  <div class="nav-links">
+
+  <button class="navbar-toggler"
+          (click)="toggleNavbar()"
+          aria-label="Afficher le menu de navigation"
+          [attr.aria-expanded]="navbarOpen"
+          aria-controls="main-navigation">
+    ☰
+  </button>
+
+  <div class="nav-links" [class.open]="navbarOpen" id="main-navigation">
     <ng-container *ngIf="isAccueilOrPubliquePage(); else privateLinks">
       <a routerLink="/inscription">S’enregistrer</a>
       <a routerLink="/connexion">Se connecter</a>
