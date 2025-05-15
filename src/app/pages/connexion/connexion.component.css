@@ -1,5 +1,42 @@
-.form-group-inline {
-  grid-template-columns: 160px 1fr;
+.container-message {
+  position: fixed;
+  top: 80px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
+  pointer-events: none;
 }
 
+.callout {
+  pointer-events: auto;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-weight: 600;
+  max-width: 480px;
+  width: auto;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  text-align: center;
+}
+
+.callout-error {
+  background-color: #fdecea;
+  color: #d32f2f;
+  border: 1px solid #f5c6cb;
+}
+
+.callout-success {
+  background-color: #e8f5e9;
+  color: #2e7d32;
+  border: 1px solid #c8e6c9;
+}
+
+.form-instruction {
+  font-size: 1rem;
+  color: #455a64;
+  margin-bottom: 16px;
+}
+
+.input-wrapper {
+  width: 100%;
+}
 

@@ -1,15 +1,18 @@
 import { Component } from '@angular/core';
-import { RouterLink } from '@angular/router';
-import { FormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
+import {FormsModule} from '@angular/forms';
+import {NgForOf, NgIf} from '@angular/common';
 
 @Component({
   selector: 'app-inscription',
   standalone: true,
-  imports: [RouterLink, FormsModule, CommonModule],
   templateUrl: './inscription.component.html',
-  styleUrls: ['./inscription.component.css','../../../assets/styles/auth-shared.css']
+  imports: [
+    FormsModule,
+    NgIf,
+    NgForOf
+  ],
+  styleUrls: ['./inscription.component.css', '../../../assets/styles/auth-shared.css']
 })
 export class InscriptionComponent {
   prenom = '';
@@ -23,12 +26,27 @@ export class InscriptionComponent {
   message = '';
   error = '';
 
-  emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-  passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{12,}$/;
+  isSubmitting = false;
+  passwordRules: string[] = [];
 
   constructor(private http: HttpClient) {}
 
-  isSubmitting = false;
+  validatePassword(): void {
+    const rules = [];
+    if (this.password.length < 12) rules.push('12 caractères minimum');
+    if (!/[A-Z]/.test(this.password)) rules.push('Au moins 1 majuscule');
+    if (!/\d/.test(this.password)) rules.push('Au moins 1 chiffre');
+    if (!/[\W_]/.test(this.password)) rules.push('Au moins 1 caractère spécial');
+    this.passwordRules = rules;
+  }
+
+  togglePasswordVisibility() {
+    this.showPassword = !this.showPassword;
+  }
+
+  toggleConfirmPasswordVisibility() {
+    this.showConfirmPassword = !this.showConfirmPassword;
+  }
 
   onRegister(): void {
     this.message = '';
@@ -36,19 +54,20 @@ export class InscriptionComponent {
     this.isSubmitting = true;
 
     if (!this.prenom.trim() || !this.nom.trim()) {
-      this.error = 'Le prénom et le nom sont obligatoires.';
+      this.error = 'Merci de renseigner prénom et nom.';
       this.isSubmitting = false;
       return;
     }
 
-    if (!this.email.match(this.emailRegex)) {
-      this.error = "L'adresse e-mail est invalide.";
+    if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(this.email)) {
+      this.error = 'Merci de vérifier votre e-mail.';
       this.isSubmitting = false;
       return;
     }
 
-    if (!this.password.match(this.passwordRegex)) {
-      this.error = 'Le mot de passe doit contenir au moins 12 caractères, une majuscule, un chiffre et un caractère spécial.';
+    this.validatePassword();
+    if (this.passwordRules.length > 0) {
+      this.error = 'Le mot de passe ne respecte pas les critères.';
       this.isSubmitting = false;
       return;
     }
@@ -66,16 +85,15 @@ export class InscriptionComponent {
       motDePasse: this.password
     }).subscribe({
       next: (res: any) => {
-        this.message = res.message || 'Utilisateur créé avec succès.';
+        this.message = 'Inscription réussie !';
         this.error = '';
         this.isSubmitting = false;
       },
-      error: (err) => {
-        this.error = err.error?.error || 'Une erreur est survenue.';
+      error: () => {
+        this.error = 'Une erreur est survenue. Veuillez réessayer.';
         this.message = '';
         this.isSubmitting = false;
       }
     });
   }
-
 }

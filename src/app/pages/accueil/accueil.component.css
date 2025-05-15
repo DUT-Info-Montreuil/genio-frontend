@@ -5,7 +5,6 @@
   justify-content: flex-start;
   background-color: #e1f2ff;
   padding: 60px 20px;
-  box-sizing: border-box;
 }
 
 .main-content h1 {
@@ -28,10 +27,15 @@
   outline: none;
 }
 
+.card-link:focus-visible {
+  outline: 3px solid #90caf9;
+  outline-offset: 6px;
+  border-radius: 12px;
+}
+
 .card {
-  width: 100%;
   max-width: 360px;
-  min-height: 540px;
+  width: 100%;
   background: #fff;
   border: 2px solid #cfd8dc;
   border-radius: 12px;
@@ -39,25 +43,33 @@
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  transition: transform 0.3s ease, box-shadow 0.3s ease, filter 0.3s ease;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, filter 0.3s ease, color 0.3s ease;
   animation: fadeInUp 0.6s ease forwards;
   cursor: pointer;
+  aspect-ratio: 3 / 4;
 }
 
 .card img {
   width: 100%;
-  height: 260px;
+  aspect-ratio: 3 / 2;
   object-fit: cover;
-  margin: 0;
-  padding: 0;
-  background-color: #f9f9f9;
   transition: filter 0.3s ease;
+}
+
+.card:hover h3,
+.card:focus-within h3 {
+  color: #1565c0;
 }
 
 .card:hover,
 .card:focus-within {
   transform: scale(1.02);
   box-shadow: 0 8px 20px rgba(13, 71, 161, 0.2);
+}
+
+.card:focus-within {
+  outline: 3px solid #90caf9;
+  outline-offset: -3px;
 }
 
 .card:hover img,
@@ -85,17 +97,6 @@
   font-size: 1rem;
   color: #455a64;
   line-height: 1.5;
-  transition: color 0.3s ease;
-}
-
-.card:hover h3,
-.card:focus-within h3 {
-  color: #1976d2;
-}
-
-.card:hover p,
-.card:focus-within p {
-  color: #263238;
 }
 
 @keyframes fadeInUp {
@@ -109,42 +110,36 @@
   }
 }
 
+.visually-hidden {
+  position: absolute !important;
+  height: 1px;
+  width: 1px;
+  overflow: hidden;
+  clip: rect(1px, 1px, 1px, 1px);
+  white-space: nowrap;
+}
+
 @media (max-width: 768px) {
   .cards-container {
     flex-direction: column;
     align-items: center;
-    gap: 20px;
   }
 
   .card {
-    max-width: 100%;
-    width: 100%;
-    min-height: auto;
+    width: 90%;
+    aspect-ratio: 3 / 4;
     box-shadow: 0 0 12px rgba(13, 71, 161, 0.1);
+    margin: 0 auto;
   }
 
   .card img {
-    height: 220px;
-    object-fit: cover;
-    border-bottom: none;
-  }
-
-  .card-body {
-    padding: 16px;
-    text-align: center;
-  }
-
-  .card h3 {
-    font-size: 1.1rem;
-    margin-bottom: 6px;
-  }
-
-  .card p {
-    font-size: 0.95rem;
+    aspect-ratio: 3 / 2;
   }
 }
 
-a:focus-visible {
-  outline: 3px solid #90caf9;
-  outline-offset: 3px;
+@media (hover: hover) and (pointer: fine) {
+  .card:hover {
+    transform: scale(1.02);
+    box-shadow: 0 8px 20px rgba(13, 71, 161, 0.2);
+  }
 }

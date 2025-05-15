@@ -1,26 +1,24 @@
 import { Component } from '@angular/core';
-import {ActivatedRoute, Router} from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
-import {NgClass, NgIf} from '@angular/common';
+import { NgClass, NgIf } from '@angular/common';
 
 @Component({
   selector: 'app-connexion',
   standalone: true,
   imports: [FormsModule, RouterLink, NgIf, NgClass],
   templateUrl: './connexion.component.html',
-  styleUrls: ['./connexion.component.css','../../../assets/styles/auth-shared.css'],
+  styleUrls: ['./connexion.component.css', '../../../assets/styles/auth-shared.css'],
 })
 export class ConnexionComponent {
   email = '';
   password = '';
   showPassword = false;
   loginError = '';
-
   isSubmitting = false;
-
   successMessage = '';
 
   constructor(
@@ -33,11 +31,11 @@ export class ConnexionComponent {
   ngOnInit() {
     this.route.queryParams.subscribe(params => {
       if (params['resetSuccess'] === 'true') {
-        this.successMessage = 'Votre mot de passe a été réinitialisé. Veuillez vous reconnecter.';
+        this.successMessage = 'Mot de passe réinitialisé. Veuillez vous reconnecter.';
         if (params['email']) {
           this.email = params['email'];
         }
-        setTimeout(() => this.successMessage = '', 5000);
+        setTimeout(() => this.successMessage = '', 3000);
       }
     });
   }
@@ -48,6 +46,7 @@ export class ConnexionComponent {
 
   onSubmit() {
     this.loginError = '';
+    this.successMessage = '';
     this.isSubmitting = true;
 
     const body = new URLSearchParams();
@@ -59,23 +58,16 @@ export class ConnexionComponent {
       withCredentials: true
     }).subscribe({
       next: () => {
-        this.http.get<any>('http://localhost:8080/api/utilisateurs/me', {
-          withCredentials: true
-        }).subscribe({
-          next: user => {
-            this.authService.setUser(user);
-            this.isSubmitting = false;
-            this.router.navigate(['/consulter-modeles']);
-          },
-          error: () => {
-            this.loginError = "Erreur lors de la récupération du profil";
-            this.isSubmitting = false;
-          }
-        });
-      },
-      error: (err) => {
-        this.loginError = err.error?.message || "Identifiants invalides";
+        this.successMessage = 'Connexion réussie !';
         this.isSubmitting = false;
+        setTimeout(() => {
+          this.router.navigate(['/consulter-modeles']);
+        }, 1500);
+      },
+      error: () => {
+        this.loginError = "Email ou mot de passe incorrect.";
+        this.isSubmitting = false;
+        setTimeout(() => this.loginError = '', 5000);
       }
     });
   }

@@ -1,82 +1,58 @@
 <div class="auth-page">
-  <div class="auth-card">
-    <h2>
+  <div class="auth-card" role="form" aria-labelledby="inscription-title">
+    <h2 id="inscription-title">
       <i class="fas fa-user-plus" aria-hidden="true"></i>
-      <span class="brand">Inscription à GenioService</span>
+      Inscription à GenioService
     </h2>
 
-    <div *ngIf="error" class="error-message" role="alert" aria-live="assertive">{{ error }}</div>
-    <div *ngIf="message" class="success-message" role="status" aria-live="polite">{{ message }}</div>
+    <p *ngIf="error" class="error-message" role="alert" aria-live="assertive">{{ error }}</p>
+    <p *ngIf="message" class="success-message" role="status" aria-live="polite">{{ message }}</p>
 
-    <form (ngSubmit)="onRegister()" aria-label="Formulaire d'inscription" role="form">
+    <form (ngSubmit)="onRegister()" aria-label="Créer un compte GenioService">
       <div class="form-group-inline">
         <label for="prenom">Prénom</label>
-        <div class="input-wrapper">
-          <i class="fas fa-user icon-left" aria-hidden="true"></i>
-          <input type="text" id="prenom" name="prenom" placeholder="Votre prénom"
-                 [(ngModel)]="prenom" required autocomplete="given-name" />
-        </div>
+        <input type="text" id="prenom" name="prenom" [(ngModel)]="prenom" required autocomplete="given-name" />
       </div>
 
       <div class="form-group-inline">
         <label for="nom">Nom</label>
-        <div class="input-wrapper">
-          <i class="fas fa-user icon-left" aria-hidden="true"></i>
-          <input type="text" id="nom" name="nom" placeholder="Votre nom"
-                 [(ngModel)]="nom" required autocomplete="family-name" />
-        </div>
+        <input type="text" id="nom" name="nom" [(ngModel)]="nom" required autocomplete="family-name" />
       </div>
 
       <div class="form-group-inline">
         <label for="email">Adresse e-mail</label>
-        <div class="input-wrapper">
-          <i class="fas fa-envelope icon-left" aria-hidden="true"></i>
-          <input type="email" id="email" name="email" placeholder="exemple@domaine.com"
-                 [(ngModel)]="email" required autocomplete="email" />
-        </div>
+        <input type="email" id="email" name="email" [(ngModel)]="email" required autocomplete="email" />
       </div>
 
       <div class="form-group-inline">
         <label for="password">Mot de passe</label>
         <div class="input-wrapper">
-          <i class="fas fa-lock icon-left" aria-hidden="true"></i>
-          <input [type]="showPassword ? 'text' : 'password'" id="password"
-                 name="password" placeholder="••••••••" [(ngModel)]="password"
-                 required autocomplete="new-password" />
-          <button type="button" class="toggle-password" aria-label="Afficher ou masquer le mot de passe"
-                  (click)="showPassword = !showPassword">
+          <input [type]="showPassword ? 'text' : 'password'" id="password" name="password"
+                 [(ngModel)]="password" required autocomplete="new-password"
+                 (input)="validatePassword()" />
+          <button type="button" class="toggle-password" (click)="togglePasswordVisibility()"
+                  [attr.aria-label]="showPassword ? 'Masquer le mot de passe' : 'Afficher le mot de passe'">
             <i [class]="showPassword ? 'fas fa-eye-slash' : 'fas fa-eye'" aria-hidden="true"></i>
           </button>
         </div>
+        <ul class="password-rules">
+          <li *ngFor="let rule of passwordRules">{{ rule }}</li>
+        </ul>
       </div>
 
       <div class="form-group-inline">
         <label for="confirmPassword">Confirmation</label>
         <div class="input-wrapper">
-          <i class="fas fa-lock icon-left" aria-hidden="true"></i>
-          <input [type]="showConfirmPassword ? 'text' : 'password'" id="confirmPassword"
-                 name="confirmPassword" placeholder="Confirmez le mot de passe"
+          <input [type]="showConfirmPassword ? 'text' : 'password'" id="confirmPassword" name="confirmPassword"
                  [(ngModel)]="confirmPassword" required autocomplete="new-password" />
-          <button type="button" class="toggle-password" aria-label="Afficher ou masquer le mot de passe"
-                  (click)="showConfirmPassword = !showConfirmPassword">
+          <button type="button" class="toggle-password" (click)="toggleConfirmPasswordVisibility()"
+                  [attr.aria-label]="showConfirmPassword ? 'Masquer le mot de passe' : 'Afficher le mot de passe'">
             <i [class]="showConfirmPassword ? 'fas fa-eye-slash' : 'fas fa-eye'" aria-hidden="true"></i>
           </button>
         </div>
       </div>
 
-      <button type="submit" class="btn-login" [disabled]="isSubmitting" [ngClass]="{ 'loading': isSubmitting }">
-        S’enregistrer
-      </button>
+      <button type="submit" class="btn-login" [disabled]="isSubmitting">S’enregistrer</button>
     </form>
-
-    <p class="conditions">
-      En créant un compte, vous acceptez nos
-      <a href="/conditions">conditions</a> et notre
-      <a href="/confidentialite">politique</a>.
-    </p>
-
-    <div class="register-link">
-      <a routerLink="/connexion">Se connecter</a>
-    </div>
   </div>
 </div>

@@ -4,17 +4,17 @@
   align-items: center;
   background-color: #002744;
   padding: 0 1rem;
-  height: 89px;
+  height: 95px;
   position: relative;
   overflow: hidden;
 }
 
 .logo img {
-  height: 140px;
+  height: 190px;
   width: auto;
   object-fit: contain;
   display: block;
-  margin-top: -30px;
+  margin-top: -50px;
   transition: filter 0.3s ease, opacity 0.3s ease;
   filter: brightness(0) invert(1);
 }
