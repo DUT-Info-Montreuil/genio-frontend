@@ -1,18 +1,17 @@
-// ✅ consulter-modele-tous.component.ts (fichier complet)
-
-import { Component, OnInit } from '@angular/core';
+import {Component, ElementRef, HostListener, OnInit, ViewChild} from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { AuthService } from '../../services/auth.service';
 import { Router, RouterLink } from '@angular/router';
 import {DatePipe, NgClass, NgFor, NgIf} from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import {BreadcrumbComponent} from '../../shared/breadcrumb/breadcrumb.component';
 
 @Component({
   selector: 'app-consulter-modele-tous',
   templateUrl: './consulter-modele-tous.component.html',
   styleUrls: ['./consulter-modele-tous.component.css'],
   standalone: true,
-  imports: [NgClass, NgIf, NgFor, FormsModule, RouterLink]
+  imports: [NgClass, NgIf, NgFor, FormsModule, RouterLink, BreadcrumbComponent]
 })
 export class ConsulterModeleTousComponent implements OnInit {
   modeles: any[] = [];
@@ -32,6 +31,10 @@ export class ConsulterModeleTousComponent implements OnInit {
 
   utilisateurs: any[] = [];
   popupVisible = false;
+  breadcrumbItems: { label: string, url?: string }[] = [];
+  paginatedModeles: any[] = [];
+
+  @ViewChild('tableStart') tableStart!: ElementRef;
 
   constructor(
     private authService: AuthService,
@@ -44,12 +47,29 @@ export class ConsulterModeleTousComponent implements OnInit {
     this.isExploitant = this.authService.isExploitant();
     this.isConsultant = this.authService.isConsultant();
 
+    this.setBreadcrumb();
     this.loadModeles();
+    window.addEventListener('keydown', this.handleEscape);
 
     if (this.isGestionnaire) {
       this.http.get<any[]>('http://localhost:8080/api/utilisateurs/non-actifs')
         .subscribe(data => this.utilisateurs = data);
     }
+  }
+
+  ngOnDestroy() {
+    window.removeEventListener('keydown', this.handleEscape);
+  }
+
+  handleEscape = (e: KeyboardEvent) => {
+    if (e.key === 'Escape' && this.showModal) this.closeModal();
+  };
+
+  setBreadcrumb() {
+    this.breadcrumbItems = [
+      { label: 'Accueil', url: '/' },
+      { label: 'Consultation des modèles' }
+    ];
   }
 
   ouvrirPopup() {
@@ -58,31 +78,47 @@ export class ConsulterModeleTousComponent implements OnInit {
 
   activer(user: any) {
     this.http.put(`http://localhost:8080/api/utilisateurs/${user.id}/role-activation`, null, {
-      params: {
-        role: 'CONSULTANT',
-        actif: 'true'
-      }
+      params: { role: 'CONSULTANT', actif: 'true' }
     }).subscribe(() => {
       this.utilisateurs = this.utilisateurs.filter(u => u.id !== user.id);
     });
   }
 
+  updatePaginatedModeles() {
+    const start = (this.currentPage - 1) * this.entriesPerPage;
+    const end = start + this.entriesPerPage;
+    this.paginatedModeles = this.filteredModeles.slice(start, end);
+    console.log(`page=${this.currentPage}, entriesPerPage=${this.entriesPerPage}, affichés=${this.paginatedModeles.length}`);
+  }
+
   loadModeles() {
     this.http.get<any[]>('http://localhost:8080/conventionServices').subscribe({
-      next: (data) => {
-        const mapped = data.map(m => {
+      next: async (data) => {
+        const mapped = await Promise.all(data.map(async (m) => {
           const annee = m.annee || this.extractAnneeFromNom(m.nom);
+          let utilise = false;
+          try {
+            const res = await this.http.get<{ isUsed: boolean }>(
+              `http://localhost:8080/conventionServices/${m.id}/isUsed`
+            ).toPromise();
+            utilise = res?.isUsed ?? false;
+          } catch (e) {
+            console.warn(`Erreur pour le modèle ${m.id} :`, e);
+          }
+
           return {
             ...m,
             annee,
             nomAffiche: this.formatNom(m.nom),
             description: `Document officiel pour les conventions de l’année ${annee}.`,
-            utilise: m.utilise ?? false
+            utilise,
+            statutTexte: utilise ? 'utilisé dans une convention' : 'non encore utilisé'
           };
-        });
+        }));
+
         this.modeles = mapped;
         this.filteredModeles = [...mapped];
-        this.currentPage = 1;
+        this.applyFilters(); // très important ici
       },
       error: () => alert("Erreur lors du chargement des modèles.")
     });
@@ -98,16 +134,20 @@ export class ConsulterModeleTousComponent implements OnInit {
       const nomAffiche = m.nomAffiche?.toLowerCase() || '';
       const annee = m.annee?.toString() || '';
       const desc = m.description?.toLowerCase() || '';
-      const statut = m.utilise ? 'utilisé dans une convention' : 'non encore utilisé';
+      const statutTexte = m.statutTexte?.toLowerCase() || '';
+
+      const texteRechercheAvancee = `${nomAffiche} ${annee} ${desc} ${statutTexte}`;
 
       return (
         (nom.includes(text) || nomAffiche.includes(text)) &&
         (!year || annee === year) &&
-        (!adv || `${nomAffiche} ${annee} ${desc} ${statut}`.includes(adv))
+        (!adv || texteRechercheAvancee.includes(adv))
       );
     });
 
     this.currentPage = 1;
+    this.updatePaginatedModeles();
+    console.log(`Filtrage appliqué. Total résultats : ${this.filteredModeles.length}`);
   }
 
   resetFilters() {
@@ -117,26 +157,30 @@ export class ConsulterModeleTousComponent implements OnInit {
     this.entriesPerPage = 5;
     this.filteredModeles = [...this.modeles];
     this.currentPage = 1;
+    this.applyFilters(); // pour relancer le filtrage avec les bons paramètres
   }
 
   setEntriesPerPage(value: number) {
-    this.entriesPerPage = value;
+    this.entriesPerPage = +value;
     this.currentPage = 1;
-    this.applyFilters();
+    this.updatePaginatedModeles();
+    console.log(`Changement à ${this.entriesPerPage} entrées par page`);
   }
 
-  get paginatedModeles() {
-    const start = (this.currentPage - 1) * this.entriesPerPage;
-    return this.filteredModeles.slice(start, start + this.entriesPerPage);
-  }
 
   get totalPages(): number {
-    return Math.ceil(this.filteredModeles.length / this.entriesPerPage);
+    const total = Math.ceil(this.filteredModeles.length / this.entriesPerPage);
+    console.log(`Total pages : ${total}`);
+    return total;
   }
 
   goToPage(page: number) {
     if (page >= 1 && page <= this.totalPages) {
       this.currentPage = page;
+      this.updatePaginatedModeles();
+      setTimeout(() => {
+        this.tableStart?.nativeElement?.focus();
+      });
     }
   }
 
@@ -155,30 +199,20 @@ export class ConsulterModeleTousComponent implements OnInit {
         pages.push(this.currentPage - 1, this.currentPage, this.currentPage + 1);
       }
     }
-
     return pages;
   }
 
   openDetails(modele: any) {
-    this.http.get<any>(`http://localhost:8080/conventionServices/${modele.id}`).subscribe({
-      next: (data) => {
-        const annee = data.annee || this.extractAnneeFromNom(data.nom);
-        this.http.get<any>(`http://localhost:8080/conventionServices/${modele.id}/isUsed`).subscribe({
-          next: (res) => {
-            this.selectedModel = {
-              ...data,
-              format: 'docx',
-              nomAffiche: this.formatNom(data.nom),
-              dateCreation: data.dateCreation || 'Non précisée',
-              taille: this.getFormattedSize(data.fichierBinaire?.length || 0),
-              utilise: res.isUsed
-            };
-            this.showModal = true;
-          },
-          error: () => this.showFallbackModel(data)
-        });
-      },
-      error: () => alert("Impossible de charger les détails du modèle.")
+    this.selectedModel = {
+      ...modele,
+      format: 'docx',
+      dateCreation: modele.dateCreation || 'Non précisée',
+      taille: this.getFormattedSize(modele.fichierBinaire?.length || 0),
+    };
+    this.showModal = true;
+    setTimeout(() => {
+      const modal = document.querySelector('.modal-card');
+      (modal as HTMLElement)?.focus();
     });
   }
 
@@ -207,10 +241,21 @@ export class ConsulterModeleTousComponent implements OnInit {
     "_STA_JOURS_TOT", "_STA_HEURES_TOT", "TUT_IUT", "TUT_IUT_MEL",
     "PRENOM_ENCADRANT", "NOM_ENCADRANT", "FONCTION_ENCADRANT",
     "TEL_ENCADRANT", "MEL_ENCADRANT", "NOM_CPAM", "Stage_Professionnel", "STA_REMU_HOR"
-  ];
+  ].sort();
+
+  showAllVariables = false;
+
+  get previewVariables(): string[] {
+    return this.expectedVariables.slice(0, 8);
+  }
+
+  toggleVariables() {
+    this.showAllVariables = !this.showAllVariables;
+  }
 
   closeModal() {
     this.showModal = false;
+    setTimeout(() => (document.querySelector('.view') as HTMLElement)?.focus());
   }
 
   extractAnneeFromNom(nom: string): string | null {
@@ -222,4 +267,60 @@ export class ConsulterModeleTousComponent implements OnInit {
     const annee = this.extractAnneeFromNom(nom);
     return annee ? `Convention ${annee}` : 'Convention';
   }
+
+  confirmDelete(modele: any) {
+    console.log('Suppression demandée pour :', modele);
+  }
+
+  notifMessageVisible = false;
+
+  afficherMessageNotif() {
+    if (this.notifMessageVisible) return;
+    this.notifMessageVisible = true;
+    setTimeout(() => {
+      this.notifMessageVisible = false;
+    }, 2000);
+  }
+
+  @HostListener('document:keydown', ['$event'])
+  handleTabKey(e: KeyboardEvent) {
+    if (!this.showModal) return;
+
+    const focusable = Array.from(document.querySelectorAll('.modal-card button, .modal-card [tabindex]'))
+      .filter(el => (el as HTMLElement).offsetParent !== null) as HTMLElement[];
+
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+
+    if (e.key === 'Tab') {
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    }
+  }
+
+  protected readonly Math = Math;
+
+  toastMessage = '';
+  toastVisible = false;
+  isLoading = false;
+
+  afficherToast(message: string) {
+    this.toastMessage = message;
+    this.toastVisible = true;
+    setTimeout(() => {
+      this.toastVisible = false;
+      this.toastMessage = '';
+    }, 3000);
+  }
+
+  getYears(): string[] {
+    return [...new Set(this.modeles.map(m => m.annee))].filter(Boolean).sort();
+  }
+
+
 }

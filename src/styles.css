@@ -16,3 +16,8 @@ router-outlet:empty {
   display: none;
 }
 
+main, .auth-page, .page-contents {
+  padding-top: 110px;
+}
+
+

@@ -1,13 +1,22 @@
 import { Injectable } from '@angular/core';
 
-@Injectable({ providedIn: 'root' })
+@Injectable({
+  providedIn: 'root'
+})
 export class AuthService {
   private role: string = '';
   private username: string = '';
 
+  constructor() {
+    this.role = localStorage.getItem('role') || '';
+    this.username = localStorage.getItem('username') || '';
+  }
   setUser(user: any): void {
     this.role = user.role;
     this.username = user.username;
+
+    localStorage.setItem('role', user.role);
+    localStorage.setItem('username', user.username);
   }
 
   getRole(): string {
@@ -28,5 +37,12 @@ export class AuthService {
 
   isConsultant(): boolean {
     return this.role === 'CONSULTANT';
+  }
+
+  clearUser(): void {
+    this.role = '';
+    this.username = '';
+    localStorage.removeItem('role');
+    localStorage.removeItem('username');
   }
 }

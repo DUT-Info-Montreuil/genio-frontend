@@ -1,0 +1,113 @@
+<main class="gestion-container">
+  <div class="page-header">
+    <h2>Gestion des utilisateurs</h2>
+    <app-breadcrumb [items]="[
+  { label: 'Accueil', url: '/' },
+  { label: 'Consulter les modèles', url: '/consulter-modeles' },
+  { label: 'Gérer les utilisateurs' }
+]"></app-breadcrumb>
+  </div>
+
+  <div class="filters-wrapper">
+    <input type="text" [(ngModel)]="searchEmail" (input)="applyFilters()" placeholder="Rechercher par email" aria-label="Recherche email">
+    <select [(ngModel)]="selectedRole" (change)="applyFilters()" aria-label="Filtrer par rôle">
+      <option value="">Tous les rôles</option>
+      <option value="NONE">Nouveaux utilisateurs</option>
+      <option value="CONSULTANT">Consultant</option>
+      <option value="GESTIONNAIRE">Gestionnaire</option>
+      <option value="EXPLOITANT">Exploitant</option>
+    </select>
+    <select [(ngModel)]="filterActif" (change)="applyFilters()" aria-label="Filtrer par état">
+      <option value="">Tous les comptes</option>
+      <option value="true">Actifs</option>
+      <option value="false">Non actifs</option>
+    </select>
+  </div>
+
+  <div class="table-wrapper">
+    <table class="models-table">
+      <thead>
+      <tr>
+        <th>Nom</th>
+        <th>Prénom</th>
+        <th>Email</th>
+        <th>Actif</th>
+        <th>Rôle</th>
+        <th>Date de création</th>
+        <th>Actions</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let user of paginatedUtilisateurs">
+        <td>{{ user.nom }}</td>
+        <td>{{ user.prenom }}</td>
+        <td>{{ user.email }}</td>
+        <td>{{ user.actif ? '✅' : '❌' }}</td>
+        <td>{{ user.role || 'NONE' }}</td>
+        <td>{{ user.createdAt | date: 'dd/MM/yyyy à HH:mm' }}</td>
+        <td class="actions-cell">
+          <button (click)="openEditModal(user)" aria-label="Modifier"><i class="fas fa-edit"></i></button>
+          <button (click)="deleteUser(user)" aria-label="Supprimer"><i class="fas fa-trash-alt"></i></button>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+
+    <div class="table-footer">
+      <span>Page {{ currentPage }} / {{ totalPages }}</span>
+      <div class="pagination">
+        <button (click)="goToPage(currentPage - 1)" [disabled]="currentPage === 1">❮</button>
+        <button *ngFor="let page of visiblePages" (click)="goToPage(page)" [class.active]="page === currentPage">{{ page }}</button>
+        <button (click)="goToPage(currentPage + 1)" [disabled]="currentPage === totalPages">❯</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" *ngIf="showEditModal">
+    <div class="modal-card user-modal">
+      <h3>Modifier l'utilisateur</h3>
+
+      <div class="modal-field">
+        <label>Nom :</label>
+        <span class="static-field">{{ editedUser.nom }}</span>
+      </div>
+
+      <div class="modal-field">
+        <label>Prénom :</label>
+        <span class="static-field">{{ editedUser.prenom }}</span>
+      </div>
+
+      <div class="modal-field">
+        <label>Email :</label>
+        <span class="static-field">{{ editedUser.email }}</span>
+      </div>
+
+      <div class="modal-field checkbox-field">
+        <label for="actifToggle">Activer le compte :</label>
+        <div class="switch-wrapper">
+          <input type="checkbox"
+                 id="actifToggle"
+                 [(ngModel)]="editedUser.actif"
+                 class="switch-toggle"
+                 aria-label="Activer ou désactiver le compte utilisateur" />
+          <label class="switch-label" for="actifToggle"></label>
+        </div>
+      </div>
+
+      <div class="modal-field">
+        <label>Rôle :</label>
+        <select [(ngModel)]="editedUser.role">
+          <option value="NONE">NONE</option>
+          <option value="CONSULTANT">Consultant</option>
+          <option value="GESTIONNAIRE">Gestionnaire</option>
+          <option value="EXPLOITANT">Exploitant</option>
+        </select>
+      </div>
+
+      <div class="modal-actions">
+        <button (click)="saveUser()">Enregistrer</button>
+        <button (click)="closeModal()">Annuler</button>
+      </div>
+    </div>
+  </div>
+</main>

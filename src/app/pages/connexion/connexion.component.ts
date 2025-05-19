@@ -9,7 +9,7 @@ import { NgClass, NgIf } from '@angular/common';
 @Component({
   selector: 'app-connexion',
   standalone: true,
-  imports: [FormsModule, RouterLink, NgIf, NgClass],
+  imports: [FormsModule, RouterLink, NgIf],
   templateUrl: './connexion.component.html',
   styleUrls: ['./connexion.component.css', '../../../assets/styles/auth-shared.css'],
 })
@@ -27,18 +27,6 @@ export class ConnexionComponent {
     private authService: AuthService,
     private route: ActivatedRoute
   ) {}
-
-  ngOnInit() {
-    this.route.queryParams.subscribe(params => {
-      if (params['resetSuccess'] === 'true') {
-        this.successMessage = 'Mot de passe réinitialisé. Veuillez vous reconnecter.';
-        if (params['email']) {
-          this.email = params['email'];
-        }
-        setTimeout(() => this.successMessage = '', 3000);
-      }
-    });
-  }
 
   togglePasswordVisibility() {
     this.showPassword = !this.showPassword;
@@ -58,14 +46,35 @@ export class ConnexionComponent {
       withCredentials: true
     }).subscribe({
       next: () => {
-        this.successMessage = 'Connexion réussie !';
-        this.isSubmitting = false;
-        setTimeout(() => {
-          this.router.navigate(['/consulter-modeles']);
-        }, 1500);
+        this.http.get<any>('http://localhost:8080/api/utilisateurs/me', { withCredentials: true }).subscribe({
+          next: (user) => {
+            this.authService.setUser({
+              role: user.role,
+              username: user.email
+            });
+
+            this.successMessage = 'Connexion réussie !';
+            this.isSubmitting = false;
+
+            setTimeout(() => {
+              this.router.navigate(['/consulter-modeles']);
+            }, 1500);
+          },
+          error: () => {
+            this.loginError = "Impossible de récupérer les informations utilisateur.";
+            this.isSubmitting = false;
+          }
+        });
       },
-      error: () => {
-        this.loginError = "Email ou mot de passe incorrect.";
+      error: (err) => {
+        if (err.status === 401) {
+          this.loginError = "Email ou mot de passe incorrect.";
+        } else if (err.status === 403) {
+          this.loginError = "Votre compte a bien été créé mais est en attente de validation.";
+        } else {
+          this.loginError = "Erreur lors de la connexion.";
+        }
+
         this.isSubmitting = false;
         setTimeout(() => this.loginError = '', 5000);
       }

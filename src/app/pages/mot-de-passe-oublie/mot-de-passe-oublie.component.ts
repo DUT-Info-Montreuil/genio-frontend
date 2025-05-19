@@ -1,12 +1,12 @@
 import { Component } from '@angular/core';
-import {FormsModule} from '@angular/forms';
-import {NgClass, NgIf} from '@angular/common';
-import {RouterLink} from '@angular/router';
+import { FormsModule } from '@angular/forms';
+import { NgClass, NgIf } from '@angular/common';
+import { RouterLink } from '@angular/router';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-
 
 @Component({
   selector: 'app-mot-de-passe-oublie',
+  standalone: true,
   imports: [
     FormsModule,
     NgClass,
@@ -14,8 +14,10 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
     NgIf
   ],
   templateUrl: './mot-de-passe-oublie.component.html',
-  standalone: true,
-  styleUrls: ['./mot-de-passe-oublie.component.css', '../../../assets/styles/auth-shared.css'],
+  styleUrls: [
+    './mot-de-passe-oublie.component.css',
+    '../../../assets/styles/auth-shared.css'
+  ],
 })
 export class MotDePasseOublieComponent {
   email = '';
@@ -38,13 +40,19 @@ export class MotDePasseOublieComponent {
       next: () => {
         this.resetSuccess = 'Un e-mail de réinitialisation a été envoyé si votre adresse est enregistrée.';
         this.isSubmitting = false;
+
+        setTimeout(() => {
+          this.resetSuccess = '';
+        }, 2000);
       },
       error: (err) => {
-        this.resetError = err.error?.message || "Erreur lors de la demande.";
+        this.resetError = err.error?.message || 'Erreur lors de la demande.';
         this.isSubmitting = false;
+
+        setTimeout(() => {
+          this.resetError = '';
+        }, 5000);
       }
     });
   }
-
-
 }

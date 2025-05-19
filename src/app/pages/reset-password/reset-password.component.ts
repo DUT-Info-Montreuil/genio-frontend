@@ -2,14 +2,14 @@ import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
-import { NgIf } from '@angular/common';
+import { NgIf, NgForOf } from '@angular/common';
 
 @Component({
   selector: 'app-reset-password',
   standalone: true,
-  imports: [FormsModule, NgIf],
+  imports: [FormsModule, NgIf, NgForOf],
   templateUrl: './reset-password.component.html',
-  styleUrls: ['./reset-password.component.css', '../../../assets/styles/auth-shared.css'],
+  styleUrls: ['./reset-password.component.css', '../../../assets/styles/auth-shared.css']
 })
 export class ResetPasswordComponent {
   nouveauMotDePasse = '';
@@ -21,7 +21,12 @@ export class ResetPasswordComponent {
   showPassword = false;
   showConfirmPassword = false;
 
-  passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{12,}$/;
+  passwordRules = [
+    { label: '12 caractères', valid: false },
+    { label: '1 majuscule', valid: false },
+    { label: '1 chiffre', valid: false },
+    { label: '1 caractère spécial', valid: false }
+  ];
 
   constructor(private route: ActivatedRoute, private http: HttpClient, private router: Router) {
     this.route.queryParams.subscribe(params => {
@@ -29,17 +34,34 @@ export class ResetPasswordComponent {
     });
   }
 
+  validatePassword() {
+    this.passwordRules = [
+      { label: '12 caractères', valid: this.nouveauMotDePasse.length >= 12 },
+      { label: '1 majuscule', valid: /[A-Z]/.test(this.nouveauMotDePasse) },
+      { label: '1 chiffre', valid: /\d/.test(this.nouveauMotDePasse) },
+      { label: '1 caractère spécial', valid: /[\W_]/.test(this.nouveauMotDePasse) }
+    ];
+  }
+
+  hasInvalidPasswordRule(): boolean {
+    return this.passwordRules.some(rule => !rule.valid);
+  }
+
   onSubmit() {
     this.message = '';
     this.error = '';
 
-    if (!this.nouveauMotDePasse.match(this.passwordRegex)) {
-      this.error = 'Le mot de passe doit contenir au moins 12 caractères, une majuscule, un chiffre et un caractère spécial.';
+    this.validatePassword();
+
+    if (this.hasInvalidPasswordRule()) {
+      this.error = 'Le mot de passe ne respecte pas les règles de sécurité.';
+      setTimeout(() => this.error = '', 4000);
       return;
     }
 
     if (this.nouveauMotDePasse !== this.confirmMotDePasse) {
       this.error = "Les mots de passe ne correspondent pas.";
+      setTimeout(() => this.error = '', 4000);
       return;
     }
 
@@ -52,12 +74,15 @@ export class ResetPasswordComponent {
       headers: new HttpHeaders({ 'Content-Type': 'application/json' })
     }).subscribe({
       next: () => {
+        this.message = 'Mot de passe réinitialisé avec succès ! Redirection...';
         this.isSubmitting = false;
-        this.router.navigate(['/connexion'], { queryParams: { resetSuccess: 'true' } });
+        setTimeout(() => this.router.navigate(['/connexion']), 2000);
+        setTimeout(() => this.message = '', 2000);
       },
       error: (err) => {
         this.error = err.error?.message || 'Erreur lors de la réinitialisation.';
         this.isSubmitting = false;
+        setTimeout(() => this.error = '', 4000);
       }
     });
   }

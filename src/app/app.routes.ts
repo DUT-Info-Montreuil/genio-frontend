@@ -12,6 +12,9 @@ import { DetailsModeleComponent } from './pages/details-modele/details-modele.co
 import { ModifierModeleComponent } from './pages/modifier-modele/modifier-modele.component';
 import { MotDePasseOublieComponent } from './pages/mot-de-passe-oublie/mot-de-passe-oublie.component';
 import {ResetPasswordComponent} from './pages/reset-password/reset-password.component';
+import {GestionUtilisateursComponent} from './pages/gestion-utilisateurs/gestion-utilisateurs.component';
+import {BreadcrumbComponent} from './shared/breadcrumb/breadcrumb.component';
+
 
 
 
@@ -29,4 +32,7 @@ export const routes: Routes = [
   { path: 'modifier-modele/:id', component: ModifierModeleComponent },
   { path: 'mot-de-passe-oublie', component: MotDePasseOublieComponent },
   { path: 'reset-password', component: ResetPasswordComponent },
+  { path: 'gestion-utilisateurs', component: GestionUtilisateursComponent },
+  { path: 'breadcrumb', component: BreadcrumbComponent },
+
 ];

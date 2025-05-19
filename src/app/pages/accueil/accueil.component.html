@@ -1,11 +1,20 @@
-<main class="main-content" aria-labelledby="page-title">
-  <h1 id="page-title">GENIO SERVICE — Gérez vos conventions en un clic</h1>
-  <nav class="cards-container" aria-label="Accès rapide aux actions">
-    <h2 class="visually-hidden">Navigation rapide</h2>
+<a href="#page-title" class="visually-hidden focusable">Aller au contenu principal</a>
 
-    <a routerLink="/connexion" class="card-link" aria-label="Consulter les modèles de convention disponibles">
+<main class="main-content" aria-labelledby="page-title">
+  <div class="page-header">
+    <h1 id="page-title">GENIO SERVICE — Gérez vos conventions en un clic</h1>
+
+    <nav class="breadcrumb accueil-breadcrumb" aria-label="Fil d’Ariane">
+      <span aria-current="page">Accueil</span>
+    </nav>
+  </div>
+
+  <h2 id="quick-access-title" class="visually-hidden">Fonctionnalités principales</h2>
+
+  <nav class="cards-container" aria-labelledby="quick-access-title">
+    <a routerLink="/connexion" class="card-link" title="Consulter les modèles de convention disponibles" aria-label="Consulter les modèles de convention disponibles">
       <article class="card">
-        <img src="assets/images/consulter-600-400.png" alt="Aperçu des modèles de convention" loading="lazy" />
+        <img src="assets/images/consulter-600-400.png" alt="Ordinateur et documents illustrant des modèles de convention disponibles" loading="lazy" />
         <div class="card-body">
           <h3>Consulter les modèles</h3>
           <p>Accédez à des modèles prêts à l’emploi.</p>
@@ -13,9 +22,9 @@
       </article>
     </a>
 
-    <a routerLink="/connexion" class="card-link" aria-label="Gérer les modèles de convention">
+    <a routerLink="/connexion" class="card-link" title="Gérer les modèles de convention" aria-label="Gérer les modèles de convention">
       <article class="card">
-        <img src="assets/images/gerer-600_400.png" alt="Gestion de vos modèles de convention" loading="lazy" />
+        <img src="assets/images/gerer-600_400.png" alt="Personne modifiant un document sur ordinateur" loading="lazy" />
         <div class="card-body">
           <h3>Gérer les modèles</h3>
           <p>Ajoutez, modifiez ou supprimez vos modèles.</p>
@@ -23,9 +32,9 @@
       </article>
     </a>
 
-    <a routerLink="/connexion" class="card-link" aria-label="Visualiser l’historique des conventions générées">
+    <a routerLink="/connexion" class="card-link" title="Accéder à l’historique des conventions" aria-label="Accéder à l’historique des conventions générées">
       <article class="card">
-        <img src="assets/images/historique600-400.png" alt="Historique des conventions générées" loading="lazy" />
+        <img src="assets/images/historique600-400.png" alt="Graphique illustrant un historique de conventions" loading="lazy" />
         <div class="card-body">
           <h3>Historique</h3>
           <p>Consultez vos conventions passées.</p>

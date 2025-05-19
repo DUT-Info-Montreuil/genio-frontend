@@ -1,9 +1,10 @@
 .footer {
   padding: 1.5rem 1rem;
-  background-color: #002744;
+  background-color: #021342;
   color: #ffffff;
   width: 100%;
   font-size: 0.95rem;
+  margin-top: 2rem;
 }
 
 .footer a {
@@ -47,9 +48,10 @@
 }
 
 .footer-logo img {
-  height: 120px;
+  height: 55px;
   width: auto;
   display: block;
+  margin-bottom: 2px;
 }
 
 .footer-links-center {
@@ -134,4 +136,13 @@ app-root {
 
 main {
   flex-grow: 1;
+}
+
+@media (max-width: 480px) {
+  .footer {
+   margin-top: 1rem;
+  }
+  .footer-logo img {
+    height: 50px;
+  }
 }

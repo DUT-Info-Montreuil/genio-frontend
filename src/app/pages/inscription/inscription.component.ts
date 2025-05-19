@@ -1,17 +1,14 @@
 import { Component } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import {FormsModule} from '@angular/forms';
-import {NgForOf, NgIf} from '@angular/common';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Router } from '@angular/router';
+import { FormsModule } from '@angular/forms';
+import { NgIf, NgForOf } from '@angular/common';
 
 @Component({
   selector: 'app-inscription',
-  standalone: true,
   templateUrl: './inscription.component.html',
-  imports: [
-    FormsModule,
-    NgIf,
-    NgForOf
-  ],
+  standalone: true,
+  imports: [FormsModule, NgIf, NgForOf],
   styleUrls: ['./inscription.component.css', '../../../assets/styles/auth-shared.css']
 })
 export class InscriptionComponent {
@@ -22,23 +19,18 @@ export class InscriptionComponent {
   confirmPassword = '';
   showPassword = false;
   showConfirmPassword = false;
-
-  message = '';
-  error = '';
-
   isSubmitting = false;
-  passwordRules: string[] = [];
+  error = '';
+  message = '';
 
-  constructor(private http: HttpClient) {}
+  passwordRules = [
+    { label: '12 caractères', valid: false },
+    { label: '1 majuscule', valid: false },
+    { label: '1 chiffre', valid: false },
+    { label: '1 caractère spécial', valid: false }
+  ];
 
-  validatePassword(): void {
-    const rules = [];
-    if (this.password.length < 12) rules.push('12 caractères minimum');
-    if (!/[A-Z]/.test(this.password)) rules.push('Au moins 1 majuscule');
-    if (!/\d/.test(this.password)) rules.push('Au moins 1 chiffre');
-    if (!/[\W_]/.test(this.password)) rules.push('Au moins 1 caractère spécial');
-    this.passwordRules = rules;
-  }
+  constructor(private http: HttpClient, private router: Router) {}
 
   togglePasswordVisibility() {
     this.showPassword = !this.showPassword;
@@ -48,51 +40,80 @@ export class InscriptionComponent {
     this.showConfirmPassword = !this.showConfirmPassword;
   }
 
-  onRegister(): void {
-    this.message = '';
+  validatePassword() {
+    this.passwordRules = [
+      { label: '12 caractères', valid: this.password.length >= 12 },
+      { label: '1 majuscule', valid: /[A-Z]/.test(this.password) },
+      { label: '1 chiffre', valid: /\d/.test(this.password) },
+      { label: '1 caractère spécial', valid: /[\W_]/.test(this.password) }
+    ];
+  }
+
+  hasInvalidPasswordRule(): boolean {
+    return this.passwordRules.some(rule => !rule.valid);
+  }
+
+  checkEmailUniqueness() {
+    if (!this.email.trim()) return;
+    this.http.get<{ exists: boolean }>(`http://localhost:8080/api/utilisateurs/exists?email=${this.email.trim()}`)
+      .subscribe({
+        next: (res) => {
+          if (res.exists) {
+            this.error = 'Cet e-mail est déjà utilisé.';
+            setTimeout(() => this.error = '', 3000);
+          }
+        },
+        error: () => {
+          this.error = 'Erreur lors de la vérification de l\'e-mail.';
+          setTimeout(() => this.error = '', 3000);
+        }
+      });
+  }
+
+  onRegister() {
     this.error = '';
-    this.isSubmitting = true;
+    this.message = '';
 
-    if (!this.prenom.trim() || !this.nom.trim()) {
-      this.error = 'Merci de renseigner prénom et nom.';
-      this.isSubmitting = false;
-      return;
-    }
-
-    if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(this.email)) {
-      this.error = 'Merci de vérifier votre e-mail.';
-      this.isSubmitting = false;
-      return;
-    }
-
-    this.validatePassword();
-    if (this.passwordRules.length > 0) {
-      this.error = 'Le mot de passe ne respecte pas les critères.';
-      this.isSubmitting = false;
+    if (!this.prenom || !this.nom || !this.email || !this.password || !this.confirmPassword) {
+      this.error = 'Veuillez remplir tous les champs obligatoires.';
+      setTimeout(() => this.error = '', 3000);
       return;
     }
 
     if (this.password !== this.confirmPassword) {
       this.error = 'Les mots de passe ne correspondent pas.';
-      this.isSubmitting = false;
+      setTimeout(() => this.error = '', 3000);
       return;
     }
 
-    this.http.post('/api/utilisateurs', {
-      nom: this.nom,
-      prenom: this.prenom,
-      email: this.email,
+    if (this.hasInvalidPasswordRule()) {
+      this.error = 'Le mot de passe ne respecte pas les règles de sécurité.';
+      setTimeout(() => this.error = '', 3000);
+      return;
+    }
+
+    this.isSubmitting = true;
+
+    const body = {
+      prenom: this.prenom.trim(),
+      nom: this.nom.trim(),
+      email: this.email.trim(),
       motDePasse: this.password
+    };
+
+    this.http.post('http://localhost:8080/api/utilisateurs', body, {
+      headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
+      withCredentials: true
     }).subscribe({
-      next: (res: any) => {
-        this.message = 'Inscription réussie !';
-        this.error = '';
-        this.isSubmitting = false;
+      next: () => {
+        this.message = 'Inscription réussie ! Redirection...';
+        setTimeout(() => this.router.navigate(['/connexion']), 2000);
+        setTimeout(() => this.message = '', 2000);
       },
-      error: () => {
-        this.error = 'Une erreur est survenue. Veuillez réessayer.';
-        this.message = '';
+      error: (err) => {
+        this.error = err.error?.error || 'Erreur lors de l\'inscription.';
         this.isSubmitting = false;
+        setTimeout(() => this.error = '', 3000);
       }
     });
   }

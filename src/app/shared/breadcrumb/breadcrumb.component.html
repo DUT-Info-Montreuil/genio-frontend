@@ -1,0 +1,11 @@
+<nav class="breadcrumb" aria-label="Fil d’Ariane">
+  <ng-container *ngFor="let item of items; let last = last">
+    <ng-container *ngIf="!last">
+      <a [routerLink]="item.url">{{ item.label }}</a>
+      <span class="separator">›</span>
+    </ng-container>
+    <ng-container *ngIf="last">
+      <span aria-current="page">{{ item.label }}</span>
+    </ng-container>
+  </ng-container>
+</nav>

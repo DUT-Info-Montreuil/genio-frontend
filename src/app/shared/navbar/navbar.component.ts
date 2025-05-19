@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import {Router, RouterLink} from '@angular/router';
-import {NgIf} from '@angular/common';
+import { Router, RouterLink } from '@angular/router';
+import { NgIf } from '@angular/common';
 
 @Component({
   selector: 'app-navbar',
@@ -15,10 +15,12 @@ import {NgIf} from '@angular/common';
 export class NavbarComponent {
   navbarOpen = false;
   currentRoute = '';
+  loginError = '';
+  successMessage = '';
 
   constructor(private router: Router) {
     this.router.events.subscribe(() => {
-      this.currentRoute = this.router.url;
+      this.currentRoute = this.router.url.split('?')[0];
       this.navbarOpen = false;
     });
   }
@@ -34,7 +36,7 @@ export class NavbarComponent {
       '/donnees-personnelles',
       '/plan-du-site',
       '/reset-password',
-      '/mot-de-passe-oublie',
+      '/mot-de-passe-oublie'
     ].includes(this.currentRoute);
   }
 
