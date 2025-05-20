@@ -48,7 +48,7 @@
 
   <nav class="actions-par-role" aria-label="Navigation des actions">
     <a [routerLink]="'/consulter-modeles'" [ngClass]="{ 'active-link': router.url === '/consulter-modeles' }">Consulter</a>
-    <a *ngIf="!isConsultant" [routerLink]="'/visualiser'" [ngClass]="{ 'active-link': router.url === '/visualiser' }">Visualiser</a>
+    <a *ngIf="!isConsultant" [routerLink]="'/historique-conventions'" [ngClass]="{ 'active-link': router.url === '/historique-conventions' }">Visualiser</a>
     <a *ngIf="isGestionnaire" [routerLink]="'/gerer'" [ngClass]="{ 'active-link': router.url === '/gerer' }">Gérer</a>
   </nav>
 

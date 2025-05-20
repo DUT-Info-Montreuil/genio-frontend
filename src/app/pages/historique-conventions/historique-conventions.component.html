@@ -1,1 +1,136 @@
-<p>historique-conventions works!</p>
+<main class="modeles-container">
+  <!-- En-tête -->
+  <div class="page-header-layout">
+    <div class="header-left">
+      <h2 id="page-title">
+        <i class="fas fa-history" aria-hidden="true"></i> Historique des conventions
+      </h2>
+      <app-breadcrumb
+        [items]="[
+          { label: 'Accueil', url: '/' },
+          { label: 'Consulter les modèles', url: '/consulter-modeles' },
+          { label: 'Historique' }
+        ]"
+        aria-labelledby="page-title"
+      ></app-breadcrumb>
+    </div>
+
+    <div class="header-right" *ngIf="isExploitant || isGestionnaire">
+      <div class="role-identity">
+        Connecté en tant que :
+        <strong [ngClass]="{
+          'role-gestionnaire': isGestionnaire,
+          'role-exploitant': isExploitant
+        }">
+          {{ isGestionnaire ? 'Gestionnaire' : 'Exploitant' }}
+        </strong>
+      </div>
+    </div>
+  </div>
+
+  <!-- Navigation -->
+  <nav class="actions-par-role">
+    <a [routerLink]="'/consulter-modeles'" [ngClass]="{ 'active-link': router.url === '/consulter-modeles' }">Consulter</a>
+    <a [routerLink]="'/historique-conventions'" [ngClass]="{ 'active-link': router.url === '/historique-conventions' }">Visualiser</a>
+    <a *ngIf="isGestionnaire" [routerLink]="'/gerer'" [ngClass]="{ 'active-link': router.url === '/gerer' }">Gérer</a>
+  </nav>
+
+  <!-- Filtres + bouton reset -->
+  <section class="filters-zone-wrapper" aria-label="Filtres">
+    <div class="filters-flex">
+      <div class="filters-zone">
+        <div class="input-icon">
+          <i class="fas fa-user" aria-hidden="true"></i>
+          <input type="text" placeholder="Nom étudiant" [(ngModel)]="searchNom" (input)="applyFilters()" />
+        </div>
+
+        <div class="input-icon">
+          <i class="fas fa-calendar-alt" aria-hidden="true"></i>
+          <input type="number" list="yearsList" placeholder="Année"
+                 [(ngModel)]="searchAnnee" (input)="applyFilters()" />
+          <datalist id="yearsList">
+            <option *ngFor="let year of getAnnee()" [value]="year"></option>
+          </datalist>
+        </div>
+
+        <div class="input-icon">
+          <i class="fas fa-graduation-cap" aria-hidden="true"></i>
+          <input type="text" placeholder="Promotion" [(ngModel)]="searchPromotion" (input)="applyFilters()" />
+        </div>
+
+      </div>
+
+      <div class="reset-icon">
+        <button class="reset-btn" (click)="resetFilters()">
+          <i class="fas fa-sync-alt"></i> Réinitialiser
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Sélecteur entrées -->
+  <section class="table-controls">
+    <div class="entries-per-page">
+      <label for="entriesSelect">Entrées par page</label>
+      <select id="entriesSelect" [(ngModel)]="entriesPerPage" (change)="setEntriesPerPage(entriesPerPage)">
+        <option [value]="5">5</option>
+        <option [value]="10">10</option>
+        <option [value]="15">15</option>
+      </select>
+    </div>
+  </section>
+
+  <!-- Tableau -->
+  <div class="table-wrapper">
+    <table class="models-table">
+      <thead>
+      <tr>
+        <th>Nom étudiant</th>
+        <th>Promotion</th>
+        <th>Année</th>
+        <th>Flux</th>
+        <th>JSON</th>
+        <th>DOCX</th>
+        <th>Status</th>
+        <th>Date</th>
+        <th>Détails</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let h of paginatedModeles">
+        <td>{{ h.convention?.etudiant?.nom || 'N/A' }}</td>
+        <td>{{ h.convention?.etudiant?.promotion || 'N/A' }}</td>
+        <td>{{ h.convention?.modele?.annee || 'N/A' }}</td>
+        <td [ngClass]="getEtapeStatus(h, 'flux') === 'OK' ? 'ok' : 'ko'">{{ getEtapeStatus(h, 'flux') }}</td>
+        <td [ngClass]="getEtapeStatus(h, 'json') === 'OK' ? 'ok' : 'ko'">{{ getEtapeStatus(h, 'json') }}</td>
+        <td [ngClass]="getEtapeStatus(h, 'docx') === 'OK' ? 'ok' : 'ko'">{{ getEtapeStatus(h, 'docx') }}</td>
+        <td [ngClass]="getStatusClass(h.status)">{{ h.status || 'N/A' }}</td>
+        <td>{{ h.timestamp ? (h.timestamp | date: 'dd/MM/yyyy HH:mm') : '—' }}</td>
+        <td>
+            <span *ngIf="h.details" [attr.title]="h.details">
+              {{ h.details.length > 25 ? (h.details | slice:0:25) + '…' : h.details }}
+            </span>
+          <span *ngIf="!h.details">-</span>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Pagination -->
+  <div class="table-footer">
+    <span>
+      Affichage de {{ filtered.length === 0 ? 0 : (currentPage - 1) * entriesPerPage + 1 }}
+      à {{ getMin(currentPage * entriesPerPage, filtered.length) }}
+      sur {{ filtered.length }} entrées
+    </span>
+
+    <nav class="pagination">
+      <button (click)="goToPage(currentPage - 1)" [disabled]="currentPage === 1">❮</button>
+      <button *ngFor="let page of visiblePages" (click)="goToPage(page)" [class.active]="currentPage === page">
+        {{ page }}
+      </button>
+      <button (click)="goToPage(currentPage + 1)" [disabled]="currentPage === totalPages">❯</button>
+    </nav>
+  </div>
+</main>

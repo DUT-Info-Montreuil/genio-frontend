@@ -14,9 +14,7 @@ import { MotDePasseOublieComponent } from './pages/mot-de-passe-oublie/mot-de-pa
 import {ResetPasswordComponent} from './pages/reset-password/reset-password.component';
 import {GestionUtilisateursComponent} from './pages/gestion-utilisateurs/gestion-utilisateurs.component';
 import {BreadcrumbComponent} from './shared/breadcrumb/breadcrumb.component';
-
-
-
+import {HistoriqueConventionsComponent} from './pages/historique-conventions/historique-conventions.component';
 
 export const routes: Routes = [
   { path: '', component: AccueilComponent },
@@ -34,5 +32,6 @@ export const routes: Routes = [
   { path: 'reset-password', component: ResetPasswordComponent },
   { path: 'gestion-utilisateurs', component: GestionUtilisateursComponent },
   { path: 'breadcrumb', component: BreadcrumbComponent },
+  { path: 'historique-conventions', component: HistoriqueConventionsComponent }
 
 ];

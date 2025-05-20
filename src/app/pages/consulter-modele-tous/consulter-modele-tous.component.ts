@@ -157,7 +157,7 @@ export class ConsulterModeleTousComponent implements OnInit {
     this.entriesPerPage = 5;
     this.filteredModeles = [...this.modeles];
     this.currentPage = 1;
-    this.applyFilters(); // pour relancer le filtrage avec les bons paramètres
+    this.applyFilters();
   }
 
   setEntriesPerPage(value: number) {

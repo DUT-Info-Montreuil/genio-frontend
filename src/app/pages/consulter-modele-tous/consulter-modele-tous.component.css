@@ -653,6 +653,48 @@ input::placeholder {
   color: #1f3c88;
   margin-top: 20px;
 }
+/* Structure globale : aligné horizontalement */
+.filters-zone-wrapper {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 15px;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+/* Zone gauche : champs + sélecteur */
+.filters-zone {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  align-items: center;
+}
+
+/* Zone droite : bouton Réinitialiser */
+.reset-icon {
+  display: flex;
+  align-items: center;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .filters-zone-wrapper {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .filters-zone {
+    width: 100%;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .input-icon input,
+  .entries-per-page select {
+    width: 100%;
+  }
+}
 
 @media (max-width: 768px) {
   .modeles-container {
