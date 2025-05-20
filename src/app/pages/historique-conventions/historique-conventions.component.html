@@ -1,136 +1,227 @@
-<main class="modeles-container">
-  <!-- En-tête -->
-  <div class="page-header-layout">
+<main class="modeles-container" aria-label="Historique des conventions">
+  <header class="page-header-layout">
     <div class="header-left">
       <h2 id="page-title">
-        <i class="fas fa-history" aria-hidden="true"></i> Historique des conventions
+        <i class="fas fa-history" aria-hidden="true"></i>
+        Historique des conventions
       </h2>
       <app-breadcrumb
-        [items]="[
-          { label: 'Accueil', url: '/' },
-          { label: 'Consulter les modèles', url: '/consulter-modeles' },
-          { label: 'Historique' }
-        ]"
+        [items]="[{ label: 'Accueil', url: '/' }, { label: 'Historique' }]"
         aria-labelledby="page-title"
       ></app-breadcrumb>
     </div>
 
-    <div class="header-right" *ngIf="isExploitant || isGestionnaire">
-      <div class="role-identity">
-        Connecté en tant que :
+    <div class="notif-actions" *ngIf="isGestionnaire">
+      <div class="notif-container">
+        <button
+          class="notif-btn"
+          (click)="afficherMessageNotif()"
+          aria-label="Voir les demandes d’habilitation"
+          aria-haspopup="true"
+          [attr.aria-expanded]="notifMessageVisible">
+          <i class="fas fa-bell" aria-hidden="true"></i>
+          <span class="badge" [ngClass]="{ 'rouge': utilisateurs.length > 0, 'vert': utilisateurs.length === 0 }">
+        {{ utilisateurs.length }}
+      </span>
+        </button>
+
+        <div *ngIf="notifMessageVisible" class="notif-message" role="status" aria-live="polite">
+          <ng-container *ngIf="utilisateurs.length === 0">Aucune demande d’habilitation.</ng-container>
+          <ng-container *ngIf="utilisateurs.length === 1">1 demande d’habilitation.</ng-container>
+          <ng-container *ngIf="utilisateurs.length > 1">{{ utilisateurs.length }} demandes d’habilitation.</ng-container>
+        </div>
+      </div>
+
+      <a routerLink="/gestion-utilisateurs" class="btn btn-primary" aria-label="Gérer les utilisateurs">
+        <i class="fas fa-users-cog" aria-hidden="true"></i>  Gérer les utilisateurs
+      </a>
+
+
+      <div class="role-identity" *ngIf="isExploitant || isConsultant">
+        <span>Connecté en tant que :</span>
         <strong [ngClass]="{
-          'role-gestionnaire': isGestionnaire,
-          'role-exploitant': isExploitant
+          'role-exploitant': isExploitant,
+          'role-consultant': isConsultant
         }">
-          {{ isGestionnaire ? 'Gestionnaire' : 'Exploitant' }}
+          {{ isExploitant ? 'Exploitant' : 'Consultant' }}
         </strong>
       </div>
     </div>
-  </div>
+  </header>
 
-  <!-- Navigation -->
-  <nav class="actions-par-role">
-    <a [routerLink]="'/consulter-modeles'" [ngClass]="{ 'active-link': router.url === '/consulter-modeles' }">Consulter</a>
-    <a [routerLink]="'/historique-conventions'" [ngClass]="{ 'active-link': router.url === '/historique-conventions' }">Visualiser</a>
-    <a *ngIf="isGestionnaire" [routerLink]="'/gerer'" [ngClass]="{ 'active-link': router.url === '/gerer' }">Gérer</a>
+  <p id="tableDescription" class="table-intro">
+    Consultez l’historique de génération des conventions par étudiant. Utilisez les filtres pour affiner les résultats
+    et cliquez sur les icônes d’aide (<i class="fas fa-question-circle" aria-hidden="true"></i>) pour plus de détails.
+  </p>
+
+  <nav class="actions-par-role" aria-label="Navigation secondaire">
+    <a routerLink="/consulter-modeles" [ngClass]="{ 'active-link': router.url === '/consulter-modeles' }">Consulter</a>
+    <a routerLink="/historique-conventions" [ngClass]="{ 'active-link': router.url === '/historique-conventions' }">Visualiser</a>
+    <a *ngIf="isGestionnaire" routerLink="/gerer" [ngClass]="{ 'active-link': router.url === '/gerer' }">Gérer</a>
   </nav>
 
-  <!-- Filtres + bouton reset -->
-  <section class="filters-zone-wrapper" aria-label="Filtres">
-    <div class="filters-flex">
-      <div class="filters-zone">
-        <div class="input-icon">
-          <i class="fas fa-user" aria-hidden="true"></i>
-          <input type="text" placeholder="Nom étudiant" [(ngModel)]="searchNom" (input)="applyFilters()" />
-        </div>
-
-        <div class="input-icon">
-          <i class="fas fa-calendar-alt" aria-hidden="true"></i>
-          <input type="number" list="yearsList" placeholder="Année"
-                 [(ngModel)]="searchAnnee" (input)="applyFilters()" />
-          <datalist id="yearsList">
-            <option *ngFor="let year of getAnnee()" [value]="year"></option>
-          </datalist>
-        </div>
-
-        <div class="input-icon">
-          <i class="fas fa-graduation-cap" aria-hidden="true"></i>
-          <input type="text" placeholder="Promotion" [(ngModel)]="searchPromotion" (input)="applyFilters()" />
-        </div>
-
+  <section class="filters-zone-wrapper" aria-label="Filtres de recherche">
+    <div class="filters-zone">
+      <div class="input-icon">
+        <i class="fas fa-user" aria-hidden="true"></i>
+        <input #inputNomEtudiant type="text" placeholder="Nom étudiant"
+               [(ngModel)]="searchNom"
+               (input)="applyFilters()"
+               aria-label="Filtrer par nom étudiant" />
       </div>
-
-      <div class="reset-icon">
-        <button class="reset-btn" (click)="resetFilters()">
-          <i class="fas fa-sync-alt"></i> Réinitialiser
-        </button>
+      <div class="input-icon">
+        <i class="fas fa-calendar-alt" aria-hidden="true"></i>
+        <input type="number" placeholder="Année" [(ngModel)]="searchAnnee" (input)="applyFilters()" list="yearsList" aria-label="Filtrer par année" />
+        <datalist id="yearsList">
+          <option *ngFor="let year of getAnnee()" [value]="year"></option>
+        </datalist>
       </div>
+      <div class="input-icon">
+        <i class="fas fa-graduation-cap" aria-hidden="true"></i>
+        <input type="text" placeholder="Promotion" [(ngModel)]="searchPromotion" (input)="applyFilters()" aria-label="Filtrer par promotion" />
+      </div>
+    </div>
+
+    <div class="reset-icon">
+      <button class="reset-btn" (click)="resetFilters()" aria-label="Réinitialiser les filtres">
+        <i class="fas fa-sync-alt" aria-hidden="true"></i> Réinitialiser
+      </button>
     </div>
   </section>
 
-  <!-- Sélecteur entrées -->
   <section class="table-controls">
-    <div class="entries-per-page">
-      <label for="entriesSelect">Entrées par page</label>
-      <select id="entriesSelect" [(ngModel)]="entriesPerPage" (change)="setEntriesPerPage(entriesPerPage)">
-        <option [value]="5">5</option>
-        <option [value]="10">10</option>
-        <option [value]="15">15</option>
-      </select>
-    </div>
+    <label for="entriesSelect">Entrées par page</label>
+    <select id="entriesSelect" [(ngModel)]="entriesPerPage" (change)="setEntriesPerPage(entriesPerPage)" aria-label="Nombre d’entrées par page">
+      <option [value]="5">5</option>
+      <option [value]="10">10</option>
+      <option [value]="15">15</option>
+    </select>
   </section>
 
-  <!-- Tableau -->
   <div class="table-wrapper">
-    <table class="models-table">
+    <table class="models-table"  aria-describedby="tableDescription">
+      <caption class="sr-only">Tableau d’historique des conventions</caption>
       <thead>
       <tr>
-        <th>Nom étudiant</th>
-        <th>Promotion</th>
-        <th>Année</th>
-        <th>Flux</th>
-        <th>JSON</th>
-        <th>DOCX</th>
-        <th>Status</th>
-        <th>Date</th>
-        <th>Détails</th>
+        <th scope="col" aria-sort="none">Nom étudiant</th>
+        <th scope="col" aria-sort="none">Promotion</th>
+        <th scope="col" aria-sort="none">Année</th>
+        <th scope="col" aria-sort="none">
+          Flux
+          <button class="info-icon" title="Voir l’aide sur FLUX" (click)="openHelp('flux')" aria-label="Aide FLUX">
+            <i class="fas fa-question-circle" aria-hidden="true"></i>
+          </button>
+        </th>
+        <th scope="col" aria-sort="none">
+          JSON
+          <button class="info-icon" title="Voir l’aide sur JSON" (click)="openHelp('json')" aria-label="Aide JSON">
+            <i class="fas fa-question-circle" aria-hidden="true"></i>
+          </button>
+        </th>
+        <th scope="col" aria-sort="none">
+          DOCX
+          <button class="info-icon" title="Voir l’aide sur DOCX" (click)="openHelp('docx')" aria-label="Aide DOCX">
+            <i class="fas fa-question-circle" aria-hidden="true"></i>
+          </button>
+        </th>
+        <th scope="col" aria-sort="none">Statut</th>
+        <th scope="col" aria-sort="none">Date</th>
+        <th scope="col" aria-sort="none">Détails</th>
       </tr>
       </thead>
       <tbody>
       <tr *ngFor="let h of paginatedModeles">
-        <td>{{ h.convention?.etudiant?.nom || 'N/A' }}</td>
-        <td>{{ h.convention?.etudiant?.promotion || 'N/A' }}</td>
-        <td>{{ h.convention?.modele?.annee || 'N/A' }}</td>
-        <td [ngClass]="getEtapeStatus(h, 'flux') === 'OK' ? 'ok' : 'ko'">{{ getEtapeStatus(h, 'flux') }}</td>
-        <td [ngClass]="getEtapeStatus(h, 'json') === 'OK' ? 'ok' : 'ko'">{{ getEtapeStatus(h, 'json') }}</td>
-        <td [ngClass]="getEtapeStatus(h, 'docx') === 'OK' ? 'ok' : 'ko'">{{ getEtapeStatus(h, 'docx') }}</td>
-        <td [ngClass]="getStatusClass(h.status)">{{ h.status || 'N/A' }}</td>
-        <td>{{ h.timestamp ? (h.timestamp | date: 'dd/MM/yyyy HH:mm') : '—' }}</td>
+        <td>{{ h.convention?.etudiant?.nom || '—' }}</td>
+        <td>{{ h.convention?.etudiant?.promotion || '—' }}</td>
+        <td>{{ h.convention?.modele?.annee || '—' }}</td>
         <td>
-            <span *ngIf="h.details" [attr.title]="h.details">
-              {{ h.details.length > 25 ? (h.details | slice:0:25) + '…' : h.details }}
-            </span>
-          <span *ngIf="!h.details">-</span>
+          <span [ngClass]="getEtapeStatus(h, 'flux') === 'OK' ? 'ok' : 'ko'">
+            {{ getEtapeStatus(h, 'flux') }}
+            <i
+              *ngIf="getEtapeStatus(h, 'flux') === 'KO'"
+              class="fas fa-exclamation-triangle"
+              title="Erreur FLUX"
+              aria-hidden="true"
+            ></i>
+          </span>
+          <span class="sr-only">
+            {{ getEtapeStatus(h, 'flux') === 'OK' ? 'Étape FLUX réussie' : 'Erreur à l’étape FLUX' }}
+         </span>
+        </td>
+        <td [ngClass]="getEtapeStatus(h, 'json') === 'OK' ? 'ok' : 'ko'">
+          {{ getEtapeStatus(h, 'json') }}
+          <i *ngIf="getEtapeStatus(h, 'json') === 'KO'" class="fas fa-exclamation-triangle" title="Erreur JSON"></i>
+          <span *ngIf="getEtapeStatus(h, 'json') === 'KO'" class="sr-only">Erreur lors de l’étape JSON</span>
+
+        </td>
+        <td [ngClass]="getEtapeStatus(h, 'docx') === 'OK' ? 'ok' : 'ko'">
+          {{ getEtapeStatus(h, 'docx') }}
+          <i *ngIf="getEtapeStatus(h, 'docx') === 'KO'" class="fas fa-exclamation-triangle" title="Erreur DOCX"></i>
+          <span *ngIf="getEtapeStatus(h, 'docx') === 'KO'" class="sr-only">Erreur lors de l’étape DOCX</span>
+        </td>
+        <td [ngClass]="getStatusClass(h.status)" [attr.role]="h.status === 'ECHEC' ? 'alert' : null">
+          {{ h.status || '—' }}
+        </td>
+        <td>{{ h.timestamp ? (h.timestamp | date: 'dd/MM/yyyy HH:mm') : '—' }}</td>
+        <td class="details-cell">
+          <span *ngIf="h.details" [attr.title]="h.details">{{ h.details }}</span>
+          <span *ngIf="!h.details">—</span>
         </td>
       </tr>
       </tbody>
     </table>
   </div>
 
-  <!-- Pagination -->
-  <div class="table-footer">
+  <footer class="table-footer" aria-label="Navigation dans les pages">
     <span>
       Affichage de {{ filtered.length === 0 ? 0 : (currentPage - 1) * entriesPerPage + 1 }}
       à {{ getMin(currentPage * entriesPerPage, filtered.length) }}
       sur {{ filtered.length }} entrées
     </span>
-
-    <nav class="pagination">
-      <button (click)="goToPage(currentPage - 1)" [disabled]="currentPage === 1">❮</button>
-      <button *ngFor="let page of visiblePages" (click)="goToPage(page)" [class.active]="currentPage === page">
+    <nav class="pagination" role="navigation" aria-label="Pagination">
+      <button (click)="goToPage(currentPage - 1)" [disabled]="currentPage === 1" aria-label="Page précédente">❮</button>
+      <button *ngFor="let page of visiblePages"
+              [class.active]="currentPage === page"
+              [attr.aria-current]="currentPage === page ? 'page' : null"
+              (click)="goToPage(page)">
         {{ page }}
       </button>
-      <button (click)="goToPage(currentPage + 1)" [disabled]="currentPage === totalPages">❯</button>
+      <button (click)="goToPage(currentPage + 1)" [disabled]="currentPage === totalPages" aria-label="Page suivante">❯</button>
     </nav>
+  </footer>
+
+  <div class="modal-overlay" *ngIf="openedHelp">
+    <div class="modal-content" tabindex="-1" #modalContent role="dialog" aria-labelledby="modal-title" aria-modal="true">
+      <h3 id="modal-title">
+        <i class="fas fa-info-circle" aria-hidden="true"></i> Aide : {{ openedHelp.toUpperCase() }}
+      </h3>
+      <section *ngIf="openedHelp === 'flux'" class="modal-section">
+        <h4>Erreurs FLUX</h4>
+        <ul>
+          <li><strong>Format non supporté</strong> – Fichier invalide</li>
+          <li><strong>Modèle introuvable</strong> – Supprimé ou inexistant</li>
+          <li><strong>ID de modèle manquant</strong> – Non sélectionné</li>
+          <li><strong>Erreur technique</strong> – Serveur</li>
+        </ul>
+      </section>
+      <section *ngIf="openedHelp === 'json'" class="modal-section">
+        <h4>Erreurs JSON</h4>
+        <ul>
+          <li><strong>Validation</strong> – Champs requis manquants</li>
+          <li><strong>Champ absent</strong> – Exemple : “Nom de l’organisme”</li>
+        </ul>
+      </section>
+      <section *ngIf="openedHelp === 'docx'" class="modal-section">
+        <h4>Erreurs DOCX</h4>
+        <ul>
+          <li><strong>Erreur d’export</strong> – Échec lors de la génération du fichier</li>
+          <li><strong>Fichier manquant</strong> – Aucun document généré</li>
+        </ul>
+      </section>
+
+      <div class="modal-actions">
+        <button (click)="closeHelp()" class="close-modal-btn" aria-label="Fermer la fenêtre d’aide">Fermer</button>
+      </div>
+    </div>
   </div>
 </main>

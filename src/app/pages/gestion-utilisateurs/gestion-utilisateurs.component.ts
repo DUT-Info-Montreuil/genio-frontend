@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { DatePipe, NgForOf, NgIf } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import {ActivatedRoute, RouterModule} from '@angular/router';
 import {BreadcrumbComponent} from '../../shared/breadcrumb/breadcrumb.component';
 
 @Component({
@@ -13,6 +13,7 @@ import {BreadcrumbComponent} from '../../shared/breadcrumb/breadcrumb.component'
   styleUrls: ['./gestion-utilisateurs.component.css']
 })
 export class GestionUtilisateursComponent implements OnInit {
+  breadcrumbItems: { label: string; url?: string }[] = [];
   utilisateurs: any[] = [];
   filteredUtilisateurs: any[] = [];
 
@@ -26,10 +27,27 @@ export class GestionUtilisateursComponent implements OnInit {
   editedUser: any = null;
   showEditModal = false;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private route: ActivatedRoute) {}
 
   ngOnInit(): void {
+    this.route.queryParams.subscribe(params => {
+      const source = params['source'] || 'menu';
+      this.updateBreadcrumb(source);
+    });
+
     this.loadUsers();
+  }
+
+  updateBreadcrumb(source: string) {
+    this.breadcrumbItems = [
+      { label: 'Accueil', url: '/' },
+      ...(source === 'historique'
+        ? [{ label: 'Historique', url: '/historique-conventions' }]
+        : source === 'consulter'
+          ? [{ label: 'Consulter les modèles', url: '/consulter-modeles' }]
+          : []),
+      { label: 'Gérer les utilisateurs' }
+    ];
   }
 
   loadUsers(): void {

@@ -1,11 +1,7 @@
 <main class="gestion-container">
   <div class="page-header">
     <h2>Gestion des utilisateurs</h2>
-    <app-breadcrumb [items]="[
-  { label: 'Accueil', url: '/' },
-  { label: 'Consulter les modèles', url: '/consulter-modeles' },
-  { label: 'Gérer les utilisateurs' }
-]"></app-breadcrumb>
+    <app-breadcrumb [items]="breadcrumbItems"></app-breadcrumb>
   </div>
 
   <div class="filters-wrapper">

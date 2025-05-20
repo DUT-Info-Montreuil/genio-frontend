@@ -11,27 +11,20 @@
       <app-breadcrumb [items]="breadcrumbItems" aria-labelledby="page-title"></app-breadcrumb>
     </div>
 
-    <div class="header-right" *ngIf="isConsultant || isExploitant">
-      <div class="role-identity">
-        Connecté en tant que :
-        <strong [ngClass]="{
-          'role-gestionnaire': isGestionnaire,
-          'role-exploitant': isExploitant,
-          'role-consultant': isConsultant
-        }">
-          {{ isExploitant ? 'Exploitant' : 'Consultant' }}
-        </strong>
-      </div>
-    </div>
 
-    <div class="header-right" *ngIf="isGestionnaire">
-      <div class="notif-actions">
+
+    <div class="header-right">
+      <div class="notif-actions" *ngIf="isGestionnaire">
         <div class="notif-container">
-          <button class="notif-btn" (click)="afficherMessageNotif()" aria-label="Voir les demandes d’habilitation" aria-haspopup="true" [attr.aria-expanded]="notifMessageVisible">
+          <button class="notif-btn"
+                  (click)="afficherMessageNotif()"
+                  aria-label="Voir les demandes d’habilitation"
+                  aria-haspopup="true"
+                  [attr.aria-expanded]="notifMessageVisible">
             <i class="fas fa-bell" aria-hidden="true"></i>
             <span class="badge" [ngClass]="{ 'rouge': utilisateurs.length > 0, 'vert': utilisateurs.length === 0 }">
-              {{ utilisateurs.length }}
-            </span>
+          {{ utilisateurs.length }}
+        </span>
           </button>
           <div *ngIf="notifMessageVisible" class="notif-message" role="status" aria-live="polite">
             <ng-container *ngIf="utilisateurs.length === 0">Aucune demande d’habilitation.</ng-container>
@@ -39,9 +32,26 @@
             <ng-container *ngIf="utilisateurs.length > 1">Vous avez {{ utilisateurs.length }} demandes d’habilitation.</ng-container>
           </div>
         </div>
-        <button class="reset-btn" [routerLink]="['/gestion-utilisateurs']">
+        <a [routerLink]="['/gestion-utilisateurs']" [queryParams]="{ source: 'consulter' }" class="btn btn-primary">
           <i class="fas fa-users-cog" aria-hidden="true"></i> Gérer les utilisateurs
-        </button>
+        </a>
+      </div>
+
+      <div class="role-identity">
+        Connecté en tant que :
+        <strong [ngClass]="{
+      'role-gestionnaire': isGestionnaire,
+      'role-exploitant': isExploitant,
+      'role-consultant': isConsultant
+    }">
+          {{
+            isGestionnaire
+              ? 'Gestionnaire'
+              : isExploitant
+                ? 'Exploitant'
+                : 'Consultant'
+          }}
+        </strong>
       </div>
     </div>
   </div>

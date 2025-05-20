@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import {Component, ElementRef, HostListener, OnInit, ViewChild} from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { CommonModule, DatePipe, NgClass } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -19,50 +19,62 @@ export class HistoriqueConventionsComponent implements OnInit {
   paginatedModeles: any[] = [];
   entriesPerPage = 5;
   currentPage = 1;
-  searchText = '';
-  searchTextAvancee = '';
   searchNom = '';
   searchPromotion = '';
   searchAnnee = '';
 
+  openedHelp: 'flux' | 'json' | 'docx' | null = null;
+
   isExploitant = false;
   isGestionnaire = false;
+  isConsultant = false;
 
   @ViewChild('tableStart') tableStart!: ElementRef;
+  @ViewChild('modalContent') modalContent!: ElementRef;
 
-  constructor(
-    private http: HttpClient,
-    private authService: AuthService,
-    public router: Router
-  ) {}
+
+
+  @HostListener('document:keydown.escape', ['$event'])
+  handleEscape(event: KeyboardEvent) {
+    this.closeHelp();
+  }
+
+  ngAfterViewChecked(): void {
+    if (this.openedHelp && this.modalContent) {
+      this.modalContent.nativeElement.focus();
+    }
+  }
+
+  constructor(private http: HttpClient, private authService: AuthService, public router: Router) {}
 
   ngOnInit(): void {
     this.isExploitant = this.authService.isExploitant();
     this.isGestionnaire = this.authService.isGestionnaire();
 
     this.http.get<any[]>('/api/genio/historique').subscribe((data) => {
-      console.log("Données brutes reçues du backend :");
-      console.table(data);
-
-      data.forEach((item, index) => {
-        console.log(`⏳ [${index}] timestamp AVANT conversion :`, item.timestamp);
-
-        if (item.timestamp) {
-          item.timestamp = new Date(item.timestamp); // Correct now
-          console.log(`[${index}] timestamp APRÈS conversion :`, item.timestamp);
-        } else {
-          console.warn(`Pas de timestamp pour item[${index}]`);
-        }
+      data.forEach(item => {
+        if (item.timestamp) item.timestamp = new Date(item.timestamp);
       });
 
-      // Tri par date DESC
-      data.sort((a, b) => {
-        return new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime();
-      });
-
+      data.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
       this.historique = data;
       this.applyFilters();
     });
+    if (this.isGestionnaire) {
+      this.http.get<any[]>('/api/utilisateurs/non-actifs')
+        .subscribe(data => this.utilisateurs = data);
+    }
+  }
+
+  utilisateurs: any[] = [];
+  notifMessageVisible = false;
+
+  afficherMessageNotif() {
+    if (this.notifMessageVisible) return;
+    this.notifMessageVisible = true;
+    setTimeout(() => {
+      this.notifMessageVisible = false;
+    }, 2000);
   }
 
   applyFilters(): void {
@@ -91,16 +103,10 @@ export class HistoriqueConventionsComponent implements OnInit {
     this.updatePaginatedModeles();
   }
 
-  getMin(a: number, b: number): number {
-    return Math.min(a, b);
-  }
-
   updatePaginatedModeles() {
     const start = (this.currentPage - 1) * this.entriesPerPage;
     const end = start + this.entriesPerPage;
     this.paginatedModeles = this.filtered.slice(start, end);
-
-    console.log("Modèles paginés :", this.paginatedModeles);
   }
 
   goToPage(page: number) {
@@ -117,11 +123,15 @@ export class HistoriqueConventionsComponent implements OnInit {
     return Math.ceil(this.filtered.length / this.entriesPerPage);
   }
 
+  getMin(a: number, b: number): number {
+    return Math.min(a, b);
+  }
+
   resetFilters() {
     this.searchNom = '';
     this.searchPromotion = '';
     this.searchAnnee = '';
-    this.entriesPerPage = 5;
+    this.entriesPerPage = 5
     this.currentPage = 1;
     this.applyFilters();
   }
@@ -149,9 +159,17 @@ export class HistoriqueConventionsComponent implements OnInit {
     const isValidationError = msg.includes('erreurs de validation') || msg.includes("champ");
     const isDocxError = !h.docxBinaire;
 
-    if (etape === 'flux') return isFluxError ? 'KO' : 'OK';
-    if (etape === 'json') return isValidationError ? 'KO' : 'OK';
-    if (etape === 'docx') return isDocxError ? 'KO' : 'OK';
+    if (etape === 'flux') {
+      return isFluxError ? 'KO' : 'OK';
+    }
+
+    if (etape === 'json') {
+      return isFluxError || isValidationError ? 'KO' : 'OK';
+    }
+
+    if (etape === 'docx') {
+      return isFluxError || isValidationError || isDocxError ? 'KO' : 'OK';
+    }
 
     return 'OK';
   }
@@ -163,15 +181,19 @@ export class HistoriqueConventionsComponent implements OnInit {
     if (total <= 5) {
       for (let i = 1; i <= total; i++) pages.push(i);
     } else {
-      if (this.currentPage <= 3) {
-        pages.push(1, 2, 3);
-      } else if (this.currentPage >= total - 2) {
-        pages.push(total - 2, total - 1, total);
-      } else {
-        pages.push(this.currentPage - 1, this.currentPage, this.currentPage + 1);
-      }
+      if (this.currentPage <= 3) pages.push(1, 2, 3);
+      else if (this.currentPage >= total - 2) pages.push(total - 2, total - 1, total);
+      else pages.push(this.currentPage - 1, this.currentPage, this.currentPage + 1);
     }
 
     return pages;
+  }
+
+  openHelp(type: 'flux' | 'json' | 'docx') {
+    this.openedHelp = type;
+  }
+
+  closeHelp() {
+    this.openedHelp = null;
   }
 }
