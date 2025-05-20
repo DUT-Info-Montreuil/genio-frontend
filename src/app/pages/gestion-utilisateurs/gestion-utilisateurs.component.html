@@ -1,27 +1,64 @@
 <main class="gestion-container">
   <div class="page-header">
-    <h2>Gestion des utilisateurs</h2>
+    <h2 id="page-title">
+      <i class="fas fa-users-cog" aria-hidden="true"></i> Gestion des utilisateurs
+    </h2>
     <app-breadcrumb [items]="breadcrumbItems"></app-breadcrumb>
   </div>
 
-  <div class="filters-wrapper">
-    <input type="text" [(ngModel)]="searchEmail" (input)="applyFilters()" placeholder="Rechercher par email" aria-label="Recherche email">
-    <select [(ngModel)]="selectedRole" (change)="applyFilters()" aria-label="Filtrer par rôle">
-      <option value="">Tous les rôles</option>
-      <option value="NONE">Nouveaux utilisateurs</option>
-      <option value="CONSULTANT">Consultant</option>
-      <option value="GESTIONNAIRE">Gestionnaire</option>
-      <option value="EXPLOITANT">Exploitant</option>
-    </select>
-    <select [(ngModel)]="filterActif" (change)="applyFilters()" aria-label="Filtrer par état">
-      <option value="">Tous les comptes</option>
-      <option value="true">Actifs</option>
-      <option value="false">Non actifs</option>
-    </select>
+  <p class="table-intro">
+    Cette section vous permet de visualiser et modifier les comptes utilisateurs. Filtrez facilement par rôle ou statut pour trouver rapidement les profils à gérer.
+  </p>
+
+  <div class="filters-zone-wrapper" aria-label="Filtres de recherche">
+    <div class="filters-zone">
+      <div class="input-icon">
+        <i class="fas fa-envelope" aria-hidden="true"></i>
+        <input type="text" [(ngModel)]="searchEmail" (input)="applyFilters()" placeholder="Rechercher par email" />
+      </div>
+      <div class="input-icon">
+        <i class="fas fa-user-tag" aria-hidden="true"></i>
+        <select [(ngModel)]="selectedRole" (change)="applyFilters()">
+          <option value="">Tous les rôles</option>
+          <option value="NONE">Nouveaux utilisateurs</option>
+          <option value="CONSULTANT">Consultant</option>
+          <option value="GESTIONNAIRE">Gestionnaire</option>
+          <option value="EXPLOITANT">Exploitant</option>
+        </select>
+      </div>
+      <div class="input-icon">
+        <i class="fas fa-toggle-on" aria-hidden="true"></i>
+        <select [(ngModel)]="filterActif" (change)="applyFilters()">
+          <option value="">Tous les comptes</option>
+          <option value="true">Actifs</option>
+          <option value="false">Non actifs</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="reset-icon">
+      <button class="reset-btn" (click)="resetFilters()">
+        <i class="fas fa-sync-alt" aria-hidden="true"></i> Réinitialiser
+      </button>
+    </div>
   </div>
 
+  <section class="table-controls">
+    <label for="entriesSelect">Entrées par page</label>
+    <select id="entriesSelect" [(ngModel)]="entriesPerPage" (change)="setEntriesPerPage(entriesPerPage)" aria-label="Nombre d’entrées par page">
+      <option [value]="5">5</option>
+      <option [value]="10">10</option>
+      <option [value]="15">15</option>
+    </select>
+    <span aria-live="polite" class="sr-only" role="status">
+    {{ filteredUtilisateurs.length }} utilisateurs trouvés
+  </span>
+  </section>
+
+
   <div class="table-wrapper">
-    <table class="models-table">
+    <table class="models-table" aria-describedby="tableDescription">
+      <caption class="sr-only">Liste des utilisateurs</caption>
       <thead>
       <tr>
         <th>Nom</th>
@@ -38,25 +75,51 @@
         <td>{{ user.nom }}</td>
         <td>{{ user.prenom }}</td>
         <td>{{ user.email }}</td>
-        <td>{{ user.actif ? '✅' : '❌' }}</td>
+        <td [ngClass]="user.actif ? 'status-success' : 'status-error'" class="status-cell">
+          <span class="status-dot" [ngClass]="user.actif ? 'dot-success' : 'dot-error'" aria-hidden="true"></span>
+          {{ user.actif ? 'Actif' : 'Inactif' }}
+          <span class="sr-only">{{ user.actif ? 'Compte actif' : 'Compte inactif' }}</span>
+        </td>
         <td>{{ user.role || 'NONE' }}</td>
         <td>{{ user.createdAt | date: 'dd/MM/yyyy à HH:mm' }}</td>
         <td class="actions-cell">
-          <button (click)="openEditModal(user)" aria-label="Modifier"><i class="fas fa-edit"></i></button>
-          <button (click)="deleteUser(user)" aria-label="Supprimer"><i class="fas fa-trash-alt"></i></button>
+          <button class="btn-icon edit-btn"
+                  (click)="openEditModal(user)"
+                  [attr.aria-label]="'Modifier l’utilisateur ' + user.nom + ' ' + user.prenom"
+                  title="Modifier l’utilisateur">
+            <i class="fas fa-edit" aria-hidden="true"></i>
+            <span class="sr-only">Modifier</span>
+          </button>
+
+          <button class="btn-icon delete-btn"
+                  (click)="openDeleteConfirmation(user)"
+                  [attr.aria-label]="'Supprimer l’utilisateur ' + user.nom + ' ' + user.prenom"
+                  title="Supprimer l’utilisateur">
+            <i class="fas fa-trash-alt" aria-hidden="true"></i>
+            <span class="sr-only">Supprimer</span>
+          </button>
         </td>
       </tr>
       </tbody>
     </table>
 
-    <div class="table-footer">
-      <span>Page {{ currentPage }} / {{ totalPages }}</span>
-      <div class="pagination">
+    <footer class="table-footer" aria-label="Navigation dans les pages">
+      <span>
+        Affichage de {{ filteredUtilisateurs.length === 0 ? 0 : (currentPage - 1) * entriesPerPage + 1 }}
+        à {{ getMin(currentPage * entriesPerPage, filteredUtilisateurs.length) }}
+        sur {{ filteredUtilisateurs.length }} utilisateurs
+      </span>
+      <nav class="pagination" role="navigation" aria-label="Pagination">
         <button (click)="goToPage(currentPage - 1)" [disabled]="currentPage === 1">❮</button>
-        <button *ngFor="let page of visiblePages" (click)="goToPage(page)" [class.active]="page === currentPage">{{ page }}</button>
+        <button *ngFor="let page of visiblePages"
+                [class.active]="currentPage === page"
+                [attr.aria-current]="currentPage === page ? 'page' : null"
+                (click)="goToPage(page)">
+          {{ page }}
+        </button>
         <button (click)="goToPage(currentPage + 1)" [disabled]="currentPage === totalPages">❯</button>
-      </div>
-    </div>
+      </nav>
+    </footer>
   </div>
 
   <div class="modal-overlay" *ngIf="showEditModal">
@@ -103,6 +166,17 @@
       <div class="modal-actions">
         <button (click)="saveUser()">Enregistrer</button>
         <button (click)="closeModal()">Annuler</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" *ngIf="userToDelete">
+    <div class="modal-card delete-modal">
+      <h3>Confirmer la suppression</h3>
+      <p>Voulez-vous vraiment supprimer <strong>{{ userToDelete.nom }} {{ userToDelete.prenom }}</strong> ?</p>
+      <div class="modal-actions">
+        <button (click)="confirmDeleteUser()">Oui, supprimer</button>
+        <button (click)="userToDelete = null">Annuler</button>
       </div>
     </div>
   </div>

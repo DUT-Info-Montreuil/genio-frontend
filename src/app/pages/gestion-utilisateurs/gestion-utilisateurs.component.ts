@@ -1,14 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
-import { DatePipe, NgForOf, NgIf } from '@angular/common';
+import {DatePipe, NgClass, NgForOf, NgIf} from '@angular/common';
 import {ActivatedRoute, RouterModule} from '@angular/router';
 import {BreadcrumbComponent} from '../../shared/breadcrumb/breadcrumb.component';
 
 @Component({
   selector: 'app-gestion-utilisateurs',
   standalone: true,
-  imports: [FormsModule, DatePipe, RouterModule, NgForOf, NgIf, BreadcrumbComponent],
+  imports: [FormsModule, DatePipe, RouterModule, NgForOf, NgIf, BreadcrumbComponent, NgClass],
   templateUrl: './gestion-utilisateurs.component.html',
   styleUrls: ['./gestion-utilisateurs.component.css']
 })
@@ -38,6 +38,17 @@ export class GestionUtilisateursComponent implements OnInit {
     this.loadUsers();
   }
 
+  resetFilters(): void {
+    this.searchEmail = '';
+    this.selectedRole = '';
+    this.filterActif = '';
+    this.entriesPerPage = 5
+    this.applyFilters();
+  }
+  getMin(a: number, b: number): number {
+    return Math.min(a, b);
+  }
+
   updateBreadcrumb(source: string) {
     this.breadcrumbItems = [
       { label: 'Accueil', url: '/' },
@@ -48,6 +59,21 @@ export class GestionUtilisateursComponent implements OnInit {
           : []),
       { label: 'Gérer les utilisateurs' }
     ];
+  }
+
+  setEntriesPerPage(value: number) {
+    this.entriesPerPage = +value;
+    this.currentPage = 1;
+    this.updatePaginatedModeles();
+  }
+
+  paginatedModeles: any[] = [];
+  filtered: any[] = [];
+
+  updatePaginatedModeles() {
+    const start = (this.currentPage - 1) * this.entriesPerPage;
+    const end = start + this.entriesPerPage;
+    this.paginatedModeles = this.filtered.slice(start, end);
   }
 
   loadUsers(): void {
@@ -107,12 +133,23 @@ export class GestionUtilisateursComponent implements OnInit {
   }
 
   deleteUser(user: any): void {
-    if (confirm(`Supprimer le compte de ${user.nom} ${user.prenom} ?`)) {
-      this.http.delete(`http://localhost:8080/api/utilisateurs/${user.id}`)
-        .subscribe(() => {
-          this.utilisateurs = this.utilisateurs.filter(u => u.id !== user.id);
-          this.applyFilters();
-        });
+    this.http.delete(`http://localhost:8080/api/utilisateurs/${user.id}`)
+      .subscribe(() => {
+        this.utilisateurs = this.utilisateurs.filter(u => u.id !== user.id);
+        this.applyFilters();
+      });
+  }
+
+  userToDelete: any = null;
+
+  openDeleteConfirmation(user: any) {
+    this.userToDelete = user;
+  }
+
+  confirmDeleteUser() {
+    if (this.userToDelete) {
+      this.deleteUser(this.userToDelete);
+      this.userToDelete = null;
     }
   }
 }

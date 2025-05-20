@@ -32,7 +32,7 @@
         </div>
       </div>
 
-      <a routerLink="/gestion-utilisateurs" class="btn btn-primary" aria-label="Gérer les utilisateurs">
+      <a [routerLink]="['/gestion-utilisateurs']" [queryParams]="{ source: 'historique' }" class="btn btn-primary" aria-label="Gérer les utilisateurs">
         <i class="fas fa-users-cog" aria-hidden="true"></i>  Gérer les utilisateurs
       </a>
 
