@@ -1,0 +1,109 @@
+<main class="modeles-container">
+
+  <header class="page-header-layout">
+    <div class="header-left">
+      <h2 id="page-title">
+        <i class="fas fa-history" aria-hidden="true"></i>
+        Gérer les modèles
+      </h2>
+      <app-breadcrumb
+        [items]="[{ label: 'Accueil', url: '/' }, { label: 'Administration des modèles' }]"
+        aria-labelledby="page-title">
+      </app-breadcrumb>
+    </div>
+
+    <div class="header-right">
+      <div class="notif-actions" *ngIf="isGestionnaire">
+        <div class="notif-container">
+          <button class="notif-btn"
+                  (click)="afficherMessageNotif()"
+                  aria-label="Voir les demandes d’habilitation"
+                  aria-haspopup="true"
+                  [attr.aria-expanded]="notifMessageVisible">
+            <i class="fas fa-bell" aria-hidden="true"></i>
+            <span class="badge" [ngClass]="{ 'rouge': utilisateurs.length > 0, 'vert': utilisateurs.length === 0 }">
+            {{ utilisateurs.length }}
+          </span>
+          </button>
+          <div *ngIf="notifMessageVisible" class="notif-message" role="status" aria-live="polite">
+            <ng-container *ngIf="utilisateurs.length === 0">Aucune demande d’habilitation.</ng-container>
+            <ng-container *ngIf="utilisateurs.length === 1">1 demande d’habilitation.</ng-container>
+            <ng-container *ngIf="utilisateurs.length > 1">{{ utilisateurs.length }} demandes d’habilitation.</ng-container>
+          </div>
+        </div>
+
+        <a [routerLink]="['/gestion-utilisateurs']"
+           [queryParams]="{ source: 'gerer' }"
+           class="btn btn-primary"
+           aria-label="Gérer">
+          <i class="fas fa-users-cog" aria-hidden="true"></i> Gérer les utilisateurs
+        </a>
+      </div>
+
+      <div class="role-identity" *ngIf="isExploitant || isConsultant">
+        <span>Connecté en tant que :</span>
+        <strong [ngClass]="{
+        'role-exploitant': isExploitant,
+        'role-consultant': isConsultant
+      }">
+          {{ isExploitant ? 'Exploitant' : 'Consultant' }}
+        </strong>
+      </div>
+    </div>
+  </header>
+
+  <p id="tableDescription" class="table-intro">
+    Cette interface vous permet d’ajouter, modifier ou supprimer les modèles de convention utilisés pour générer les documents. Veillez à ne pas ajouter deux fois le même fichier.
+  </p>
+
+  <div class="actions-bar">
+    <nav class="actions-par-role" aria-label="Navigation secondaire">
+      <a routerLink="/consulter-modeles" [ngClass]="{ 'active-link': router.url === '/consulter-modeles' }">Consulter</a>
+      <a routerLink="/historique-conventions" [ngClass]="{ 'active-link': router.url === '/historique-conventions' }">Visualiser</a>
+      <a *ngIf="isGestionnaire" routerLink="/gerer-modeles" [ngClass]="{ 'active-link': router.url === '/gerer-modeles' }">Gérer</a>
+    </nav>
+
+    <div class="action-buttons">
+      <button class="btn btn-primary" (click)="ajouter()">Ajouter</button>
+      <button class="btn btn-primary" (click)="modifier()">Modifier</button>
+      <button class="btn btn-primary" (click)="supprimer()">Supprimer</button>
+    </div>
+  </div>
+
+  <div class="modele-upload-container">
+    <h2>Ajouter un modèle de convention</h2>
+
+    <form (submit)="onSubmit()" enctype="multipart/form-data">
+      <div class="form-group">
+        <label for="file">Choisir un fichier :</label>
+        <input type="file" id="file" (change)="onFileSelected($event)" accept=".docx" />
+      </div>
+
+      <div class="form-group">
+        <label for="annee">Année du modèle :</label>
+        <input type="text" id="annee" [(ngModel)]="annee" name="annee" maxlength="4" required />
+      </div>
+
+      <button type="submit" [disabled]="isSubmitting">Ajouter</button>
+
+      <!-- Message de succès -->
+      <div *ngIf="message" class="success">{{ message }}</div>
+
+      <!-- Message d'erreur -->
+      <div *ngIf="error" class="error">
+        {{ error }}
+
+        <!-- Bouton voir plus si erreur liée aux variables attendues -->
+        <div *ngIf="error.includes('variables attendues')" class="voir-plus-btn">
+          <button type="button" (click)="toggleExpectedVariables()">
+            {{ showExpectedVariables ? 'Masquer les variables attendues' : 'Voir les variables attendues' }}
+          </button>
+
+          <ul *ngIf="showExpectedVariables" class="variable-list">
+            <li *ngFor="let v of getExpectedVariables()">{{ v }}</li>
+          </ul>
+        </div>
+      </div>
+    </form>
+  </div>
+</main>

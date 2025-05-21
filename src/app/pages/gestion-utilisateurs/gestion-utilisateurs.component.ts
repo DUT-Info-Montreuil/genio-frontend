@@ -55,8 +55,10 @@ export class GestionUtilisateursComponent implements OnInit {
       ...(source === 'historique'
         ? [{ label: 'Historique', url: '/historique-conventions' }]
         : source === 'consulter'
-          ? [{ label: 'Consulter les modèles', url: '/consulter-modeles' }]
-          : []),
+          ? [{ label: 'Modèles disponibles', url: '/consulter-modeles' }]
+          : source === 'gerer'
+            ? [{ label: 'Administration des modèles', url: '/gerer-modeles' }]
+            : []),
       { label: 'Gérer les utilisateurs' }
     ];
   }

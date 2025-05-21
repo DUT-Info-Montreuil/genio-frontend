@@ -147,3 +147,41 @@ main, .auth-page, .page-contents {
     white-space: normal;
   }
 }
+
+.variable-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+  margin-top: 0.5rem;
+}
+
+.variable-table td {
+  padding: 8px 12px;
+  border-bottom: 1px solid #dee2e6;
+  vertical-align: top;
+  color: #1f3c88;
+  font-weight: 500;
+  word-break: break-word;
+}
+
+.variable-table-wrapper {
+  overflow-x: auto;
+  margin-bottom: 1rem;
+}
+
+.toggle-vars-btn {
+  background-color: transparent;
+  border: 1px solid #1f3c88;
+  color: #1f3c88;
+  padding: 8px 14px;
+  font-size: 0.9rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.2s ease;
+}
+
+.toggle-vars-btn:hover {
+  background-color: #1f3c88;
+  color: #fff;
+}

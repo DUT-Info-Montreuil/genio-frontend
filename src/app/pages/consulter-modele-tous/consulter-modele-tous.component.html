@@ -6,12 +6,11 @@
   <div class="page-header-layout">
     <div class="header-left">
       <h2 id="page-title">
-        <i class="fas fa-folder-open" aria-hidden="true"></i> Consultation des modèles
+        <i class="fas fa-folder-open" aria-hidden="true"></i>
+        Modèles de convention disponibles
       </h2>
       <app-breadcrumb [items]="breadcrumbItems" aria-labelledby="page-title"></app-breadcrumb>
     </div>
-
-
 
     <div class="header-right">
       <div class="notif-actions" *ngIf="isGestionnaire">
@@ -46,15 +45,15 @@
         </strong>
       </div>
     </div>
-    <span class="table-intro">
-      Cette section vous permet de consulter les modèles de convention disponibles. Utilisez les filtres pour affiner votre recherche et accéder aux détails de chaque modèle.
-    </span>
+    <p class="table-intro" id="tableDescription">
+      Retrouvez ici tous les modèles de convention mis à disposition. Filtrez-les par nom ou année pour accéder rapidement aux informations souhaitées.
+    </p>
   </div>
 
   <nav class="actions-par-role" aria-label="Navigation des actions">
     <a [routerLink]="'/consulter-modeles'" [ngClass]="{ 'active-link': router.url === '/consulter-modeles' }">Consulter</a>
     <a *ngIf="!isConsultant" [routerLink]="'/historique-conventions'" [ngClass]="{ 'active-link': router.url === '/historique-conventions' }">Visualiser</a>
-    <a *ngIf="isGestionnaire" [routerLink]="'/gerer'" [ngClass]="{ 'active-link': router.url === '/gerer' }">Gérer</a>
+    <a *ngIf="isGestionnaire" [routerLink]="'/gerer-modeles'" [ngClass]="{ 'active-link': router.url === '/gerer' }">Gérer</a>
   </nav>
 
   <section class="filters-wrapper" aria-label="Filtres">
@@ -198,11 +197,19 @@
             Affichage de {{ showAllVariables ? expectedVariables.length : previewVariables.length }}
             / {{ expectedVariables.length }} variables
           </p>
-          <ul class="variable-list">
-            <li *ngFor="let variable of (showAllVariables ? expectedVariables : previewVariables)">
-              {{ variable }}
-            </li>
-          </ul>
+
+          <div class="variable-table-wrapper">
+            <table class="variable-table">
+              <tbody>
+              <tr *ngFor="let row of getVariableRows(3)">
+                <td *ngIf="row[0]">{{ row[0] }}</td>
+                <td *ngIf="row[1]">{{ row[1] }}</td>
+                <td *ngIf="row[2]">{{ row[2] }}</td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+
           <button (click)="toggleVariables()" class="toggle-vars-btn">
             {{ showAllVariables ? 'Voir moins' : 'Voir toutes les variables' }}
           </button>

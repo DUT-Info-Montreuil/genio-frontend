@@ -68,8 +68,19 @@ export class ConsulterModeleTousComponent implements OnInit {
   setBreadcrumb() {
     this.breadcrumbItems = [
       { label: 'Accueil', url: '/' },
-      { label: 'Consultation des modèles' }
+      { label: 'Modèles disponibles' }
     ];
+  }
+
+  getVariableRows(cols: number = 3): string[][] {
+    const list = this.showAllVariables ? this.expectedVariables : this.previewVariables;
+    const rows: string[][] = [];
+
+    for (let i = 0; i < list.length; i += cols) {
+      rows.push(list.slice(i, i + cols));
+    }
+
+    return rows;
   }
 
   ouvrirPopup() {

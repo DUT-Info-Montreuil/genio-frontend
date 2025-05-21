@@ -60,7 +60,7 @@
   <nav class="actions-par-role" aria-label="Navigation secondaire">
     <a routerLink="/consulter-modeles" [ngClass]="{ 'active-link': router.url === '/consulter-modeles' }">Consulter</a>
     <a routerLink="/historique-conventions" [ngClass]="{ 'active-link': router.url === '/historique-conventions' }">Visualiser</a>
-    <a *ngIf="isGestionnaire" routerLink="/gerer" [ngClass]="{ 'active-link': router.url === '/gerer' }">Gérer</a>
+    <a *ngIf="isGestionnaire" routerLink="/gerer-modeles" [ngClass]="{ 'active-link': router.url === '/gerer' }">Gérer</a>
   </nav>
 
   <section class="filters-zone-wrapper" aria-label="Filtres de recherche">

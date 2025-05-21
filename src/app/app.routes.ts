@@ -15,6 +15,7 @@ import {ResetPasswordComponent} from './pages/reset-password/reset-password.comp
 import {GestionUtilisateursComponent} from './pages/gestion-utilisateurs/gestion-utilisateurs.component';
 import {BreadcrumbComponent} from './shared/breadcrumb/breadcrumb.component';
 import {HistoriqueConventionsComponent} from './pages/historique-conventions/historique-conventions.component';
+import {GererModelesComponent} from './pages/gerer-modeles/gerer-modeles.component';
 
 export const routes: Routes = [
   { path: '', component: AccueilComponent },
@@ -32,6 +33,7 @@ export const routes: Routes = [
   { path: 'reset-password', component: ResetPasswordComponent },
   { path: 'gestion-utilisateurs', component: GestionUtilisateursComponent },
   { path: 'breadcrumb', component: BreadcrumbComponent },
-  { path: 'historique-conventions', component: HistoriqueConventionsComponent }
+  { path: 'historique-conventions', component: HistoriqueConventionsComponent },
+  { path: 'gerer-modeles', component: GererModelesComponent}
 
 ];
