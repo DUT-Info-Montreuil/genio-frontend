@@ -105,7 +105,7 @@ body {
 }
 
 .card p {
-  font-size: 1rem;
+  font-size: 1.1rem;
   color: #455a64;
   line-height: 1.5;
 }
@@ -142,23 +142,6 @@ body {
   }
 }
 
-
-
-.breadcrumb.accueil-breadcrumb {
-  justify-content: center;
-  font-size: 0.9rem;
-  margin: -0.5rem auto 1.5rem;
-  color: #6c757d;
-}
-
-.breadcrumb.accueil-breadcrumb span {
-  padding: 4px 10px;
-  border-radius: 12px;
-  background-color: transparent;
-  color: #6c757d;
-  font-weight: 500;
-  box-shadow: none;
-}
 @media (prefers-reduced-motion: reduce) {
   * {
     animation: none !important;

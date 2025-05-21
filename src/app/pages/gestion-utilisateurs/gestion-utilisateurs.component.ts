@@ -10,7 +10,7 @@ import {BreadcrumbComponent} from '../../shared/breadcrumb/breadcrumb.component'
   standalone: true,
   imports: [FormsModule, DatePipe, RouterModule, NgForOf, NgIf, BreadcrumbComponent, NgClass],
   templateUrl: './gestion-utilisateurs.component.html',
-  styleUrls: ['./gestion-utilisateurs.component.css']
+  styleUrls: ['./gestion-utilisateurs.component.css','../../../assets/styles/ tables-common.css','../../../assets/styles/modal-box.css','../../../assets/styles/header.css']
 })
 export class GestionUtilisateursComponent implements OnInit {
   breadcrumbItems: { label: string; url?: string }[] = [];

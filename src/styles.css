@@ -2,7 +2,7 @@ html, body {
   height: 100%;
   background-color: #e1f2ff;
   margin: 0;
-  font-size: 1.1rem;
+  font-size: 1.2rem;
   font-family: Arial, sans-serif;
 }
 
@@ -16,8 +16,6 @@ router-outlet:empty {
   display: none;
 }
 
-main, .auth-page, .page-contents {
-  padding-top: 110px;
-}
+
 
 

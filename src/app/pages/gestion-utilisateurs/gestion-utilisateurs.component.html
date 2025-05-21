@@ -1,9 +1,11 @@
 <main class="gestion-container">
-  <div class="page-header">
-    <h2 id="page-title">
-      <i class="fas fa-users-cog" aria-hidden="true"></i> Gestion des utilisateurs
-    </h2>
-    <app-breadcrumb [items]="breadcrumbItems"></app-breadcrumb>
+  <div class="page-header-layout">
+    <div class="header-left">
+      <h2 id="page-title">
+        <i class="fas fa-users-cog" aria-hidden="true"></i> Gestion des utilisateurs
+      </h2>
+      <app-breadcrumb [items]="breadcrumbItems" aria-labelledby="page-title"></app-breadcrumb>
+    </div>
   </div>
 
   <p class="table-intro">
@@ -51,13 +53,12 @@
       <option [value]="15">15</option>
     </select>
     <span aria-live="polite" class="sr-only" role="status">
-    {{ filteredUtilisateurs.length }} utilisateurs trouvés
-  </span>
+      {{ filteredUtilisateurs.length }} utilisateurs trouvés
+    </span>
   </section>
 
-
   <div class="table-wrapper">
-    <table class="models-table" aria-describedby="tableDescription">
+    <table class="app-table" aria-describedby="tableDescription">
       <caption class="sr-only">Liste des utilisateurs</caption>
       <thead>
       <tr>
@@ -76,24 +77,22 @@
         <td>{{ user.prenom }}</td>
         <td>{{ user.email }}</td>
         <td [ngClass]="user.actif ? 'status-success' : 'status-error'" class="status-cell">
-          <span class="status-dot" [ngClass]="user.actif ? 'dot-success' : 'dot-error'" aria-hidden="true"></span>
           {{ user.actif ? 'Actif' : 'Inactif' }}
           <span class="sr-only">{{ user.actif ? 'Compte actif' : 'Compte inactif' }}</span>
         </td>
         <td>{{ user.role || 'NONE' }}</td>
         <td>{{ user.createdAt | date: 'dd/MM/yyyy à HH:mm' }}</td>
         <td class="actions-cell">
-          <button class="btn-icon edit-btn"
+          <button class="btn-icon edit"
                   (click)="openEditModal(user)"
-                  [attr.aria-label]="'Modifier l’utilisateur ' + user.nom + ' ' + user.prenom"
+                  [attr.aria-label]="'Modifier ' + user.nom + ' ' + user.prenom"
                   title="Modifier l’utilisateur">
             <i class="fas fa-edit" aria-hidden="true"></i>
             <span class="sr-only">Modifier</span>
           </button>
-
-          <button class="btn-icon delete-btn"
+          <button class="btn-icon delete"
                   (click)="openDeleteConfirmation(user)"
-                  [attr.aria-label]="'Supprimer l’utilisateur ' + user.nom + ' ' + user.prenom"
+                  [attr.aria-label]="'Supprimer ' + user.nom + ' ' + user.prenom"
                   title="Supprimer l’utilisateur">
             <i class="fas fa-trash-alt" aria-hidden="true"></i>
             <span class="sr-only">Supprimer</span>
@@ -122,61 +121,53 @@
     </footer>
   </div>
 
-  <div class="modal-overlay" *ngIf="showEditModal">
-    <div class="modal-card user-modal">
-      <h3>Modifier l'utilisateur</h3>
-
-      <div class="modal-field">
-        <label>Nom :</label>
-        <span class="static-field">{{ editedUser.nom }}</span>
-      </div>
-
-      <div class="modal-field">
-        <label>Prénom :</label>
-        <span class="static-field">{{ editedUser.prenom }}</span>
-      </div>
-
-      <div class="modal-field">
-        <label>Email :</label>
-        <span class="static-field">{{ editedUser.email }}</span>
-      </div>
-
-      <div class="modal-field checkbox-field">
-        <label for="actifToggle">Activer le compte :</label>
-        <div class="switch-wrapper">
-          <input type="checkbox"
-                 id="actifToggle"
-                 [(ngModel)]="editedUser.actif"
-                 class="switch-toggle"
-                 aria-label="Activer ou désactiver le compte utilisateur" />
-          <label class="switch-label" for="actifToggle"></label>
+  <div class="modal-wrapper" *ngIf="showEditModal">
+    <div class="modal-box" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+      <h3 id="modal-title"><i class="fas fa-user-edit"></i> Modifier l'utilisateur</h3>
+      <div class="modal-section">
+        <div class="modal-field">
+          <label>Nom :</label>
+          <span class="static-field">{{ editedUser.nom }}</span>
+        </div>
+        <div class="modal-field">
+          <label>Prénom :</label>
+          <span class="static-field">{{ editedUser.prenom }}</span>
+        </div>
+        <div class="modal-field">
+          <label>Email :</label>
+          <span class="static-field">{{ editedUser.email }}</span>
+        </div>
+        <div class="modal-field checkbox-field">
+          <label for="actifToggle">Activer le compte :</label>
+          <div class="switch-wrapper">
+            <input type="checkbox" id="actifToggle" [(ngModel)]="editedUser.actif" class="switch-toggle" />
+            <label class="switch-label" for="actifToggle"></label>
+          </div>
+        </div>
+        <div class="modal-field">
+          <label>Rôle :</label>
+          <select [(ngModel)]="editedUser.role">
+            <option value="NONE">NONE</option>
+            <option value="CONSULTANT">Consultant</option>
+            <option value="GESTIONNAIRE">Gestionnaire</option>
+            <option value="EXPLOITANT">Exploitant</option>
+          </select>
         </div>
       </div>
-
-      <div class="modal-field">
-        <label>Rôle :</label>
-        <select [(ngModel)]="editedUser.role">
-          <option value="NONE">NONE</option>
-          <option value="CONSULTANT">Consultant</option>
-          <option value="GESTIONNAIRE">Gestionnaire</option>
-          <option value="EXPLOITANT">Exploitant</option>
-        </select>
-      </div>
-
       <div class="modal-actions">
-        <button (click)="saveUser()">Enregistrer</button>
-        <button (click)="closeModal()">Annuler</button>
+        <button class="primary" (click)="saveUser()">Enregistrer</button>
+        <button class="secondary" (click)="closeModal()">Annuler</button>
       </div>
     </div>
   </div>
 
-  <div class="modal-overlay" *ngIf="userToDelete">
-    <div class="modal-card delete-modal">
-      <h3>Confirmer la suppression</h3>
+  <div class="modal-wrapper" *ngIf="userToDelete">
+    <div class="modal-box alert" role="dialog" aria-modal="true">
+      <h3><i class="fas fa-exclamation-triangle"></i> Confirmer la suppression</h3>
       <p>Voulez-vous vraiment supprimer <strong>{{ userToDelete.nom }} {{ userToDelete.prenom }}</strong> ?</p>
       <div class="modal-actions">
-        <button (click)="confirmDeleteUser()">Oui, supprimer</button>
-        <button (click)="userToDelete = null">Annuler</button>
+        <button class="danger" (click)="confirmDeleteUser()">Oui, supprimer</button>
+        <button class="secondary" (click)="userToDelete = null">Annuler</button>
       </div>
     </div>
   </div>

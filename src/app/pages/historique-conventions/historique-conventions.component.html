@@ -1,4 +1,5 @@
 <main class="modeles-container" aria-label="Historique des conventions">
+
   <header class="page-header-layout">
     <div class="header-left">
       <h2 id="page-title">
@@ -7,42 +8,44 @@
       </h2>
       <app-breadcrumb
         [items]="[{ label: 'Accueil', url: '/' }, { label: 'Historique' }]"
-        aria-labelledby="page-title"
-      ></app-breadcrumb>
+        aria-labelledby="page-title">
+      </app-breadcrumb>
     </div>
 
-    <div class="notif-actions" *ngIf="isGestionnaire">
-      <div class="notif-container">
-        <button
-          class="notif-btn"
-          (click)="afficherMessageNotif()"
-          aria-label="Voir les demandes d’habilitation"
-          aria-haspopup="true"
-          [attr.aria-expanded]="notifMessageVisible">
-          <i class="fas fa-bell" aria-hidden="true"></i>
-          <span class="badge" [ngClass]="{ 'rouge': utilisateurs.length > 0, 'vert': utilisateurs.length === 0 }">
-        {{ utilisateurs.length }}
-      </span>
-        </button>
-
-        <div *ngIf="notifMessageVisible" class="notif-message" role="status" aria-live="polite">
-          <ng-container *ngIf="utilisateurs.length === 0">Aucune demande d’habilitation.</ng-container>
-          <ng-container *ngIf="utilisateurs.length === 1">1 demande d’habilitation.</ng-container>
-          <ng-container *ngIf="utilisateurs.length > 1">{{ utilisateurs.length }} demandes d’habilitation.</ng-container>
+    <div class="header-right">
+      <div class="notif-actions" *ngIf="isGestionnaire">
+        <div class="notif-container">
+          <button class="notif-btn"
+                  (click)="afficherMessageNotif()"
+                  aria-label="Voir les demandes d’habilitation"
+                  aria-haspopup="true"
+                  [attr.aria-expanded]="notifMessageVisible">
+            <i class="fas fa-bell" aria-hidden="true"></i>
+            <span class="badge" [ngClass]="{ 'rouge': utilisateurs.length > 0, 'vert': utilisateurs.length === 0 }">
+            {{ utilisateurs.length }}
+          </span>
+          </button>
+          <div *ngIf="notifMessageVisible" class="notif-message" role="status" aria-live="polite">
+            <ng-container *ngIf="utilisateurs.length === 0">Aucune demande d’habilitation.</ng-container>
+            <ng-container *ngIf="utilisateurs.length === 1">1 demande d’habilitation.</ng-container>
+            <ng-container *ngIf="utilisateurs.length > 1">{{ utilisateurs.length }} demandes d’habilitation.</ng-container>
+          </div>
         </div>
+
+        <a [routerLink]="['/gestion-utilisateurs']"
+           [queryParams]="{ source: 'historique' }"
+           class="btn btn-primary"
+           aria-label="Gérer les utilisateurs">
+          <i class="fas fa-users-cog" aria-hidden="true"></i> Gérer les utilisateurs
+        </a>
       </div>
-
-      <a [routerLink]="['/gestion-utilisateurs']" [queryParams]="{ source: 'historique' }" class="btn btn-primary" aria-label="Gérer les utilisateurs">
-        <i class="fas fa-users-cog" aria-hidden="true"></i>  Gérer les utilisateurs
-      </a>
-
 
       <div class="role-identity" *ngIf="isExploitant || isConsultant">
         <span>Connecté en tant que :</span>
         <strong [ngClass]="{
-          'role-exploitant': isExploitant,
-          'role-consultant': isConsultant
-        }">
+        'role-exploitant': isExploitant,
+        'role-consultant': isConsultant
+      }">
           {{ isExploitant ? 'Exploitant' : 'Consultant' }}
         </strong>
       </div>
@@ -51,7 +54,7 @@
 
   <p id="tableDescription" class="table-intro">
     Consultez l’historique de génération des conventions par étudiant. Utilisez les filtres pour affiner les résultats
-    et cliquez sur les icônes d’aide (<i class="fas fa-question-circle" aria-hidden="true"></i>) pour plus de détails.
+    et cliquez sur les icônes d’aide <i class="fas fa-question-circle" aria-hidden="true"></i> pour plus de détails.
   </p>
 
   <nav class="actions-par-role" aria-label="Navigation secondaire">
@@ -64,10 +67,7 @@
     <div class="filters-zone">
       <div class="input-icon">
         <i class="fas fa-user" aria-hidden="true"></i>
-        <input #inputNomEtudiant type="text" placeholder="Nom étudiant"
-               [(ngModel)]="searchNom"
-               (input)="applyFilters()"
-               aria-label="Filtrer par nom étudiant" />
+        <input type="text" placeholder="Nom étudiant" [(ngModel)]="searchNom" (input)="applyFilters()" aria-label="Filtrer par nom étudiant" />
       </div>
       <div class="input-icon">
         <i class="fas fa-calendar-alt" aria-hidden="true"></i>
@@ -99,34 +99,34 @@
   </section>
 
   <div class="table-wrapper">
-    <table class="models-table"  aria-describedby="tableDescription">
+    <table class="app-table" aria-describedby="tableDescription">
       <caption class="sr-only">Tableau d’historique des conventions</caption>
       <thead>
       <tr>
-        <th scope="col" aria-sort="none">Nom étudiant</th>
-        <th scope="col" aria-sort="none">Promotion</th>
-        <th scope="col" aria-sort="none">Année</th>
-        <th scope="col" aria-sort="none">
+        <th scope="col">Nom étudiant</th>
+        <th scope="col">Promotion</th>
+        <th scope="col">Année</th>
+        <th scope="col">
           Flux
-          <button class="info-icon" title="Voir l’aide sur FLUX" (click)="openHelp('flux')" aria-label="Aide FLUX">
-            <i class="fas fa-question-circle" aria-hidden="true"></i>
+          <button class="info-icon" (click)="openHelp('flux')" title="Voir l’aide sur FLUX" aria-label="Aide FLUX">
+            <i class="fas fa-question-circle"></i>
           </button>
         </th>
-        <th scope="col" aria-sort="none">
+        <th scope="col">
           JSON
-          <button class="info-icon" title="Voir l’aide sur JSON" (click)="openHelp('json')" aria-label="Aide JSON">
-            <i class="fas fa-question-circle" aria-hidden="true"></i>
+          <button class="info-icon" (click)="openHelp('json')" title="Voir l’aide sur JSON" aria-label="Aide JSON">
+            <i class="fas fa-question-circle"></i>
           </button>
         </th>
-        <th scope="col" aria-sort="none">
+        <th scope="col">
           DOCX
-          <button class="info-icon" title="Voir l’aide sur DOCX" (click)="openHelp('docx')" aria-label="Aide DOCX">
-            <i class="fas fa-question-circle" aria-hidden="true"></i>
+          <button class="info-icon" (click)="openHelp('docx')" title="Voir l’aide sur DOCX" aria-label="Aide DOCX">
+            <i class="fas fa-question-circle"></i>
           </button>
         </th>
-        <th scope="col" aria-sort="none">Statut</th>
-        <th scope="col" aria-sort="none">Date</th>
-        <th scope="col" aria-sort="none">Détails</th>
+        <th scope="col">Statut</th>
+        <th scope="col">Date</th>
+        <th scope="col">Détails</th>
       </tr>
       </thead>
       <tbody>
@@ -134,35 +134,52 @@
         <td>{{ h.convention?.etudiant?.nom || '—' }}</td>
         <td>{{ h.convention?.etudiant?.promotion || '—' }}</td>
         <td>{{ h.convention?.modele?.annee || '—' }}</td>
-        <td>
-          <span [ngClass]="getEtapeStatus(h, 'flux') === 'OK' ? 'ok' : 'ko'">
-            {{ getEtapeStatus(h, 'flux') }}
-            <i
-              *ngIf="getEtapeStatus(h, 'flux') === 'KO'"
-              class="fas fa-exclamation-triangle"
-              title="Erreur FLUX"
-              aria-hidden="true"
-            ></i>
-          </span>
-          <span class="sr-only">
-            {{ getEtapeStatus(h, 'flux') === 'OK' ? 'Étape FLUX réussie' : 'Erreur à l’étape FLUX' }}
-         </span>
-        </td>
-        <td [ngClass]="getEtapeStatus(h, 'json') === 'OK' ? 'ok' : 'ko'">
-          {{ getEtapeStatus(h, 'json') }}
-          <i *ngIf="getEtapeStatus(h, 'json') === 'KO'" class="fas fa-exclamation-triangle" title="Erreur JSON"></i>
-          <span *ngIf="getEtapeStatus(h, 'json') === 'KO'" class="sr-only">Erreur lors de l’étape JSON</span>
 
+        <td>
+      <span [ngClass]="getEtapeStatus(h, 'flux') === 'OK' ? 'ok' : 'ko'">
+        <i
+          [class.fas]="true"
+          [class.fa-check-circle]="getEtapeStatus(h, 'flux') === 'OK'"
+          [class.fa-exclamation-triangle]="getEtapeStatus(h, 'flux') === 'KO'"
+          [attr.title]="getEtapeStatus(h, 'flux') === 'OK' ? 'Étape FLUX réussie' : 'Erreur à l’étape FLUX'"
+          aria-hidden="true"
+        ></i>
+        {{ getEtapeStatus(h, 'flux') }}
+      </span>
         </td>
-        <td [ngClass]="getEtapeStatus(h, 'docx') === 'OK' ? 'ok' : 'ko'">
-          {{ getEtapeStatus(h, 'docx') }}
-          <i *ngIf="getEtapeStatus(h, 'docx') === 'KO'" class="fas fa-exclamation-triangle" title="Erreur DOCX"></i>
-          <span *ngIf="getEtapeStatus(h, 'docx') === 'KO'" class="sr-only">Erreur lors de l’étape DOCX</span>
+
+        <td>
+      <span [ngClass]="getEtapeStatus(h, 'json') === 'OK' ? 'ok' : 'ko'">
+        <i
+          [class.fas]="true"
+          [class.fa-check-circle]="getEtapeStatus(h, 'json') === 'OK'"
+          [class.fa-exclamation-triangle]="getEtapeStatus(h, 'json') === 'KO'"
+          [attr.title]="getEtapeStatus(h, 'json') === 'OK' ? 'Étape JSON réussie' : 'Erreur à l’étape JSON'"
+          aria-hidden="true"
+        ></i>
+        {{ getEtapeStatus(h, 'json') }}
+      </span>
         </td>
+
+        <td>
+      <span [ngClass]="getEtapeStatus(h, 'docx') === 'OK' ? 'ok' : 'ko'">
+        <i
+          [class.fas]="true"
+          [class.fa-check-circle]="getEtapeStatus(h, 'docx') === 'OK'"
+          [class.fa-exclamation-triangle]="getEtapeStatus(h, 'docx') === 'KO'"
+          [attr.title]="getEtapeStatus(h, 'docx') === 'OK' ? 'Étape DOCX réussie' : 'Erreur à l’étape DOCX'"
+          aria-hidden="true"
+        ></i>
+        {{ getEtapeStatus(h, 'docx') }}
+      </span>
+        </td>
+
         <td [ngClass]="getStatusClass(h.status)" [attr.role]="h.status === 'ECHEC' ? 'alert' : null">
           {{ h.status || '—' }}
         </td>
+
         <td>{{ h.timestamp ? (h.timestamp | date: 'dd/MM/yyyy HH:mm') : '—' }}</td>
+
         <td class="details-cell">
           <span *ngIf="h.details" [attr.title]="h.details">{{ h.details }}</span>
           <span *ngIf="!h.details">—</span>
@@ -190,10 +207,10 @@
     </nav>
   </footer>
 
-  <div class="modal-overlay" *ngIf="openedHelp">
-    <div class="modal-content" tabindex="-1" #modalContent role="dialog" aria-labelledby="modal-title" aria-modal="true">
+  <div class="modal-wrapper" *ngIf="openedHelp">
+    <div class="modal-box" tabindex="-1" #modalContent role="dialog" aria-modal="true" aria-labelledby="modal-title">
       <h3 id="modal-title">
-        <i class="fas fa-info-circle" aria-hidden="true"></i> Aide : {{ openedHelp.toUpperCase() }}
+        <i class="fas fa-info-circle"></i> Aide : {{ openedHelp.toUpperCase() }}
       </h3>
       <section *ngIf="openedHelp === 'flux'" class="modal-section">
         <h4>Erreurs FLUX</h4>
@@ -218,9 +235,8 @@
           <li><strong>Fichier manquant</strong> – Aucun document généré</li>
         </ul>
       </section>
-
       <div class="modal-actions">
-        <button (click)="closeHelp()" class="close-modal-btn" aria-label="Fermer la fenêtre d’aide">Fermer</button>
+        <button class="close-modal-btn" (click)="closeHelp()">Fermer</button>
       </div>
     </div>
   </div>

@@ -9,7 +9,7 @@ import {BreadcrumbComponent} from '../../shared/breadcrumb/breadcrumb.component'
 @Component({
   selector: 'app-consulter-modele-tous',
   templateUrl: './consulter-modele-tous.component.html',
-  styleUrls: ['./consulter-modele-tous.component.css'],
+  styleUrls: ['./consulter-modele-tous.component.css','../../../assets/styles/ tables-common.css','../../../assets/styles/modal-box.css','../../../assets/styles/header.css'],
   standalone: true,
   imports: [NgClass, NgIf, NgFor, FormsModule, RouterLink, BreadcrumbComponent]
 })

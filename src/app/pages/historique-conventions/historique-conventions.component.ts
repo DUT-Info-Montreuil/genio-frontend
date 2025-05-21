@@ -11,7 +11,7 @@ import { AuthService } from '../../services/auth.service';
   standalone: true,
   imports: [CommonModule, DatePipe, FormsModule, RouterLink, NgClass, BreadcrumbComponent],
   templateUrl: './historique-conventions.component.html',
-  styleUrls: ['./historique-conventions.component.css']
+  styleUrls: ['./historique-conventions.component.css','../../../assets/styles/ tables-common.css','../../../assets/styles/modal-box.css','../../../assets/styles/header.css']
 })
 export class HistoriqueConventionsComponent implements OnInit {
   historique: any[] = [];

@@ -36,24 +36,19 @@
           <i class="fas fa-users-cog" aria-hidden="true"></i> Gérer les utilisateurs
         </a>
       </div>
-
-      <div class="role-identity">
-        Connecté en tant que :
+      <div class="role-identity" *ngIf="isExploitant || isConsultant">
+        <span>Connecté en tant que :</span>
         <strong [ngClass]="{
-      'role-gestionnaire': isGestionnaire,
-      'role-exploitant': isExploitant,
-      'role-consultant': isConsultant
-    }">
-          {{
-            isGestionnaire
-              ? 'Gestionnaire'
-              : isExploitant
-                ? 'Exploitant'
-                : 'Consultant'
-          }}
+          'role-exploitant': isExploitant,
+          'role-consultant': isConsultant
+        }">
+          {{ isExploitant ? 'Exploitant' : 'Consultant' }}
         </strong>
       </div>
     </div>
+    <span class="table-intro">
+      Cette section vous permet de consulter les modèles de convention disponibles. Utilisez les filtres pour affiner votre recherche et accéder aux détails de chaque modèle.
+    </span>
   </div>
 
   <nav class="actions-par-role" aria-label="Navigation des actions">
@@ -88,19 +83,17 @@
     </div>
   </section>
 
-  <section class="table-controls" aria-label="Contrôle d'affichage">
-    <div class="entries-per-page">
-      <label for="entriesSelectModele">Entrées par page</label>
-      <select id="entriesSelectModele" [(ngModel)]="entriesPerPage" (change)="setEntriesPerPage(entriesPerPage)">
-        <option [value]="5">5</option>
-        <option [value]="10">10</option>
-        <option [value]="15">15</option>
-      </select>
-    </div>
+  <section class="table-controls">
+    <label for="entriesSelect">Entrées par page</label>
+    <select id="entriesSelect" [(ngModel)]="entriesPerPage" (change)="setEntriesPerPage(entriesPerPage)" aria-label="Nombre d’entrées par page">
+      <option [value]="5">5</option>
+      <option [value]="10">10</option>
+      <option [value]="15">15</option>
+    </select>
   </section>
 
   <div class="table-wrapper">
-    <table class="models-table" aria-label="Liste des modèles">
+    <table class="app-table models-table" aria-label="Liste des modèles">
       <caption class="sr-only">Tableau listant les modèles de conventions disponibles avec actions associées</caption>
       <thead>
       <tr>
@@ -124,16 +117,34 @@
         <td class="center">{{ modele.annee }}</td>
         <td class="center">Document</td>
         <td class="center actions-col">
-          <button class="btn-icon view" (click)="openDetails(modele)" [attr.aria-label]="'Voir les détails de ' + modele.nom" title="Voir les détails">
+          <button class="btn-icon view"
+                  (click)="openDetails(modele)"
+                  [attr.aria-label]="'Voir les détails du modele'"
+                  [attr.title]="'Voir les détails du modele'">
             <i class="fas fa-eye" aria-hidden="true"></i>
           </button>
-          <button class="btn-icon ajout" [routerLink]="['/ajouter-modele']" [disabled]="!isGestionnaire" aria-label="Ajouter un modèle" title="Ajouter un modèle">
+
+          <button class="btn-icon ajout"
+                  [routerLink]="['/ajouter-modele']"
+                  [disabled]="!isGestionnaire"
+                  [attr.aria-label]="'Ajouter un modèle'"
+                  [attr.title]="'Ajouter un modèle'">
             <i class="fas fa-plus" aria-hidden="true"></i>
           </button>
-          <button class="btn-icon edit" [routerLink]="['/modifier-modele', modele.id]" [disabled]="!isGestionnaire"  aria-label="'Modifier le modèle ' + modele.nom" [attr.title]="'Modifier ' + modele.nom">
+
+          <button class="btn-icon edit"
+                  [routerLink]="['/modifier-modele', modele.id]"
+                  [disabled]="!isGestionnaire"
+                  [attr.aria-label]="'Modifier ce modele'"
+                  [attr.title]="'Modifier ce modele'">
             <i class="fas fa-edit" aria-hidden="true"></i>
           </button>
-          <button class="btn-icon delete" [disabled]="!isGestionnaire" (click)="confirmDelete(modele)" [attr.aria-label]="'Supprimer le modèle ' + modele.nom" [attr.title]="'Supprimer ' + modele.nom">
+
+          <button class="btn-icon delete"
+                  [disabled]="!isGestionnaire"
+                  (click)="confirmDelete(modele)"
+                  [attr.aria-label]="'Supprimer ce modele'"
+                  [attr.title]="'Supprimer ce modele'">
             <i class="fas fa-trash-alt" aria-hidden="true"></i>
           </button>
         </td>
@@ -164,49 +175,45 @@
     </div>
   </div>
 
-  <div class="modal-overlay" *ngIf="showModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle" aria-describedby="modalDescription">
-    <div class="modal-card" tabindex="-1">
-      <h3 id="modalTitle">Détails du modèle</h3>
+  <div class="modal-wrapper" *ngIf="showModal">
+    <div class="modal-box" role="dialog" aria-modal="true" aria-labelledby="modal-title" aria-describedby="modal-body">
+      <h3 id="modal-title">
+        <i class="fas fa-info-circle" aria-hidden="true"></i> Détails du modèle
+      </h3>
 
-      <section id="modalDescription" role="document" aria-labelledby="modalTitle">
-        <div class="modal-section">
-          <strong>Nom :</strong> {{ selectedModel.nom }}
-        </div>
-        <div class="modal-section">
-          <strong>Année :</strong> {{ selectedModel.annee }}
-        </div>
-        <div class="modal-section">
-          <strong>Format :</strong> {{ selectedModel.format }}
-        </div>
-        <div class="modal-section">
+      <section id="modal-body" class="modal-section">
+        <p><strong>Nom :</strong> {{ selectedModel.nom }}</p>
+        <p><strong>Année :</strong> {{ selectedModel.annee }}</p>
+        <p><strong>Format :</strong> {{ selectedModel.format }}</p>
+        <p>
           <strong>Statut :</strong>
-          <span [ngClass]="{ 'badge-used': selectedModel.utilise, 'badge-unused': !selectedModel.utilise }">
+          <span [ngClass]="selectedModel.utilise ? 'badge-used' : 'badge-unused'">
           {{ selectedModel.statutTexte }}
         </span>
-        </div>
+        </p>
 
-        <div class="modal-section variables">
+        <div class="variables-zone">
           <strong>Variables attendues :</strong>
           <p class="var-subinfo">
-            Affichage de {{ showAllVariables ? expectedVariables.length : previewVariables.length }} / {{ expectedVariables.length }} variables
+            Affichage de {{ showAllVariables ? expectedVariables.length : previewVariables.length }}
+            / {{ expectedVariables.length }} variables
           </p>
-
-          <div class="variables-grid" [ngClass]="{ 'collapsed': !showAllVariables }" id="variables-grid" role="list" aria-label="Liste des variables attendues">
-            <div *ngFor="let variable of (showAllVariables ? expectedVariables : previewVariables)" class="variable-item" role="listitem">
+          <ul class="variable-list">
+            <li *ngFor="let variable of (showAllVariables ? expectedVariables : previewVariables)">
               {{ variable }}
-            </div>
-          </div>
-
-          <button class="toggle-vars-btn" (click)="toggleVariables()" aria-controls="variables-grid" [attr.aria-expanded]="showAllVariables">
+            </li>
+          </ul>
+          <button (click)="toggleVariables()" class="toggle-vars-btn">
             {{ showAllVariables ? 'Voir moins' : 'Voir toutes les variables' }}
           </button>
         </div>
       </section>
 
-      <button class="modal-close-btn" (click)="closeModal()">Fermer</button>
+      <div class="modal-actions">
+        <button class="close-modal-btn" (click)="closeModal()">Fermer</button>
+      </div>
     </div>
   </div>
-
   <div *ngIf="toastMessage" class="toast" [class.show]="toastVisible">
     {{ toastMessage }}
   </div>
