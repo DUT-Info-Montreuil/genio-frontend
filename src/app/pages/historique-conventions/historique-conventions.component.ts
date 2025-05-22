@@ -28,6 +28,7 @@ export class HistoriqueConventionsComponent implements OnInit {
   isExploitant = false;
   isGestionnaire = false;
   isConsultant = false;
+  selectedHistoriqueDetails: string | null = null;
 
   @ViewChild('tableStart') tableStart!: ElementRef;
   @ViewChild('modalContent') modalContent!: ElementRef;
@@ -152,12 +153,25 @@ export class HistoriqueConventionsComponent implements OnInit {
     const isFluxError =
       msg.includes('format de fichier') ||
       msg.includes('modèle introuvable') ||
-      msg.includes('erreur inattendue') ||
       msg.includes('identifiant de modèle manquant') ||
+      msg.includes('le corps de la requête') ||
+      msg.includes('manquant ou mal formé') ||
       !h.fluxJsonBinaire;
 
-    const isValidationError = msg.includes('erreurs de validation') || msg.includes("champ");
-    const isDocxError = !h.docxBinaire;
+    const isValidationError =
+    msg.includes("le téléphone") ||
+    msg.includes("le nom") ||
+    msg.includes("doit être au format") ||
+    msg.includes("est obligatoire") ||
+    msg.includes("champ") ||
+    msg.includes("erreurs de validation");
+    const isDocxError =
+      !h.docxBinaire &&
+      !msg.includes("requête est manquant") && // Ne pas accuser DOCX à tort
+      !msg.includes("corps de la requête") &&
+      !msg.includes("Validation") && // c'est JSON, pas DOCX
+      !msg.includes("champ");
+
 
     if (etape === 'flux') {
       return isFluxError ? 'KO' : 'OK';
@@ -195,5 +209,12 @@ export class HistoriqueConventionsComponent implements OnInit {
 
   closeHelp() {
     this.openedHelp = null;
+  }
+
+  openDetailsModal(details: string) {
+    this.selectedHistoriqueDetails = details;
+  }
+  closeDetailsModal() {
+    this.selectedHistoriqueDetails = null;
   }
 }

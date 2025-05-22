@@ -181,7 +181,14 @@
         <td>{{ h.timestamp ? (h.timestamp | date: 'dd/MM/yyyy HH:mm') : '—' }}</td>
 
         <td class="details-cell">
-          <span *ngIf="h.details" [attr.title]="h.details">{{ h.details }}</span>
+       <span *ngIf="h.details">
+        <button class="btn-icon view"
+                [attr.aria-label]="'Voir les détails du modèle'"
+                [attr.title]="'Voir les détails du modèle'"
+                (click)="openDetailsModal(h.details)">
+          <i class="fas fa-eye" aria-hidden="true"></i>
+        </button>
+        </span>
           <span *ngIf="!h.details">—</span>
         </td>
       </tr>
@@ -206,6 +213,19 @@
       <button (click)="goToPage(currentPage + 1)" [disabled]="currentPage === totalPages" aria-label="Page suivante">❯</button>
     </nav>
   </footer>
+  <div class="modal-wrapper" *ngIf="selectedHistoriqueDetails">
+    <div class="modal-box" tabindex="-1" role="dialog" aria-modal="true">
+      <h3>
+        <i class="fas fa-info-circle"></i> Détails de l’erreur
+      </h3>
+      <section class="modal-section">
+        <p>{{ selectedHistoriqueDetails }}</p>
+      </section>
+      <div class="modal-actions">
+        <button class="close-modal-btn" (click)="closeDetailsModal()">Fermer</button>
+      </div>
+    </div>
+  </div>
 
   <div class="modal-wrapper" *ngIf="openedHelp">
     <div class="modal-box" tabindex="-1" #modalContent role="dialog" aria-modal="true" aria-labelledby="modal-title">
