@@ -34,6 +34,7 @@ export const routes: Routes = [
   { path: 'gestion-utilisateurs', component: GestionUtilisateursComponent },
   { path: 'breadcrumb', component: BreadcrumbComponent },
   { path: 'historique-conventions', component: HistoriqueConventionsComponent },
-  { path: 'gerer-modeles', component: GererModelesComponent}
+  { path: 'gerer-modeles', component: GererModelesComponent},
+  { path: 'modifier-modele', component: ModifierModeleComponent}
 
 ];

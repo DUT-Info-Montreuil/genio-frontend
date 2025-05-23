@@ -159,17 +159,25 @@ export class HistoriqueConventionsComponent implements OnInit {
       !h.fluxJsonBinaire;
 
     const isValidationError =
-    msg.includes("le téléphone") ||
-    msg.includes("le nom") ||
-    msg.includes("doit être au format") ||
-    msg.includes("est obligatoire") ||
-    msg.includes("champ") ||
-    msg.includes("erreurs de validation");
+      msg.includes("champ") ||
+      msg.includes("est obligatoire") ||
+      msg.includes("doit être au format") ||
+      msg.includes("must") ||
+      msg.includes("validation");
+      msg.includes("le téléphone") ||
+      msg.includes("le nom") ||
+      msg.includes("doit être au format") ||
+      msg.includes("est obligatoire") ||
+      msg.includes("champ") ||
+      msg.includes("erreurs de validation");
+
     const isDocxError =
-      !h.docxBinaire &&
-      !msg.includes("requête est manquant") && // Ne pas accuser DOCX à tort
+     !h.docxBinaire &&
+      !isFluxError &&
+      !isValidationError;
+      !msg.includes("requête est manquant") &&
       !msg.includes("corps de la requête") &&
-      !msg.includes("Validation") && // c'est JSON, pas DOCX
+      !msg.includes("Validation") &&
       !msg.includes("champ");
 
 

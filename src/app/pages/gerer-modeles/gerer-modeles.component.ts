@@ -1,4 +1,4 @@
-import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import {Router, RouterLink, RouterLinkActive} from '@angular/router';
 import { AuthService } from '../../services/auth.service';
@@ -28,7 +28,6 @@ export class GererModelesComponent implements OnInit {
   error: string = '';
   isSubmitting = false;
   showExpectedVariables = false;
-  missingVariables: string[] = [];
   showAllVariables = false;
   isNotAModel = false;
 
@@ -42,6 +41,7 @@ export class GererModelesComponent implements OnInit {
   isAnneeValid: boolean = false;
   isFileValid: boolean = false;
   currentYear = new Date().getFullYear();
+  allVariablesStatus: { name: string; ok: boolean }[] = [];
 
   constructor(
     private http: HttpClient,
@@ -49,6 +49,14 @@ export class GererModelesComponent implements OnInit {
     private authService: AuthService,
    private cdr: ChangeDetectorRef
   ) {}
+
+  @ViewChild('modalBox') modalBox: ElementRef | undefined;
+
+  ngAfterViewChecked() {
+    if (this.showAnneeErrorModal || this.showFileErrorModal) {
+      this.modalBox?.nativeElement?.focus();
+    }
+  }
 
   ngOnInit(): void {
     this.isExploitant = this.authService.isExploitant();
@@ -149,23 +157,42 @@ export class GererModelesComponent implements OnInit {
               .split(",")
               .map(v => v.trim());
 
-            const missing = this.getExpectedVariables().filter(expected => !variablesDetectees.includes(expected));
+            const expected = this.getExpectedVariables();
+            const found = variablesDetectees;
 
-            this.missingVariables = missing;
+            this.allVariablesStatus = expected.map(v => ({
+              name: v,
+              ok: found.includes(v)
+            }));
+
+            const missing = this.allVariablesStatus.filter(v => !v.ok);
+            this.isFileValid = missing.length === 0;
             this.isNotAModel = false;
+            this.error = this.isFileValid ? '' : `Le document est un modèle, mais il manque ${missing.length} variable(s).`;
+            this.showFileErrorModal = !this.isFileValid;
+            if (variablesDetectees.length === 0) {
+              // Cas 1 : Aucun champ exploitable → pas un modèle
+              this.isFileValid = false;
+              this.isNotAModel = true;
+              this.error = '❌ Ce fichier ne semble pas être un modèle de convention (aucun champ détecté).';
+              this.showFileErrorModal = true;
+              return;
+            }
 
             if (missing.length > 0) {
+              // Cas 2 : Modèle partiel → erreur avec liste complète
               this.isFileValid = false;
-              this.error = `❌ Le modèle est bien structuré, mais il manque ${missing.length} variable(s) : ${missing.join(', ')}`;
+              this.error = `❌ Le document est un modèle, mais il manque ${missing.length} variable(s) : ${missing.join(', ')}`;
               this.showFileErrorModal = true;
             } else {
+              // Cas 3 : Tout est bon
               this.isFileValid = true;
               this.error = '';
             }
           } else {
+            // Cas 1 bis : réponse inattendue
             this.isFileValid = false;
             this.isNotAModel = true;
-            this.missingVariables = [];
             this.error = '❌ Le fichier ne semble pas être un modèle de convention.';
             this.showFileErrorModal = true;
           }
@@ -175,7 +202,6 @@ export class GererModelesComponent implements OnInit {
           const rawMessage = err?.error || '';
           if (rawMessage.includes('Aucun contenu exploitable')) {
             this.isNotAModel = true;
-            this.missingVariables = [];
             this.error = rawMessage;
             this.isFileValid = false;
             this.showFileErrorModal = true;
@@ -197,18 +223,17 @@ export class GererModelesComponent implements OnInit {
 
                   const missing = this.getExpectedVariables().filter(expected => !variablesDetectees.includes(expected));
 
-                  this.missingVariables = missing;
 
                   if (missing.length > 0) {
                     this.isFileValid = false;
-                    this.error = `❌ Le modèle est bien structuré, mais il manque ${missing.length} variable(s).`;
+                    this.error = `❌ Le document est un modèle mais il n’est pas complet. Il manque ${missing.length} variable(s) : ${missing.join(', ')}.`;
+                    this.showFileErrorModal = true;
                   } else {
                     this.isFileValid = true;
                     this.error = '';
                   }
 
                 } else {
-                  this.missingVariables = [];
                   this.isFileValid = false;
                   this.error = "❌ Format inattendu dans le retour.";
                 }
@@ -216,7 +241,6 @@ export class GererModelesComponent implements OnInit {
                 this.showFileErrorModal = true;
               },
               error: (err2) => {
-                this.missingVariables = [];
                 this.error = err2?.error || "Erreur inconnue lors de la relecture.";
                 this.isFileValid = false;
                 this.showFileErrorModal = true;
@@ -226,13 +250,9 @@ export class GererModelesComponent implements OnInit {
       });
   }
 
-  chunkArray(array: string[], size: number): string[][] {
-    const result: string[][] = [];
-    for (let i = 0; i < array.length; i += size) {
-      result.push(array.slice(i, i + size));
-    }
-    return result;
-  }
+
+
+
 
   onSubmit(): void {
     if (!this.isAnneeValid) {
@@ -295,6 +315,7 @@ export class GererModelesComponent implements OnInit {
     ];
   }
 
+
   ajouter() {
 
   }
@@ -335,4 +356,16 @@ export class GererModelesComponent implements OnInit {
     this.showAnneeErrorModal = false;
     this.cdr.detectChanges(); // utile pour forcer le refresh si besoin
   }
+
+
+
+
+
+
+
+  toggleShowAllVariables(): void {
+    this.showAllVariables = !this.showAllVariables;
+  }
+
+  protected readonly document = document;
 }
