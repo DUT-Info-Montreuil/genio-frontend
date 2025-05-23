@@ -20,6 +20,7 @@
             (input)="validateAnnee()"
             [attr.aria-invalid]="!isAnneeValid"
             aria-describedby="anneeErrorDesc"
+            autocomplete="off"
           />
           <span class="status-indicator" [ngClass]="{ 'ok': isAnneeValid, 'ko': !isAnneeValid }">
             {{ isAnneeValid ? '✔️ OK' : '❌ KO' }}
@@ -51,13 +52,7 @@
                 {{ selectedFile.name }}
                 <span class="status-indicator inline-status" [ngClass]="{ 'ok': isFileValid, 'ko': !isFileValid }">
                   {{ isFileValid ? '✔️ OK' : '❌ KO' }}
-                  <i *ngIf="!isFileValid" class="fas fa-question-circle info-icon"
-                     (click)="openAnneeErrorModal()" tabindex="0" role="button"
-                     title="Pourquoi ce champ est invalide ?"></i>
                 </span>
-                <button type="button" class="delete-file-btn" (click)="removeFile()" aria-label="Archiver le fichier">
-                  <i class="fas fa-times-circle"></i>
-                </button>
               </div>
             </div>
           </ng-container>
@@ -69,8 +64,18 @@
             <i class="fas fa-upload"></i> Choisir un fichier
           </button>
           <span class="status-indicator inline-status" [ngClass]="{ 'ok': isFileValid, 'ko': !isFileValid }">
-            {{ isFileValid ? '✔️ OK' : '❌ KO' }}
-          </span>
+          {{ isFileValid ? '✔️ OK' : '❌ KO' }}
+
+            <!-- ce bouton ne doit pas être bloqué par pointer-events: none -->
+            <i *ngIf="!isFileValid"
+               class="fas fa-question-circle info-icon"
+               (click)="openFileErrorModal()"
+               tabindex="0"
+               role="button"
+               title="Pourquoi ce champ est invalide ?"
+               aria-label="Afficher les détails de l’erreur">
+            </i>
+             </span>
         </div>
       </div>
       <br>
@@ -97,6 +102,45 @@
       <button type="submit" class="btn btn-primary full-width" [disabled]="!isAnneeValid || !isFileValid || isSubmitting">
         <i class="fas fa-paper-plane"></i> Valider le modèle
       </button>
+      <div class="modal-wrapper" *ngIf="showAnneeErrorModal">
+        <div class="modal-box alert" tabindex="-1" role="dialog" aria-modal="true" aria-labelledby="modalAnneeTitle">
+          <h3 id="modalAnneeTitle"><i class="fas fa-exclamation-triangle"></i> Erreur sur l’année</h3>
+          <div class="modal-section">
+            <p class="error">{{ error }}</p>
+            <p>L’année doit être composée de 4 chiffres (ex : 2025), et être comprise entre 2020 et {{ currentYear + 5 }}.</p>
+          </div>
+          <div class="modal-actions">
+            <button class="close-modal-btn" (click)="closeAnneeErrorModal()">Fermer</button>
+          </div>
+        </div>
+      </div>
+      <div class="modal-wrapper" *ngIf="showFileErrorModal">
+        <div class="modal-box alert" tabindex="-1" role="dialog" aria-modal="true" aria-labelledby="modalFileTitle">
+          <h3 id="modalFileTitle"><i class="fas fa-exclamation-triangle"></i> Erreur sur le fichier</h3>
+          <div class="modal-section">
+            <p class="error">{{ error }}</p>
+
+            <!-- Affichage complet -->
+            <div *ngIf="showAllVariables" class="variable-grid-4">
+              <div *ngFor="let variable of sortedVariables"
+                   class="variable-cell"
+                   [ngClass]="{ 'ok': variable.ok, 'ko': !variable.ok }">
+                {{ variable.name }}
+              </div>
+            </div>
+
+            <!-- Le bouton va maintenant EN DESSOUS -->
+            <div *ngIf="hasMissingVariables()" class="voir-plus-btn">
+              <button class="btn btn-primary" (click)="toggleShowAllVariables()">
+                {{ showAllVariables ? 'Réduire' : 'Afficher toutes les variables' }}
+              </button>
+            </div>
+            </div>
+          <div class="modal-actions">
+            <button class="close-modal-btn" (click)="closeFileErrorModal()">Fermer</button>
+          </div>
+        </div>
+        </div>
     </form>
   </div>
 </div>

@@ -197,7 +197,7 @@ export class AjouterModeleComponent {
               }
             } else {
               this.isFileValid = false;
-              this.error = `❌ Le document est un modèle, mais il manque ${missing.length} variable(s) : ${missing.join(', ')}`;
+              this.error = `Certaines informations sont manquantes. Voici les détails ci-dessous.`;
               this.showFileErrorModal = true;
             }
           } else {
@@ -320,4 +320,19 @@ export class AjouterModeleComponent {
 
   titre: string = '';
   titreEditable = false;
+
+  hasMissingVariables(): boolean {
+    return this.allVariablesStatus.some(v => !v.ok);
+  }
+
+  get missingVariables() {
+    return this.allVariablesStatus.filter(v => !v.ok);
+  }
+
+  get sortedVariables() {
+    return this.allVariablesStatus.slice().sort((a, b) => {
+      if (a.ok === b.ok) return 0;
+      return a.ok ? 1 : -1; // ko d'abord
+    });
+  }
 }

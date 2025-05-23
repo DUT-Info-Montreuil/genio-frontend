@@ -639,3 +639,48 @@ input[type="file"]::-webkit-file-upload-button:focus {
   margin-top: 1rem;
 }
 
+.small-note {
+  font-size: 0.95rem;
+  color: #555;
+  margin-top: 1rem;
+}
+
+.custom-drop-area {
+  border: 3px dashed #0d47a1;
+  background-color: #f8fbff;
+  border-radius: 12px;
+  padding: 4rem 2rem;
+  text-align: center;
+  font-size: 1.1rem;
+  color: #0d47a1;
+  min-height: 220px;
+  height: 220px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: background-color 0.3s ease;
+  cursor: pointer;
+  overflow: hidden; /* évite que le nom de fichier pousse */
+}
+
+.custom-drop-area:hover {
+  background-color: #eef4fb;
+}
+
+.custom-drop-area.disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.drop-text {
+  font-weight: 500;
+  font-size: 1.1rem;
+  line-height: 1.6;
+  max-width: 90%;
+  color: #1a237e;
+}
+
+.custom-drop-area:hover {
+  background-color: #e3f2fd;
+  border-color: #1976d2;
+}
