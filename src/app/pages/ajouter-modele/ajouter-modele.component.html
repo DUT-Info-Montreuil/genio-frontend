@@ -66,7 +66,6 @@
           <span class="status-indicator inline-status" [ngClass]="{ 'ok': isFileValid, 'ko': !isFileValid }">
           {{ isFileValid ? '✔️ OK' : '❌ KO' }}
 
-            <!-- ce bouton ne doit pas être bloqué par pointer-events: none -->
             <i *ngIf="!isFileValid"
                class="fas fa-question-circle info-icon"
                (click)="openFileErrorModal()"
@@ -120,7 +119,6 @@
           <div class="modal-section">
             <p class="error">{{ error }}</p>
 
-            <!-- Affichage complet -->
             <div *ngIf="showAllVariables" class="variable-grid-4">
               <div *ngFor="let variable of sortedVariables"
                    class="variable-cell"
@@ -129,7 +127,6 @@
               </div>
             </div>
 
-            <!-- Le bouton va maintenant EN DESSOUS -->
             <div *ngIf="hasMissingVariables()" class="voir-plus-btn">
               <button class="btn btn-primary" (click)="toggleShowAllVariables()">
                 {{ showAllVariables ? 'Réduire' : 'Afficher toutes les variables' }}
@@ -144,7 +141,7 @@
     </form>
   </div>
 </div>
-<div class="container-message" aria-live="polite" role="status" *ngIf="message || (error && !showFileErrorModal && isAnneeValid && isFileValid)">
+<div class="container-message" aria-live="polite" role="status" *ngIf="message">
   <div class="callout" [ngClass]="{ 'callout-success': !!message, 'callout-error': !!error }">
     <span *ngIf="message">{{ message }}</span>
     <ng-container *ngIf="error && !showFileErrorModal">

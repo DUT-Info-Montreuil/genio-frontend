@@ -81,6 +81,7 @@ export class AjouterModeleComponent {
   }
 
   openFileErrorModal(): void {
+    if (this.showFileErrorModal) return; // ← empêchera la double ouverture
     this.showFileErrorModal = true;
   }
 
@@ -309,10 +310,6 @@ export class AjouterModeleComponent {
     this.cdr.detectChanges();
   }
 
-  closeFileErrorModal(): void {
-    this.showFileErrorModal = false;
-    this.cdr.detectChanges(); // <-- force le rafraîchissement Angular
-  }
 
   toggleShowAllVariables(): void {
     this.showAllVariables = !this.showAllVariables;
@@ -334,5 +331,13 @@ export class AjouterModeleComponent {
       if (a.ok === b.ok) return 0;
       return a.ok ? 1 : -1; // ko d'abord
     });
+  }
+
+  closeFileErrorModal(): void {
+    this.showAllVariables = false;
+    this.showFileErrorModal = false;
+    this.error = '';
+    this.isNotAModel = false;
+    this.cdr.detectChanges();
   }
 }

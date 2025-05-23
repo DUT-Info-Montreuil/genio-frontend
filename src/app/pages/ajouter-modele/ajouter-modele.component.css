@@ -21,54 +21,35 @@ input[type="file"]::-webkit-file-upload-button:focus {
   box-shadow: none !important;
 }
 
+.status-indicator.ok {
+  color: green;
+}
+.status-indicator.ko {
+  color: red;
+}
 
-
-
-.btn.btn-primary {
+.status-indicator {
+  position: absolute;
+  right: 16px;
+  font-weight: bold;
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 10px 16px;
-  background-color: #1f3c88;
-  border: 1px solid #1f3c88;
-  color: #fff;
-  border-radius: 6px;
-  font-weight: 500;
-  cursor: pointer;
+  gap: 6px;
+  top: 50%;
+  transform: translateY(-50%);
 }
-.btn.btn-primary:hover {
-  background-color: #0d47a1;
+.status-indicator.inline-status {
+  position: static;
+  transform: none;
+  margin-left: 0.5rem;
+  top: auto;
+  right: auto;
 }
-
-.custom-drop-area {
-  border: 2px dashed #0d47a1;
-  background-color: #f9f9f9;
-  border-radius: 10px;
-  padding: 2.5rem;
-  text-align: center;
-  font-size: 1rem;
-  color: #0d47a1;
-  margin-bottom: 1.5rem;
-  transition: background-color 0.3s ease;
-  cursor: pointer;
-}
-
-.custom-drop-area:hover {
-  background-color: #eef4fb;
-}
-
-.custom-drop-area.disabled {
-  opacity: 0.4;
-  pointer-events: none;
-}
-
-.drop-text {
-  font-weight: 500;
-}
-
-.form-group {
-  margin-bottom: 1.5rem;
-
+.status-indicator:not(.inline-status) {
+  position: absolute;
+  right: 16px;
+  top: 50%;
+  transform: translateY(-50%);
 }
 
 .form-group-inline {
@@ -100,47 +81,7 @@ input[type="file"]::-webkit-file-upload-button:focus {
   align-items: center;
 }
 
-.input-wrapper {
-  position: relative;
-  display: flex;
-  align-items: center;
-  background-color: #f9f9f9;
-  border: 1px solid #cfd8dc;
-  border-radius: 8px;
-  padding-left: 16px;
-  padding-right: 16px;
-  height: 48px;
-}
 
-.input-wrapper input {
-  flex: 1;
-  border: none;
-  background: transparent;
-  font-size: 1.05rem;
-  color: #0d47a1;
-  padding: 12px;
-}
-
-.input-wrapper input:focus {
-  outline: none;
-}
-
-.status-indicator {
-  position: absolute;
-  right: 16px;
-  font-weight: bold;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.status-indicator.ok {
-  color: green;
-}
-
-.status-indicator.ko {
-  color: red;
-}
 
 .info-icon {
   font-size: 1.2rem;
@@ -169,7 +110,6 @@ input[type="file"]::-webkit-file-upload-button:focus {
   background-color: #0d47a1;
 }
 
-
 .file-name-wrapper {
   display: flex;
   justify-content: center;
@@ -184,24 +124,6 @@ input[type="file"]::-webkit-file-upload-button:focus {
   align-items: center;
   gap: 10px;
   flex-wrap: wrap;
-}
-
-.delete-file-btn {
-  background: none;
-  border: none;
-  color: red;
-  cursor: pointer;
-  font-size: 1.2rem;
-}
-
-.delete-file-btn:hover {
-  color: darkred;
-}
-
-.file-validation-indicator {
-  margin-top: 0.5rem;
-  display: flex;
-  align-items: center;
 }
 
 .modal-wrapper {
@@ -276,22 +198,19 @@ input[type="file"]::-webkit-file-upload-button:focus {
   word-break: break-word;
   white-space: normal;
   overflow: visible;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-.variable-cell.ok {
-  color: #2e7d32;
-}
-
-.variable-cell.ko {
-  color: #d32f2f;
-}
 
 .variable-cell.ok {
   color: green;
 }
-
 .variable-cell.ko {
   color: red;
+  background-color: #fff5f5;
+  border-color: #f44336;
 }
 
 .voir-plus-btn {
@@ -362,11 +281,6 @@ input[type="file"]::-webkit-file-upload-button:focus {
     align-items: flex-start;
   }
 
-  .action-buttons {
-    width: 100%;
-    justify-content: flex-start;
-  }
-
   .variable-grid-4 {
     grid-template-columns: repeat(2, 1fr);
   }
@@ -376,19 +290,6 @@ input[type="file"]::-webkit-file-upload-button:focus {
   }
 }
 
-.page-header-layout h2 {
-  font-size: 1.8rem;
-  font-weight: 700;
-  color: #0d47a1;
-  margin-bottom: 0.5rem;
-}
-
-.form-instruction {
-  font-size: 1rem;
-  color: #455a64;
-  margin: 0.5rem 0 2rem;
-  line-height: 1.4;
-}
 
 .auth-page {
   display: flex;
@@ -417,12 +318,6 @@ input[type="file"]::-webkit-file-upload-button:focus {
   flex-wrap: wrap;
   gap: 1rem;
 }
-
-.action-buttons .btn.selected-btn {
-  background-color: #0a2c70;
-  border-color: #0a2c70;
-}
-
 
 .required-star {
   color: #d32f2f;
@@ -472,57 +367,6 @@ input[type="file"]::-webkit-file-upload-button:focus {
   font-size: 1.1rem;
 }
 
-.btn-login {
-  width: 100%;
-  padding: 12px;
-  min-height: 44px;
-  font-size: 1.1rem;
-  font-weight: 700;
-  color: white;
-  background-color: #0d47a1;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  margin-top: 32px;
-  transition: background-color 0.3s ease, transform 0.1s ease;
-}
-
-.btn-login:hover {
-  background-color: #1565c0;
-  transform: scale(1.01);
-}
-
-.btn-login:disabled {
-  background-color: #90caf9;
-  cursor: not-allowed;
-  opacity: 0.7;
-}
-
-.status-indicator {
-  position: absolute;
-  right: 16px;
-  font-weight: bold;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  top: 50%;
-  transform: translateY(-50%);
-}
-
-.inline-status {
-  position: static;
-  transform: none;
-  top: auto;
-  right: auto;
-  margin-left: 0.5rem;
-}
-
-.file-upload-wrapper {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-top: 1rem;
-}
 
 .file-upload-wrapper .btn {
   margin: 0;
@@ -569,13 +413,6 @@ input[type="file"]::-webkit-file-upload-button:focus {
     }
   }
 
-  .variable-cell {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-  }
-
   .visually-hidden {
     position: absolute;
     left: -9999px;
@@ -591,12 +428,6 @@ input[type="file"]::-webkit-file-upload-button:focus {
     overflow: hidden;
     white-space: nowrap;
     clip: rect(0 0 0 0);
-  }
-
-  .variable-cell.ko {
-    background-color: #fff5f5;
-    border-color: #f44336;
-    color: #c62828;
   }
 
   .modal-section {
@@ -639,11 +470,6 @@ input[type="file"]::-webkit-file-upload-button:focus {
   margin-top: 1rem;
 }
 
-.small-note {
-  font-size: 0.95rem;
-  color: #555;
-  margin-top: 1rem;
-}
 
 .custom-drop-area {
   border: 3px dashed #0d47a1;
@@ -660,8 +486,10 @@ input[type="file"]::-webkit-file-upload-button:focus {
   align-items: center;
   transition: background-color 0.3s ease;
   cursor: pointer;
-  overflow: hidden; /* évite que le nom de fichier pousse */
+  overflow: hidden;
+  margin-bottom: 1.5rem;
 }
+
 
 .custom-drop-area:hover {
   background-color: #eef4fb;
