@@ -40,10 +40,14 @@ export class HistoriqueConventionsComponent implements OnInit {
     this.closeHelp();
   }
 
-  ngAfterViewChecked(): void {
-    if (this.openedHelp && this.modalContent) {
-      this.modalContent.nativeElement.focus();
-    }
+  showGeneralHelpModal = false;
+
+  openGeneralHelp() {
+    this.showGeneralHelpModal = true;
+  }
+
+  closeGeneralHelp() {
+    this.showGeneralHelpModal = false;
   }
 
   constructor(private http: HttpClient, private authService: AuthService, public router: Router) {}

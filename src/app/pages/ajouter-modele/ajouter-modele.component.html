@@ -1,0 +1,115 @@
+<div class="auth-page">
+  <div class="auth-card">
+    <form (ngSubmit)="onSubmit()" enctype="multipart/form-data" #modeleForm="ngForm">
+
+      <!-- Année du modèle -->
+      <div class="form-group-inline">
+        <label for="annee">
+          <span class="label-blue">Année du modèle<span class="required-star"> *</span> :</span>
+        </label>
+        <div class="input-wrapper small-input">
+          <i class="fas fa-calendar icon-left" aria-hidden="true"></i>
+          <input
+            type="text"
+            inputmode="numeric"
+            id="annee"
+            name="annee"
+            maxlength="4"
+            required
+            [(ngModel)]="annee"
+            pattern="^[0-9]{4}$"
+            (input)="validateAnnee()"
+            [attr.aria-invalid]="!isAnneeValid"
+            aria-describedby="anneeErrorDesc"
+          />
+          <span class="status-indicator" [ngClass]="{ 'ok': isAnneeValid, 'ko': !isAnneeValid }">
+            {{ isAnneeValid ? '✔️ OK' : '❌ KO' }}
+            <i *ngIf="!isAnneeValid" class="fas fa-question-circle info-icon"
+               (click)="openAnneeErrorModal()" tabindex="0" role="button"
+               title="Pourquoi ce champ est invalide ?" aria-label="Afficher les détails de l’erreur">
+            </i>
+          </span>
+        </div>
+      </div>
+
+      <!-- Erreur année -->
+      <div id="anneeErrorDesc" class="sr-only" aria-live="assertive">
+        {{ isAnneeValid ? '✔️ Année valide.' : error }}
+      </div>
+
+      <!-- Drop + Upload -->
+      <div class="drop-upload-wrapper">
+        <div
+          class="custom-drop-area"
+          [class.disabled]="!isAnneeValid || selectedFile"
+          (drop)="onFileDropped($event)"
+          (dragover)="onDragOver($event)"
+          (dragleave)="onDragLeave($event)">
+          <ng-container *ngIf="!selectedFile">
+            <p class="drop-text">📄 Glissez un fichier ici</p>
+          </ng-container>
+          <ng-container *ngIf="selectedFile">
+            <div class="file-name-wrapper">
+              <div class="file-name">
+                📄 {{ selectedFile.name }}
+                <span class="status-indicator inline-status" [ngClass]="{ 'ok': isFileValid, 'ko': !isFileValid }">
+                  {{ isFileValid ? '✔️ OK' : '❌ KO' }}
+                  <i *ngIf="!isFileValid" class="fas fa-question-circle info-icon"
+                     (click)="openAnneeErrorModal()" tabindex="0" role="button"
+                     title="Pourquoi ce champ est invalide ?"></i>
+                </span>
+                <button type="button" class="delete-file-btn" (click)="removeFile()" aria-label="Archiver le fichier">
+                  <i class="fas fa-times-circle"></i>
+                </button>
+              </div>
+            </div>
+          </ng-container>
+        </div>
+
+        <div class="upload-footer">
+          <input type="file" id="file" name="file" accept=".docx" hidden (change)="onFileSelected($event)" [disabled]="!isAnneeValid" />
+          <button type="button" class="btn btn-primary" (click)="document.getElementById('file')?.click()" [disabled]="!isAnneeValid">
+            <i class="fas fa-upload"></i> Choisir un fichier
+          </button>
+          <span class="status-indicator inline-status" [ngClass]="{ 'ok': isFileValid, 'ko': !isFileValid }">
+            {{ isFileValid ? '✔️ OK' : '❌ KO' }}
+          </span>
+        </div>
+      </div>
+      <br>
+
+      <!-- Titre du modèle -->
+      <div class="form-group-inline">
+        <label for="titre">
+          <span class="label-blue">Titre du modèle</span><span class="required-star">*</span> :
+        </label>
+        <div class="input-wrapper small-input">
+          <i class="fas fa-pen icon-left" aria-hidden="true"></i>
+          <input
+            type="text"
+            id="titre"
+            name="titre"
+            [(ngModel)]="titre"
+            required
+            [readonly]="!titreEditable"
+            (dblclick)="enableEditTitre()"
+            [attr.aria-label]="'Titre du modèle à ajouter'"
+          />
+        </div>
+      </div>
+
+      <!-- Valider -->
+      <button type="submit" class="btn btn-primary full-width" [disabled]="!isAnneeValid || !isFileValid || isSubmitting">
+        <i class="fas fa-paper-plane"></i> Valider le modèle
+      </button>
+    </form>
+  </div>
+</div>
+<div class="container-message" aria-live="polite" role="status" *ngIf="message || (error && !showFileErrorModal && isAnneeValid && isFileValid)">
+  <div class="callout" [ngClass]="{ 'callout-success': !!message, 'callout-error': !!error }">
+    <span *ngIf="message">{{ message }}</span>
+    <ng-container *ngIf="error && !showFileErrorModal">
+      <span>{{ error }}</span>
+    </ng-container>
+  </div>
+</div>

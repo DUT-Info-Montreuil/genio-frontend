@@ -121,7 +121,8 @@
 
 .btn-icon.view     { color: #1f3c88; }
 .btn-icon.edit     { color: #1f3c88; }
-.btn-icon.delete   { color: #dc3545; }
+.btn-icon.ajout   { color: #1f3c88; }
+.btn-icon.delete   { color: #1f3c88; }
 
 
 .btn-icon.edit:disabled,

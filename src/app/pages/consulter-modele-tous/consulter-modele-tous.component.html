@@ -8,7 +8,25 @@
       <h2 id="page-title">
         <i class="fas fa-folder-open" aria-hidden="true"></i>
         Modèles de convention disponibles
+        <button class="info-btn" (click)="openInfoModal()" aria-label="Aide sur les modèles" title="Aide sur les modèles">
+          <i class="fas fa-question-circle" aria-hidden="true"></i>
+        </button>
       </h2>
+      <!-- Fenêtre modale d’aide pour consulter -->
+      <div class="modal-wrapper" *ngIf="showInfoModal">
+        <div class="modal-box" role="dialog" aria-modal="true" aria-labelledby="modalInfoTitle" tabindex="-1">
+          <h3 id="modalInfoTitle"><i class="fas fa-info-circle"></i> À propos des modèles</h3>
+          <div class="modal-section">
+            <p>
+              Cette page affiche tous les modèles de convention disponibles. Vous pouvez les filtrer par nom ou année,
+              puis consulter, modifier ou archiver un modèle si vous avez les droits nécessaires.
+            </p>
+          </div>
+          <div class="modal-actions">
+            <button class="close-modal-btn" (click)="closeInfoModal()">Fermer</button>
+          </div>
+        </div>
+      </div>
       <app-breadcrumb [items]="breadcrumbItems" aria-labelledby="page-title"></app-breadcrumb>
     </div>
 
@@ -45,9 +63,6 @@
         </strong>
       </div>
     </div>
-    <p class="table-intro" id="tableDescription">
-      Retrouvez ici tous les modèles de convention mis à disposition. Filtrez-les par nom ou année pour accéder rapidement aux informations souhaitées.
-    </p>
   </div>
 
   <nav class="actions-par-role" aria-label="Navigation des actions">
@@ -96,7 +111,7 @@
       <caption class="sr-only">Tableau listant les modèles de conventions disponibles avec actions associées</caption>
       <thead>
       <tr>
-        <th scope="col">Nom du modèle</th>
+        <th scope="col">Titre du modèle</th>
         <th scope="col" class="center">Année</th>
         <th scope="col" class="center">Format</th>
         <th scope="col" class="center actions-col">Actions</th>
@@ -112,7 +127,7 @@
         (keyup.enter)="openDetails(modele)"
         role="button"
         [attr.aria-label]="'Ouvrir les détails de ' + modele.nom">
-       <td>{{ modele.nom }}</td>
+        <td>{{ modele.titre }}</td>
         <td class="center">{{ modele.annee }}</td>
         <td class="center">Document</td>
         <td class="center actions-col">
@@ -142,9 +157,9 @@
           <button class="btn-icon delete"
                   [disabled]="!isGestionnaire"
                   (click)="confirmDelete(modele)"
-                  [attr.aria-label]="'Supprimer ce modele'"
-                  [attr.title]="'Supprimer ce modele'">
-            <i class="fas fa-trash-alt" aria-hidden="true"></i>
+                  [attr.aria-label]="'Archiver ce modele'"
+                  [attr.title]="'Archiver ce modele'">
+            <i class="fas fa-archive" aria-hidden="true"></i>
           </button>
         </td>
       </tr>
@@ -181,7 +196,7 @@
       </h3>
 
       <section id="modal-body" class="modal-section">
-        <p><strong>Nom :</strong> {{ selectedModel.nom }}</p>
+        <p><strong>Titre :</strong> {{ selectedModel.titre }}</p>
         <p><strong>Année :</strong> {{ selectedModel.annee }}</p>
         <p><strong>Format :</strong> {{ selectedModel.format }}</p>
         <p>

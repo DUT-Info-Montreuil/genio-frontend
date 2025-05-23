@@ -9,11 +9,7 @@ main, .auth-page, .page-contents {
   background-color: rgba(13, 71, 161, 0.1);
 }
 
-.table-intro {
-  margin: -2rem 0 1rem;
-  font-size: 1.1rem;
-  color: #495057;
-}
+
 
 .actions-par-role {
   display: flex;
@@ -46,7 +42,15 @@ main, .auth-page, .page-contents {
   background-color: #0d47a1;
 }
 
-
+.integration-dot {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  background-color: #43a047; /* ou #d32f2f si KO */
+  border-radius: 50%;
+  margin-left: 8px;
+  vertical-align: middle;
+}
 
 
 .filters-wrapper {
@@ -64,6 +68,7 @@ main, .auth-page, .page-contents {
 
 .input-icon {
   position: relative;
+
 }
 .input-icon i {
   position: absolute;
@@ -73,13 +78,14 @@ main, .auth-page, .page-contents {
   color: #6c757d;
 }
 .input-icon input {
-  padding: 10px 12px 10px 32px;
+  padding: 10px 12px 10px 40px;
   font-size: 1.2rem;
   border: 1px solid #ced4da;
   border-radius: 6px;
   background: #fff;
   color: #212529;
   width: 250px;
+
 }
 .input-icon.large-input input {
   width: 320px;
@@ -184,4 +190,15 @@ main, .auth-page, .page-contents {
 .toggle-vars-btn:hover {
   background-color: #1f3c88;
   color: #fff;
+}
+.info-btn {
+  background: none;
+  border: none;
+  font-size: 1.4rem;
+  color: #1f3c88;
+  cursor: pointer;
+  margin-left: 10px;
+}
+.info-btn:hover {
+  color: #0d47a1;
 }

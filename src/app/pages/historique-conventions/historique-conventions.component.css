@@ -1,11 +1,7 @@
 main, .auth-page, .page-contents {
   padding-top: 115px;
 }
-.table-intro {
-  margin: -2rem 0 1rem;
-  font-size: 1.1rem;
-  color: #495057;
-}
+
 
 .btn.btn-primary {
   display: flex;
@@ -63,14 +59,26 @@ main, .auth-page, .page-contents {
   color: #6c757d;
 }
 .input-icon input {
-  padding: 10px 12px 10px 37px;
+  padding: 10px 12px 10px 40px;
   border: 1px solid #ced4da;
   border-radius: 6px;
   font-size: 1.2rem;
   width: 300px;
   color: #212529;
+
 }
 
+.info-btn {
+  background: none;
+  border: none;
+  font-size: 1.4rem;
+  color: #1f3c88;
+  cursor: pointer;
+  margin-left: 10px;
+}
+.info-btn:hover {
+  color: #0d47a1;
+}
 .reset-icon {
   display: flex;
   align-items: center;

@@ -1,225 +1,55 @@
-<main class="modeles-container">
-  <!-- Titre principal + description -->
-  <header class="page-header-layout">
-    <div class="header-left">
-      <h2 id="page-title">
-        <i class="fas fa-history" aria-hidden="true"></i>
-        Historique des conventions
-      </h2>
-      <app-breadcrumb
-        [items]="[{ label: 'Accueil', url: '/' }, { label: 'Gérer', url: '/gerer-modeles' }, { label: 'Ajouter' }]"
-        aria-labelledby="page-title">
-      </app-breadcrumb>
+<div class="page-header-layout">
+  <h2>Modifier un modèle existant</h2>
+</div>
+
+<!-- Tableau de sélection -->
+<table class="app-table models-table" *ngIf="modeles.length > 0">
+  <thead>
+  <tr>
+    <th>Nom</th>
+    <th>Année</th>
+    <th>Actions</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr *ngFor="let m of modeles">
+    <td>{{ m.nom }}</td>
+    <td>{{ m.annee }}</td>
+    <td>
+      <button class="btn btn-secondary" (click)="selectModel(m)">Modifier</button>
+    </td>
+  </tr>
+  </tbody>
+</table>
+
+<div *ngIf="modeles.length === 0">
+  <p>Aucun modèle trouvé.</p>
+</div>
+
+<!-- Formulaire de modification -->
+<div *ngIf="selectedModel" class="auth-card">
+  <h3>Modifier le modèle : {{ selectedModel.nom }}</h3>
+
+  <form (ngSubmit)="onUpdate()" enctype="multipart/form-data">
+    <!-- Année affichée (non modifiable) -->
+    <div class="form-group-inline">
+      <label>Année :</label>
+      <input type="text" [value]="selectedModel.annee" disabled />
     </div>
 
-    <div class="header-right">
-      <div class="notif-actions" *ngIf="isGestionnaire">
-        <div class="notif-container">
-          <button class="notif-btn"
-                  (click)="afficherMessageNotif()"
-                  aria-label="Voir les demandes d’habilitation"
-                  aria-haspopup="true"
-                  [attr.aria-expanded]="notifMessageVisible">
-            <i class="fas fa-bell" aria-hidden="true"></i>
-            <span class="badge" [ngClass]="{ 'rouge': utilisateurs.length > 0, 'vert': utilisateurs.length === 0 }">
-            {{ utilisateurs.length }}
-          </span>
-          </button>
-          <div *ngIf="notifMessageVisible" class="notif-message" role="status" aria-live="polite">
-            <ng-container *ngIf="utilisateurs.length === 0">Aucune demande d’habilitation.</ng-container>
-            <ng-container *ngIf="utilisateurs.length === 1">1 demande d’habilitation.</ng-container>
-            <ng-container *ngIf="utilisateurs.length > 1">{{ utilisateurs.length }} demandes d’habilitation.</ng-container>
-          </div>
-        </div>
-
-        <a [routerLink]="['/gestion-utilisateurs']"
-           [queryParams]="{ source: 'historique' }"
-           class="btn btn-primary"
-           aria-label="Gérer les utilisateurs">
-          <i class="fas fa-users-cog" aria-hidden="true"></i> Gérer les utilisateurs
-        </a>
-      </div>
-
-      <div class="role-identity" *ngIf="isExploitant || isConsultant">
-        <span>Connecté en tant que :</span>
-        <strong [ngClass]="{
-        'role-exploitant': isExploitant,
-        'role-consultant': isConsultant
-      }">
-          {{ isExploitant ? 'Exploitant' : 'Consultant' }}
-        </strong>
-      </div>
+    <!-- Upload fichier -->
+    <div class="form-group">
+      <label>Remplacer le fichier :</label>
+      <input type="file" (change)="onFileSelected($event)" />
+      <span *ngIf="selectedFile">📄 {{ selectedFile.name }}</span>
     </div>
-  </header>
 
-  <p id="tableDescription" class="table-intro">
-    Ajoutez un nouveau modèle <code>.docx</code> à l’aide du formulaire ci-dessous. Les variables seront validées automatiquement lors de l’upload.
-  </p>
+    <!-- Bouton validation -->
+    <button type="submit" class="btn-login" [disabled]="isSubmitting || !selectedFile">
+      <i class="fas fa-save"></i> Sauvegarder les modifications
+    </button>
+  </form>
 
-  <!-- WRAPPER ALIGNÉ -->
-  <div class="actions-wrapper">
-    <nav class="actions-par-role" aria-label="Navigation secondaire">
-      <a routerLink="/consulter-modeles"
-         [ngClass]="{ 'active-link': router.url === '/consulter-modeles' }">Consulter</a>
-      <a routerLink="/historique-conventions"
-         [ngClass]="{ 'active-link': router.url === '/historique-conventions' }">Visualiser</a>
-      <a *ngIf="isGestionnaire"
-         routerLink="/gerer-modeles"
-         [ngClass]="{ 'active-link': router.url === '/gerer-modeles' }">Gérer</a>
-    </nav>
-
-    <div class="action-buttons">
-      <button class="btn btn-primary"
-              [ngClass]="{ 'selected-btn': router.url === '/gerer-modeles' }">
-        <i class="fas fa-plus-circle"></i> Ajouter
-      </button>
-      <button class="btn btn-primary">
-        <i class="fas fa-edit"></i> Modifier
-      </button>
-      <button class="btn btn-primary">
-        <i class="fas fa-trash"></i> Supprimer
-      </button>
-    </div>
-  </div>
-
-  <!-- FORMULAIRE ENCADRÉ -->
-  <div class="auth-page">
-    <div class="auth-card">
-      <!-- Le formulaire commence ici -->
-      <form (ngSubmit)="onSubmit()" enctype="multipart/form-data" #modeleForm="ngForm">
-        <!-- Année -->
-        <div class="form-group-inline">
-          <label for="annee">Année du modèle <span class="required-star">*</span></label>
-          <div class="input-wrapper">
-            <i class="fas fa-calendar icon-left" aria-hidden="true"></i>
-            <input
-              type="text"
-              id="annee"
-              name="annee"
-              maxlength="4"
-              required
-              [(ngModel)]="annee"
-              pattern="^[0-9]{4}$"
-              (input)="validateAnnee()"
-            />
-            <span class="status-indicator" [ngClass]="{ 'ok': isAnneeValid, 'ko': !isAnneeValid }">
-               {{ isAnneeValid ? '✔️ OK' : '❌ KO' }}
-              <i *ngIf="!isAnneeValid" class="fas fa-question-circle info-icon"
-                 (click)="openAnneeErrorModal()" tabindex="0" role="button"
-                 title="Pourquoi ce champ est invalide ?" aria-label="Afficher les détails de l’erreur">
-            </i>
-          </span>
-          </div>
-        </div>
-
-        <!-- Modal erreur année -->
-        <div class="modal-wrapper" *ngIf="showAnneeErrorModal">
-          <div class="modal-box alert" role="dialog" aria-modal="true" aria-labelledby="modalAnneeTitle">
-            <h3 id="modalAnneeTitle"><i class="fas fa-exclamation-triangle"></i> Erreur sur l’année</h3>
-            <div class="modal-section">
-              <p class="error">{{ error }}</p>
-              <p>L’année doit être composée de 4 chiffres (ex : 2025), et être comprise entre 2020 et {{ currentYear + 5 }}.</p>
-            </div>
-            <div class="modal-actions">
-              <button class="close-modal-btn" (click)="closeAnneeErrorModal()">Fermer</button>
-            </div>
-          </div>
-        </div>
-
-        <!-- Drop zone -->
-        <div
-          class="custom-drop-area"
-          [class.disabled]="!isAnneeValid || selectedFile"
-          (drop)="onFileDropped($event)"
-          (dragover)="onDragOver($event)"
-          (dragleave)="onDragLeave($event)">
-          <ng-container *ngIf="!selectedFile">
-            <p class="drop-text">📄 Glissez un fichier ici</p>
-          </ng-container>
-          <ng-container *ngIf="selectedFile">
-            <div class="file-name-wrapper">
-              <div class="file-name">
-                📄 {{ selectedFile.name }}
-                <span class="status-indicator inline-status"
-                      [ngClass]="{ 'ok': isAnneeValid, 'ko': !isAnneeValid }">
-                   {{ isAnneeValid ? '✔️ OK' : '❌ KO' }}
-                  <i *ngIf="!isAnneeValid" class="fas fa-question-circle info-icon"
-                     (click)="openAnneeErrorModal()" tabindex="0" role="button"
-                     title="Pourquoi ce champ est invalide ?" aria-label="Afficher les détails de l’erreur">
-                </i>
-              </span>
-                <button type="button" class="delete-file-btn" (click)="removeFile()" aria-label="Supprimer le fichier">
-                  <i class="fas fa-times-circle" aria-hidden="true"></i>
-                </button>
-              </div>
-            </div>
-          </ng-container>
-        </div>
-
-        <!-- Sélection de fichier -->
-        <div class="form-group" style="margin-top: 1rem;">
-          <label for="file">Ou choisissez un fichier :</label>
-          <div class="input-wrapper">
-            <input
-              type="file"
-              id="file"
-              name="file"
-              accept=".docx"
-              (change)="onFileSelected($event)"
-              [disabled]="!isAnneeValid"
-            />
-            <span class="status-indicator" [ngClass]="{ 'ok': isFileValid, 'ko': !isFileValid }">
-            {{ isFileValid ? '✔️ OK' : '❌ KO' }}
-          </span>
-          </div>
-        </div>
-
-        <!-- Modal erreurs fichier -->
-        <div class="modal-wrapper" *ngIf="showFileErrorModal">
-          <div class="modal-box alert" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
-            <h3 id="modalTitle"><i class="fas fa-exclamation-triangle"></i> Erreurs de validation</h3>
-            <div class="modal-section">
-              <ng-container *ngIf="isNotAModel">
-                <p class="error">❌ Le fichier ne semble pas être un modèle de convention. Aucun champ exploitable n’a été détecté.</p>
-              </ng-container>
-              <ng-container *ngIf="!isNotAModel && allVariablesStatus.length > 0">
-                <p>Voici les variables attendues :</p>
-                <div class="variable-grid-4">
-                  <div *ngFor="let variable of showAllVariables ? allVariablesStatus : allVariablesStatus.slice(0, 8)"
-                       class="variable-cell" [ngClass]="{ 'ok': variable.ok, 'ko': !variable.ok }">
-                    {{ variable.ok ? '✅' : '❌' }} {{ variable.name }}
-                  </div>
-                </div>
-                <div class="voir-plus-btn" *ngIf="allVariablesStatus.length > 8">
-                  <button type="button" (click)="toggleShowAllVariables()">
-                    {{ showAllVariables ? 'Voir moins ▲' : 'Voir plus ▼' }}
-                  </button>
-                </div>
-              </ng-container>
-            </div>
-            <div class="modal-actions">
-              <button class="close-modal-btn" (click)="closeFileErrorModal()">Fermer</button>
-            </div>
-          </div>
-        </div>
-
-        <!-- Submit -->
-        <button type="submit"
-                class="btn-login"
-                [disabled]="!isAnneeValid || !isFileValid || isSubmitting">
-          <i class="fas fa-paper-plane"></i> Valider le modèle
-        </button>
-      </form>
-    </div>
-  </div>
-
-  <!-- Message final -->
-  <div class="container-message" *ngIf="message || (error && !showFileErrorModal && isAnneeValid && isFileValid)">
-    <div class="callout" [ngClass]="{ 'callout-success': !!message, 'callout-error': !!error }">
-      <span *ngIf="message">{{ message }}</span>
-      <ng-container *ngIf="error && !showFileErrorModal">
-        <span>{{ error }}</span>
-      </ng-container>
-    </div>
-  </div>
-</main>
+  <div *ngIf="message" class="callout callout-success">{{ message }}</div>
+  <div *ngIf="error" class="callout callout-error">{{ error }}</div>
+</div>

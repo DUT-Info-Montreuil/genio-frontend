@@ -33,6 +33,16 @@ export class ConsulterModeleTousComponent implements OnInit {
   popupVisible = false;
   breadcrumbItems: { label: string, url?: string }[] = [];
   paginatedModeles: any[] = [];
+  integrationOK: boolean = true; // ou false selon ton état
+  showInfoModal = false;
+
+  openInfoModal() {
+    this.showInfoModal = true;
+  }
+
+  closeInfoModal() {
+    this.showInfoModal = false;
+  }
 
   @ViewChild('tableStart') tableStart!: ElementRef;
 
@@ -99,7 +109,12 @@ export class ConsulterModeleTousComponent implements OnInit {
     const start = (this.currentPage - 1) * this.entriesPerPage;
     const end = start + this.entriesPerPage;
     this.paginatedModeles = this.filteredModeles.slice(start, end);
-    console.log(`page=${this.currentPage}, entriesPerPage=${this.entriesPerPage}, affichés=${this.paginatedModeles.length}`);
+  }
+
+  formatTitreParDefaut(nom: string): string {
+    const match = nom.match(/_(\d{4})/);
+    const annee = match ? match[1] : 'inconnue';
+    return `modeleConvention_${annee}`;
   }
 
   loadModeles() {
@@ -120,6 +135,7 @@ export class ConsulterModeleTousComponent implements OnInit {
           return {
             ...m,
             annee,
+            titre: m.titre && m.titre.trim() !== '' ? m.titre : this.formatTitreParDefaut(m.nom),
             nomAffiche: this.formatNom(m.nom),
             description: `Document officiel pour les conventions de l’année ${annee}.`,
             utilise,
@@ -158,7 +174,6 @@ export class ConsulterModeleTousComponent implements OnInit {
 
     this.currentPage = 1;
     this.updatePaginatedModeles();
-    console.log(`Filtrage appliqué. Total résultats : ${this.filteredModeles.length}`);
   }
 
   resetFilters() {
@@ -181,7 +196,6 @@ export class ConsulterModeleTousComponent implements OnInit {
 
   get totalPages(): number {
     const total = Math.ceil(this.filteredModeles.length / this.entriesPerPage);
-    console.log(`Total pages : ${total}`);
     return total;
   }
 
@@ -216,11 +230,13 @@ export class ConsulterModeleTousComponent implements OnInit {
   openDetails(modele: any) {
     this.selectedModel = {
       ...modele,
+      titre: modele.titre?.trim() || this.formatTitreParDefaut(modele.nom),
       format: 'docx',
       dateCreation: modele.dateCreation || 'Non précisée',
       taille: this.getFormattedSize(modele.fichierBinaire?.length || 0),
     };
     this.showModal = true;
+
     setTimeout(() => {
       const modal = document.querySelector('.modal-card');
       (modal as HTMLElement)?.focus();

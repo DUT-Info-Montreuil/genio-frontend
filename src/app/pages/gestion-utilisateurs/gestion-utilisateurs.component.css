@@ -11,12 +11,6 @@ main, .auth-page, .page-contents {
   font-size: 1.2rem;
 }
 
-.table-intro {
-  margin: -2rem 0 1rem;
-  font-size: 1.1rem;
-  color: #495057;
-}
-
 .filters-zone-wrapper {
   display: flex;
   justify-content: space-between;

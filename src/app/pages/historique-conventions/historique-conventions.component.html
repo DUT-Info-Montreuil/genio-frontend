@@ -5,7 +5,28 @@
       <h2 id="page-title">
         <i class="fas fa-history" aria-hidden="true"></i>
         Historique des conventions
+        <button class="info-btn" (click)="openGeneralHelp()" aria-label="Aide sur l’historique des conventions" title="Aide">
+          <i class="fas fa-question-circle" aria-hidden="true"></i>
+        </button>
       </h2>
+      <!-- Modale d'aide globale sur l'historique -->
+      <div class="modal-wrapper" *ngIf="showGeneralHelpModal">
+        <div class="modal-box" tabindex="-1" role="dialog" aria-modal="true" aria-labelledby="modalHistoriqueHelpTitle">
+          <h3 id="modalHistoriqueHelpTitle">
+            <i class="fas fa-info-circle" aria-hidden="true"></i> À propos de cette section
+          </h3>
+          <div class="modal-section">
+            <p>
+              Cette section affiche l’historique des conventions générées pour chaque étudiant.
+              Utilisez les champs de recherche pour filtrer les résultats par nom, promotion ou année.
+              Les icônes <i class="fas fa-question-circle"></i> dans le tableau vous donnent plus de détails sur chaque étape (FLUX, JSON, DOCX).
+            </p>
+          </div>
+          <div class="modal-actions">
+            <button class="close-modal-btn" (click)="closeGeneralHelp()">Fermer</button>
+          </div>
+        </div>
+      </div>
       <app-breadcrumb
         [items]="[{ label: 'Accueil', url: '/' }, { label: 'Historique' }]"
         aria-labelledby="page-title">
@@ -51,11 +72,6 @@
       </div>
     </div>
   </header>
-
-  <p id="tableDescription" class="table-intro">
-    Consultez l’historique de génération des conventions par étudiant. Utilisez les filtres pour affiner les résultats
-    et cliquez sur les icônes d’aide <i class="fas fa-question-circle" aria-hidden="true"></i> pour plus de détails.
-  </p>
 
   <nav class="actions-par-role" aria-label="Navigation secondaire">
     <a routerLink="/consulter-modeles" [ngClass]="{ 'active-link': router.url === '/consulter-modeles' }">Consulter</a>
@@ -233,7 +249,7 @@
         <i class="fas fa-info-circle"></i> Aide : {{ openedHelp.toUpperCase() }}
       </h3>
       <section *ngIf="openedHelp === 'flux'" class="modal-section">
-        <h4>Erreurs FLUX</h4>
+        <h4>Liste des erreurs possibles</h4>
         <ul>
           <li><strong>Format non supporté</strong> – Fichier invalide</li>
           <li><strong>Modèle introuvable</strong> – Supprimé ou inexistant</li>
@@ -242,14 +258,14 @@
         </ul>
       </section>
       <section *ngIf="openedHelp === 'json'" class="modal-section">
-        <h4>Erreurs JSON</h4>
+        <h4>Liste des erreurs possibles</h4>
         <ul>
           <li><strong>Validation</strong> – Champs requis manquants</li>
           <li><strong>Champ absent</strong> – Exemple : “Nom de l’organisme”</li>
         </ul>
       </section>
       <section *ngIf="openedHelp === 'docx'" class="modal-section">
-        <h4>Erreurs DOCX</h4>
+        <h4>Liste des erreurs possibles</h4>
         <ul>
           <li><strong>Erreur d’export</strong> – Échec lors de la génération du fichier</li>
           <li><strong>Fichier manquant</strong> – Aucun document généré</li>

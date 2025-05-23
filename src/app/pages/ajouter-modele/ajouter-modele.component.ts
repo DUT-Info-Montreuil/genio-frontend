@@ -1,30 +1,27 @@
-import {ChangeDetectorRef, Component, input, OnInit} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
-import {ActivatedRoute, Router, RouterLink, RouterLinkActive} from '@angular/router';
-import {AuthService} from '../../services/auth.service';
-import {NgClass, NgForOf, NgIf} from '@angular/common';
-import {BreadcrumbComponent} from '../../shared/breadcrumb/breadcrumb.component';
+import {ChangeDetectorRef, Component} from '@angular/core';
 import {FormsModule} from '@angular/forms';
+import {JsonPipe, NgClass, NgForOf, NgIf} from '@angular/common';
+import {HttpClient} from '@angular/common/http';
+import {Router} from '@angular/router';
+import {AuthService} from '../../services/auth.service';
 
 @Component({
-  selector: 'app-modifier-modele',
-  templateUrl: './modifier-modele.component.html',
-  standalone: true,
+  selector: 'app-ajouter-modele',
   imports: [
-    NgClass,
-    BreadcrumbComponent,
-    RouterLink,
     FormsModule,
+    NgClass,
     NgIf,
-    NgForOf,
+    JsonPipe,
+    NgForOf
   ],
-  styleUrls: ['./modifier-modele.component.css', '../../../assets/styles/header.css','../../../assets/styles/modal-box.css']
+  templateUrl: './ajouter-modele.component.html',
+  standalone: true,
+  styleUrls: ['./ajouter-modele.component.css','../../../assets/styles/modal-box.css']
 })
-export class ModifierModeleComponent implements OnInit {
+export class AjouterModeleComponent {
 
   isAnneeValid: boolean = false;
   annee: string = '';
-  idModeleActuel: number = 0;
   currentYear = new Date().getFullYear();
   selectedFile: File | null = null;
   message: string = '';
@@ -44,37 +41,43 @@ export class ModifierModeleComponent implements OnInit {
     private http: HttpClient,
     protected router: Router,
     private authService: AuthService,
-    private cdr: ChangeDetectorRef,
-  private route: ActivatedRoute
+    private cdr: ChangeDetectorRef
   ) {}
 
-
-
-  onUpdate(): void {
-    if (!this.selectedFile) {
-      this.error = "Veuillez sélectionner un fichier à uploader.";
+  onSubmit(): void {
+    if (!this.isAnneeValid) {
+      this.error = 'L’année est invalide.';
       return;
     }
 
-    this.isSubmitting = true;
+    if (!this.isFileValid || !this.selectedFile) {
+      this.openFileErrorModal();
+      return;
+    }
 
     const formData = new FormData();
-    formData.append('file', this.selectedFile!);
+    formData.append('file', this.selectedFile);
+    formData.append('titre', this.titre);
+    formData.append('annee', this.annee);
+    this.isSubmitting = true;
 
-    this.http.put(`http://localhost:8080/conventionServices/${this.idModeleActuel}/file`, formData)
-      .subscribe({
-        next: () => {
-          this.message = "✅ Fichier mis à jour avec succès.";
-          this.error = '';
-          this.isSubmitting = false;
-          this.selectedFile = null;
-        },
-        error: (err) => {
-          this.error = err.error?.error || "❌ Erreur lors de la mise à jour du fichier.";
-          this.message = '';
-          this.isSubmitting = false;
+    this.http.post<any>('http://localhost:8080/conventionServices', formData).subscribe({
+      next: (res) => {
+        this.message = res.message;
+        this.error = '';
+        this.resetForm();
+      },
+      error: (err) => {
+        const msg = err.error?.error || "Erreur lors de l'ajout du modèle.";
+        this.error = msg;
+        if (msg.includes("déjà été ajouté")) {
+          this.error = "⚠️ Ce fichier a déjà été ajouté.";
         }
-      });
+        this.message = '';
+        this.isSubmitting = false;
+        this.showExpectedVariables = false;
+      }
+    });
   }
 
   openFileErrorModal(): void {
@@ -88,6 +91,8 @@ export class ModifierModeleComponent implements OnInit {
     this.showExpectedVariables = false;
     this.isAnneeValid = false;
     this.isFileValid = false;
+    this.titre = '';
+    this.titreEditable = false;
   }
 
   validateAnnee(): void {
@@ -184,13 +189,16 @@ export class ModifierModeleComponent implements OnInit {
               return;
             }
 
-            if (missing.length > 0) {
+            if (missing.length === 0) {
+              this.isFileValid = true;
+              this.error = '';
+              if (this.annee) {
+                this.titre = `Convention ${this.annee}`;
+              }
+            } else {
               this.isFileValid = false;
               this.error = `❌ Le document est un modèle, mais il manque ${missing.length} variable(s) : ${missing.join(', ')}`;
               this.showFileErrorModal = true;
-            } else {
-              this.isFileValid = true;
-              this.error = '';
             }
           } else {
             this.isFileValid = false;
@@ -252,6 +260,15 @@ export class ModifierModeleComponent implements OnInit {
       });
   }
 
+  enableEditTitre(): void {
+    if (!this.isFileValid) return; // 🔒 sécurité supplémentaire
+    this.titreEditable = true;
+    const input = document.getElementById('titre') as HTMLInputElement;
+    if (input) {
+      input.removeAttribute('readonly');
+      input.focus();
+    }
+  }
 
   onFileDropped(event: DragEvent): void {
     event.preventDefault();
@@ -301,33 +318,6 @@ export class ModifierModeleComponent implements OnInit {
     this.showAllVariables = !this.showAllVariables;
   }
 
-  modeles: any[] = [];
-  selectedModel: any = null;
-
-  ngOnInit(): void {
-    this.loadModeles();
-  }
-
-  loadModeles(): void {
-    this.http.get<any[]>('http://localhost:8080/conventionServices').subscribe({
-      next: (data) => {
-        this.modeles = data;
-      },
-      error: () => {
-        this.error = "Erreur lors du chargement des modèles.";
-      }
-    });
-  }
-
-  selectModel(modele: any): void {
-    this.selectedModel = modele;
-    this.idModeleActuel = modele.id;
-    this.annee = modele.annee;
-    this.error = '';
-    this.message = '';
-    this.selectedFile = null;
-    this.isAnneeValid = true; // on considère valide l’année déjà enregistrée
-  }
-
-
+  titre: string = '';
+  titreEditable = false;
 }

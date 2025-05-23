@@ -44,12 +44,6 @@
   text-decoration: underline;
 }
 
-/*.nav-links a:focus {
-  outline: 3px solid #90caf9;
-  outline-offset: 3px;
-  background-color: rgba(144, 202, 249, 0.1);
-}*/
-
 .navbar-toggler {
   display: none;
   background: none;

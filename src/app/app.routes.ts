@@ -16,6 +16,7 @@ import {GestionUtilisateursComponent} from './pages/gestion-utilisateurs/gestion
 import {BreadcrumbComponent} from './shared/breadcrumb/breadcrumb.component';
 import {HistoriqueConventionsComponent} from './pages/historique-conventions/historique-conventions.component';
 import {GererModelesComponent} from './pages/gerer-modeles/gerer-modeles.component';
+import {SupprimerModeleComponent} from './pages/supprimer-modele/supprimer-modele.component';
 
 export const routes: Routes = [
   { path: '', component: AccueilComponent },
@@ -35,6 +36,7 @@ export const routes: Routes = [
   { path: 'breadcrumb', component: BreadcrumbComponent },
   { path: 'historique-conventions', component: HistoriqueConventionsComponent },
   { path: 'gerer-modeles', component: GererModelesComponent},
-  { path: 'modifier-modele', component: ModifierModeleComponent}
+  { path: 'modifier-modele', component: ModifierModeleComponent},
+  { path: 'supprimer-modele', component: SupprimerModeleComponent}
 
 ];
