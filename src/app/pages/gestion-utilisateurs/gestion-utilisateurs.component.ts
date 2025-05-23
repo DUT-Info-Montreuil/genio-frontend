@@ -38,6 +38,16 @@ export class GestionUtilisateursComponent implements OnInit {
     this.loadUsers();
   }
 
+  showHelpModal = false;
+
+  openHelp() {
+    this.showHelpModal = true;
+  }
+
+  closeHelp() {
+    this.showHelpModal = false;
+  }
+
   resetFilters(): void {
     this.searchEmail = '';
     this.selectedRole = '';

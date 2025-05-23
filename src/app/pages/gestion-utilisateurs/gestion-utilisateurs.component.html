@@ -3,14 +3,29 @@
     <div class="header-left">
       <h2 id="page-title">
         <i class="fas fa-users-cog" aria-hidden="true"></i> Gestion des utilisateurs
+        <button class="info-btn" (click)="openHelp()" aria-label="Aide sur la gestion des utilisateurs" title="Aide">
+          <i class="fas fa-question-circle" aria-hidden="true"></i>
+        </button>
       </h2>
+      <div class="modal-wrapper" *ngIf="showHelpModal">
+        <div class="modal-box" role="dialog" aria-modal="true" aria-labelledby="modalHelpTitle" tabindex="-1">
+          <h3 id="modalHelpTitle">
+            <i class="fas fa-info-circle" aria-hidden="true"></i> À propos de cette section
+          </h3>
+          <div class="modal-section">
+            <p>
+              Cette section vous permet de visualiser et de modifier les comptes utilisateurs de la plateforme.
+              Vous pouvez filtrer par email, rôle ou statut, et activer, modifier ou supprimer des comptes en quelques clics.
+            </p>
+          </div>
+          <div class="modal-actions">
+            <button class="close-modal-btn" (click)="closeHelp()">Fermer</button>
+          </div>
+        </div>
+      </div>
       <app-breadcrumb [items]="breadcrumbItems" aria-labelledby="page-title"></app-breadcrumb>
     </div>
   </div>
-
-  <p class="table-intro">
-    Cette section vous permet de visualiser et modifier les comptes utilisateurs. Filtrez facilement par rôle ou statut pour trouver rapidement les profils à gérer.
-  </p>
 
   <div class="filters-zone-wrapper" aria-label="Filtres de recherche">
     <div class="filters-zone">
