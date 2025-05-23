@@ -165,8 +165,8 @@ input[type="file"]::-webkit-file-upload-button:focus {
   border-radius: 12px;
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
   width: 100%;
-  max-width: 1000px; /* ← passe de 800px à 1000px */
-  min-width: 600px;  /* ← pour éviter que ça écrase trop */
+  max-width: 1000px;
+  min-width: 600px;
   padding: 30px 40px;
   font-size: 1rem;
   line-height: 1.6;
@@ -212,7 +212,7 @@ input[type="file"]::-webkit-file-upload-button:focus {
 
 .variable-grid-4 {
   display: grid;
-  grid-template-columns: repeat(3, 1fr); /* 3 colonnes fixes */
+  grid-template-columns: repeat(3, 1fr);
   gap: 12px;
   margin-top: 1rem;
 }
@@ -226,7 +226,7 @@ input[type="file"]::-webkit-file-upload-button:focus {
   text-align: center;
   font-family: monospace;
   word-break: break-word;
-  white-space: normal;       /* ← important ! */
+  white-space: normal;
   overflow: visible;
 }
 
@@ -525,13 +525,13 @@ input[type="file"]::-webkit-file-upload-button:focus {
 
   @media (max-width: 768px) {
     .variable-grid-4 {
-      grid-template-columns: repeat(2, 1fr); /* 2 colonnes max en mobile */
+      grid-template-columns: repeat(2, 1fr);
     }
   }
 
   @media (max-width: 480px) {
     .variable-grid-4 {
-      grid-template-columns: 1fr; /* 1 colonne sur petit mobile */
+      grid-template-columns: 1fr;
     }
   }
 

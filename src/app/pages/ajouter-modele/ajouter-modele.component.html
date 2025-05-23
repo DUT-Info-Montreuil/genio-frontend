@@ -2,7 +2,6 @@
   <div class="auth-card">
     <form (ngSubmit)="onSubmit()" enctype="multipart/form-data" #modeleForm="ngForm">
 
-      <!-- Année du modèle -->
       <div class="form-group-inline">
         <label for="annee">
           <span class="label-blue">Année du modèle<span class="required-star"> *</span> :</span>
@@ -32,12 +31,10 @@
         </div>
       </div>
 
-      <!-- Erreur année -->
       <div id="anneeErrorDesc" class="sr-only" aria-live="assertive">
         {{ isAnneeValid ? '✔️ Année valide.' : error }}
       </div>
 
-      <!-- Drop + Upload -->
       <div class="drop-upload-wrapper">
         <div
           class="custom-drop-area"
@@ -46,12 +43,12 @@
           (dragover)="onDragOver($event)"
           (dragleave)="onDragLeave($event)">
           <ng-container *ngIf="!selectedFile">
-            <p class="drop-text">📄 Glissez un fichier ici</p>
+            <p class="drop-text">Glissez un fichier ici ou appuyer sur le bouton pour ajouter un fichier.</p>
           </ng-container>
           <ng-container *ngIf="selectedFile">
             <div class="file-name-wrapper">
               <div class="file-name">
-                📄 {{ selectedFile.name }}
+                {{ selectedFile.name }}
                 <span class="status-indicator inline-status" [ngClass]="{ 'ok': isFileValid, 'ko': !isFileValid }">
                   {{ isFileValid ? '✔️ OK' : '❌ KO' }}
                   <i *ngIf="!isFileValid" class="fas fa-question-circle info-icon"
@@ -78,7 +75,6 @@
       </div>
       <br>
 
-      <!-- Titre du modèle -->
       <div class="form-group-inline">
         <label for="titre">
           <span class="label-blue">Titre du modèle</span><span class="required-star">*</span> :
@@ -98,7 +94,6 @@
         </div>
       </div>
 
-      <!-- Valider -->
       <button type="submit" class="btn btn-primary full-width" [disabled]="!isAnneeValid || !isFileValid || isSubmitting">
         <i class="fas fa-paper-plane"></i> Valider le modèle
       </button>

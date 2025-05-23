@@ -46,7 +46,7 @@ main, .auth-page, .page-contents {
   display: inline-block;
   width: 10px;
   height: 10px;
-  background-color: #43a047; /* ou #d32f2f si KO */
+  background-color: #43a047;
   border-radius: 50%;
   margin-left: 8px;
   vertical-align: middle;

@@ -84,7 +84,7 @@ input[type="file"]::-webkit-file-upload-button:focus {
 .form-group-inline label {
   font-weight: 600;
   font-size: 1.1rem;
-  color: #0d47a1; /* même couleur pour les deux labels */
+  color: #0d47a1;
   white-space: nowrap;
   display: flex;
   align-items: center;
@@ -145,12 +145,12 @@ input[type="file"]::-webkit-file-upload-button:focus {
 .info-icon {
   font-size: 1.2rem;
   cursor: pointer;
-  color: #0d47a1; /* même que les labels */
+  color: #0d47a1;
   transition: color 0.3s ease;
 }
 
 .info-icon:hover {
-  color: #1f3c88; /* légèrement plus clair */
+  color: #1f3c88;
 }
 
 .btn.btn-primary {
@@ -213,8 +213,8 @@ input[type="file"]::-webkit-file-upload-button:focus {
   border-radius: 12px;
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
   width: 100%;
-  max-width: 1000px; /* ← passe de 800px à 1000px */
-  min-width: 600px;  /* ← pour éviter que ça écrase trop */
+  max-width: 1000px;
+  min-width: 600px;
   padding: 30px 40px;
   font-size: 1rem;
   line-height: 1.6;
@@ -260,7 +260,7 @@ input[type="file"]::-webkit-file-upload-button:focus {
 
 .variable-grid-4 {
   display: grid;
-  grid-template-columns: repeat(3, 1fr); /* 3 colonnes fixes */
+  grid-template-columns: repeat(3, 1fr);
   gap: 12px;
   margin-top: 1rem;
 }
@@ -274,7 +274,7 @@ input[type="file"]::-webkit-file-upload-button:focus {
   text-align: center;
   font-family: monospace;
   word-break: break-word;
-  white-space: normal;       /* ← important ! */
+  white-space: normal;
   overflow: visible;
 }
 
@@ -559,13 +559,13 @@ input[type="file"]::-webkit-file-upload-button:focus {
 
   @media (max-width: 768px) {
     .variable-grid-4 {
-      grid-template-columns: repeat(2, 1fr); /* 2 colonnes max en mobile */
+      grid-template-columns: repeat(2, 1fr);
     }
   }
 
   @media (max-width: 480px) {
     .variable-grid-4 {
-      grid-template-columns: 1fr; /* 1 colonne sur petit mobile */
+      grid-template-columns: 1fr;
     }
   }
 

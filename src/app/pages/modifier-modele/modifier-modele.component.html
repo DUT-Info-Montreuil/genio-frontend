@@ -2,7 +2,6 @@
   <h2>Modifier un modèle existant</h2>
 </div>
 
-<!-- Tableau de sélection -->
 <table class="app-table models-table" *ngIf="modeles.length > 0">
   <thead>
   <tr>
@@ -26,25 +25,21 @@
   <p>Aucun modèle trouvé.</p>
 </div>
 
-<!-- Formulaire de modification -->
 <div *ngIf="selectedModel" class="auth-card">
   <h3>Modifier le modèle : {{ selectedModel.nom }}</h3>
 
   <form (ngSubmit)="onUpdate()" enctype="multipart/form-data">
-    <!-- Année affichée (non modifiable) -->
     <div class="form-group-inline">
       <label>Année :</label>
       <input type="text" [value]="selectedModel.annee" disabled />
     </div>
 
-    <!-- Upload fichier -->
     <div class="form-group">
       <label>Remplacer le fichier :</label>
       <input type="file" (change)="onFileSelected($event)" />
-      <span *ngIf="selectedFile">📄 {{ selectedFile.name }}</span>
+      <span *ngIf="selectedFile">{{ selectedFile.name }}</span>
     </div>
 
-    <!-- Bouton validation -->
     <button type="submit" class="btn-login" [disabled]="isSubmitting || !selectedFile">
       <i class="fas fa-save"></i> Sauvegarder les modifications
     </button>
