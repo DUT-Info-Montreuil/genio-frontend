@@ -1,8 +1,8 @@
-import {ChangeDetectorRef, Component, input, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, ElementRef, input, OnInit, ViewChild} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {ActivatedRoute, Router, RouterLink, RouterLinkActive} from '@angular/router';
 import {AuthService} from '../../services/auth.service';
-import {NgClass, NgForOf, NgIf} from '@angular/common';
+import {DatePipe, NgClass, NgForOf, NgIf} from '@angular/common';
 import {BreadcrumbComponent} from '../../shared/breadcrumb/breadcrumb.component';
 import {FormsModule} from '@angular/forms';
 
@@ -17,8 +17,9 @@ import {FormsModule} from '@angular/forms';
     FormsModule,
     NgIf,
     NgForOf,
+    DatePipe,
   ],
-  styleUrls: ['./modifier-modele.component.css', '../../../assets/styles/header.css','../../../assets/styles/modal-box.css']
+  styleUrls: ['./modifier-modele.component.css', '../../../assets/styles/header.css','../../../assets/styles/modal-box.css','../../../assets/styles/auth-shared.css','../../../assets/styles/ tables-common.css']
 })
 export class ModifierModeleComponent implements OnInit {
 
@@ -38,86 +39,188 @@ export class ModifierModeleComponent implements OnInit {
   showAnneeErrorModal = false;
   showFileErrorModal: boolean = false;
   showExpectedVariables = false;
+  searchText = '';
+  searchYear = '';
+  advancedSearch = '';
+  entriesPerPage = 5;
+  currentPage = 1;
+  filteredModeles: any[] = [];
+  paginatedModeles: any[] = [];
   protected readonly document = document;
+
+
 
   constructor(
     private http: HttpClient,
     protected router: Router,
     private authService: AuthService,
     private cdr: ChangeDetectorRef,
-  private route: ActivatedRoute
+    private route: ActivatedRoute
   ) {}
 
+  @ViewChild('tableStart') tableStart!: ElementRef;
 
+  updatePaginatedModeles() {
+    const start = (this.currentPage - 1) * this.entriesPerPage;
+    const end = start + this.entriesPerPage;
+    this.paginatedModeles = this.filteredModeles.slice(start, end);
+  }
+
+  get visiblePages(): number[] {
+    const pages: number[] = [];
+    const total = this.totalPages;
+
+    if (total <= 5) {
+      for (let i = 1; i <= total; i++) pages.push(i);
+    } else {
+      if (this.currentPage <= 3) {
+        pages.push(1, 2, 3);
+      } else if (this.currentPage >= total - 2) {
+        pages.push(total - 2, total - 1, total);
+      } else {
+        pages.push(this.currentPage - 1, this.currentPage, this.currentPage + 1);
+      }
+    }
+    return pages;
+  }
+
+  getYears(): string[] {
+    const allYears = this.modeles.map(m => m.annee || this.extractAnneeFromNom(m.nom));
+    return [...new Set(allYears)].filter(Boolean).sort();
+  }
+
+  resetFilters() {
+    this.searchText = '';
+    this.searchYear = '';
+    this.advancedSearch = '';
+    this.entriesPerPage = 5;
+    this.filteredModeles = [...this.modeles];
+    this.currentPage = 1;
+    this.applyFilters();
+  }
+
+  get totalPages(): number {
+    const total = Math.ceil(this.filteredModeles.length / this.entriesPerPage);
+    return total;
+  }
+
+  goToPage(page: number) {
+    if (page >= 1 && page <= this.totalPages) {
+      this.currentPage = page;
+      this.updatePaginatedModeles();
+      setTimeout(() => {
+        this.tableStart?.nativeElement?.focus();
+      });
+    }
+  }
+
+  setEntriesPerPage(value: number) {
+    this.entriesPerPage = +value;
+    this.currentPage = 1;
+    this.updatePaginatedModeles();
+    console.log(`Changement à ${this.entriesPerPage} entrées par page`);
+  }
+
+  applyFilters() {
+    const text = this.searchText.toLowerCase().trim();
+    const year = this.searchYear?.toString().trim();
+    const adv = this.advancedSearch.toLowerCase().trim();
+
+    this.filteredModeles = this.modeles.filter(m => {
+      const nom = m.nom?.toLowerCase() || '';
+      const titre = m.titre?.toLowerCase() || '';
+      const annee = m.annee?.toString() || this.extractAnneeFromNom(m.nom);
+      const desc = m.description?.toLowerCase() || '';
+      const statutTexte = m.statutTexte?.toLowerCase() || '';
+
+      const texteRechercheAvancee = `${titre} ${nom} ${annee} ${desc} ${statutTexte}`;
+
+      return (
+        (nom.includes(text) || titre.includes(text)) &&
+        (!year || annee === year) &&
+        (!adv || texteRechercheAvancee.includes(adv))
+      );
+    });
+
+    this.currentPage = 1;
+    this.updatePaginatedModeles();
+  }
 
   onUpdate(): void {
-    if (!this.selectedFile) {
-      this.error = "Veuillez sélectionner un fichier à uploader.";
-      return;
-    }
+    if (!this.selectedModel) return;
 
-    this.isSubmitting = true;
+    const now = new Date(); // ✅ ici en haut
 
-    const formData = new FormData();
-    formData.append('file', this.selectedFile!);
+    const updatePayload = {
+      titre: this.selectedModel.titre,
+      descriptionModification: this.descriptionModification,
+      dateDerniereModification: now.toISOString(),
+      id: this.selectedModel.id, // 💥 Ajoute ça
+      nom: this.selectedModel.nom, // 💥 Ajoute ça
+      annee: this.selectedModel.annee, // 💥 Ajoute ça
+    };
 
-    this.http.put(`http://localhost:8080/conventionServices/${this.idModeleActuel}/file`, formData)
+    this.http.put(`http://localhost:8080/conventionServices/${this.idModeleActuel}`, updatePayload)
       .subscribe({
         next: () => {
-          this.message = "✅ Fichier mis à jour avec succès.";
+          this.selectedModel.dateDerniereModification = now;
+          this.message = '✅ Modèle mis à jour avec succès !';
           this.error = '';
           this.isSubmitting = false;
-          this.selectedFile = null;
+          this.showEditModal = false;
+
+          setTimeout(() => this.message = '', 2000);
         },
         error: (err) => {
-          this.error = err.error?.error || "❌ Erreur lors de la mise à jour du fichier.";
+          this.error = err.error?.error || '❌ Erreur lors de la mise à jour.';
           this.message = '';
           this.isSubmitting = false;
+
+          setTimeout(() => this.error = '', 3000);
         }
       });
+
+    if (this.selectedFile) {
+      const formData = new FormData();
+      formData.append('file', this.selectedFile);
+      this.http.put(`http://localhost:8080/conventionServices/${this.idModeleActuel}/file`, formData)
+        .subscribe();
+    }
   }
 
-  openFileErrorModal(): void {
-    this.showFileErrorModal = true;
-  }
+  descriptionModification: string = '';
 
-  resetForm(): void {
+  showEditModal = false;
+
+  selectModel(modele: any): void {
+    this.selectedModel = modele;
+    this.idModeleActuel = modele.id;
+    this.annee = modele.annee || this.extractAnneeFromNom(modele.nom);
+    this.descriptionModification = modele.descriptionModification || '';
+    this.error = '';
+    this.message = '';
     this.selectedFile = null;
-    this.annee = '';
-    this.isSubmitting = false;
-    this.showExpectedVariables = false;
-    this.isAnneeValid = false;
-    this.isFileValid = false;
-  }
+    this.isAnneeValid = true;
 
-  validateAnnee(): void {
-    const year = +this.annee;
-    this.isAnneeValid = /^\d{4}$/.test(this.annee) && year >= 2020 && year <= this.currentYear + 5;
-
-    if (!this.isAnneeValid) {
-      if (!/^\d{4}$/.test(this.annee)) {
-        this.error = "⚠️ L’année doit contenir 4 chiffres (ex : 2025).";
-      } else {
-        this.error = `⚠️ L’année doit être comprise entre 2020 et ${this.currentYear + 5}.`;
-      }
-      this.selectedFile = null;
-      this.isFileValid = false;
-      return;
+    if (!this.selectedModel.titre || this.selectedModel.titre.trim() === '') {
+      this.selectedModel.titre = `modeleConvention_${this.annee}`;
     }
 
-    this.http.get<{ exists: boolean }>(`http://localhost:8080/conventionServices/check-nom-exists?annee=${this.annee}`)
-      .subscribe(res => {
-        if (res.exists) {
-          this.error = `⚠️ Un modèle existe déjà pour l’année ${this.annee}.`;
-          this.isAnneeValid = false;
-          this.selectedFile = null;
-          this.isFileValid = false;
-        } else {
-          this.error = '';
-          this.isAnneeValid = true;
-        }
-      });
+    this.showEditModal = true;
   }
+
+  closeModal(): void {
+    this.showEditModal = false;
+  }
+
+
+
+  extractAnneeFromNom(nom: string): string {
+    const match = nom?.match(/_(\d{4})/);
+    return match ? match[1] : '????';
+  }
+
+
 
   removeFile(): void {
     this.selectedFile = null;
@@ -311,7 +414,12 @@ export class ModifierModeleComponent implements OnInit {
   loadModeles(): void {
     this.http.get<any[]>('http://localhost:8080/conventionServices').subscribe({
       next: (data) => {
-        this.modeles = data;
+        this.modeles = data.map(m => ({
+          ...m,
+          dateDerniereModification: m.dateDerniereModification ? new Date(m.dateDerniereModification) : null
+        }));
+        this.filteredModeles = [...this.modeles];
+        this.applyFilters(); // ← Important aussi
       },
       error: () => {
         this.error = "Erreur lors du chargement des modèles.";
@@ -319,15 +427,16 @@ export class ModifierModeleComponent implements OnInit {
     });
   }
 
-  selectModel(modele: any): void {
-    this.selectedModel = modele;
-    this.idModeleActuel = modele.id;
-    this.annee = modele.annee;
-    this.error = '';
-    this.message = '';
-    this.selectedFile = null;
-    this.isAnneeValid = true; // on considère valide l’année déjà enregistrée
+
+  titreEditable = false;
+
+  enableEditTitre() {
+    this.titreEditable = true;
+    setTimeout(() => {
+      const input = document.getElementById('titre') as HTMLInputElement;
+      input?.focus();
+    }, 0);
   }
 
-
+  protected readonly Math = Math;
 }

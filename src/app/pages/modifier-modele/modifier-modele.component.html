@@ -1,50 +1,159 @@
-<div class="page-header-layout">
-  <h2>Modifier un modèle existant</h2>
+<section class="filters-wrapper" aria-label="Filtres">
+  <div class="filters-zone">
+    <div class="input-icon">
+      <i class="fas fa-file-alt" aria-hidden="true"></i>
+      <input type="text" aria-label="Recherche par nom de modèle" placeholder="Modèle" [(ngModel)]="searchText" (input)="applyFilters()" />
+    </div>
+    <div class="input-icon">
+      <i class="fas fa-calendar-alt" aria-hidden="true"></i>
+      <input type="number" list="yearsList" min="2000" max="2099" aria-label="Filtrer par année" placeholder="Année" [(ngModel)]="searchYear" (input)="applyFilters()" />
+      <datalist id="yearsList">
+        <option *ngFor="let year of getYears()" [value]="year"></option>
+      </datalist>
+    </div>
+  </div>
+
+  <div class="reset-icon">
+    <button class="reset-btn" (click)="resetFilters()">
+      <i class="fas fa-sync-alt" aria-hidden="true"></i> Réinitialiser
+    </button>
+  </div>
+</section>
+
+<section class="table-controls">
+  <label for="entriesSelect">Entrées par page</label>
+  <select id="entriesSelect" [(ngModel)]="entriesPerPage" (change)="setEntriesPerPage(entriesPerPage)" aria-label="Nombre d’entrées par page">
+    <option [value]="5">5</option>
+    <option [value]="10">10</option>
+    <option [value]="15">15</option>
+  </select>
+</section>
+
+<div class="table-wrapper">
+  <table class="app-table models-table" *ngIf="modeles.length > 0">
+    <thead>
+    <tr>
+      <th>Titre</th>
+      <th>Année</th>
+      <th>Format</th>
+      <th>Dernière modification</th>
+      <th class="center action-col">Action</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let m of paginatedModeles">
+      <td>{{ m.titre || ('modeleConvention_' + extractAnneeFromNom(m.nom)) }}</td>
+      <td>{{ m.annee || extractAnneeFromNom(m.nom) }}</td>
+      <td>{{ m.format || 'Document' }}</td>
+      <td>
+        {{ m.dateDerniereModification ? (m.dateDerniereModification | date:'dd/MM/yyyy à HH:mm') : '—' }}
+      </td>
+      <td class="center action-col">
+        <button class="btn-icon edit"(click)="selectModel(m)" title="Modifier">
+          <i class="fas fa-edit" aria-hidden="true"></i>
+        </button>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+
+  <div class="table-footer" aria-label="Navigation des pages">
+      <span>
+        Affichage de {{
+          filteredModeles.length === 0 ? 0 : (currentPage - 1) * entriesPerPage + 1
+        }} à {{
+          Math.min(currentPage * entriesPerPage, filteredModeles.length)
+        }} sur {{ filteredModeles.length }} entrées
+      </span>
+
+    <nav class="pagination" role="navigation" aria-label="Pagination">
+      <button (click)="goToPage(currentPage - 1)" [disabled]="currentPage === 1" aria-label="Page précédente">❮</button>
+      <button *ngIf="currentPage > 3" (click)="goToPage(1)">1</button>
+      <span *ngIf="currentPage > 4" aria-hidden="true">…</span>
+      <button *ngFor="let page of visiblePages" (click)="goToPage(page)" [class.active]="currentPage === page" [attr.aria-current]="currentPage === page ? 'page' : null">
+        {{ page }}
+      </button>
+      <span *ngIf="currentPage < totalPages - 3" aria-hidden="true">…</span>
+      <button *ngIf="currentPage < totalPages - 2" (click)="goToPage(totalPages)">{{ totalPages }}</button>
+      <button (click)="goToPage(currentPage + 1)" [disabled]="currentPage === totalPages" aria-label="Page suivante">❯</button>
+    </nav>
+  </div>
 </div>
 
-<table class="app-table models-table" *ngIf="modeles.length > 0">
-  <thead>
-  <tr>
-    <th>Nom</th>
-    <th>Année</th>
-    <th>Actions</th>
-  </tr>
-  </thead>
-  <tbody>
-  <tr *ngFor="let m of modeles">
-    <td>{{ m.nom }}</td>
-    <td>{{ m.annee }}</td>
-    <td>
-      <button class="btn btn-secondary" (click)="selectModel(m)">Modifier</button>
-    </td>
-  </tr>
-  </tbody>
-</table>
 
+  <div *ngIf="modeles.length === 0" class="empty-state">
+    <p>Aucun modèle disponible.</p>
+  </div>
+
+<div class="global-alert-wrapper" aria-live="polite" role="status">
+  <div *ngIf="message || (error && !showFileErrorModal)" class="callout"
+       [ngClass]="{ 'callout-success': !!message, 'callout-error': !!error }">
+    <span *ngIf="message">{{ message }}</span>
+    <span *ngIf="error && !showFileErrorModal">{{ error }}</span>
+  </div>
+</div>
 <div *ngIf="modeles.length === 0">
   <p>Aucun modèle trouvé.</p>
 </div>
 
-<div *ngIf="selectedModel" class="auth-card">
-  <h3>Modifier le modèle : {{ selectedModel.nom }}</h3>
+<div *ngIf="showEditModal" class="modal-overlay" (click)="closeModal()" tabindex="-1">
+  <div class="modal-box" (click)="$event.stopPropagation()" role="dialog" aria-modal="true">
+    <h3 class="modal-title">
+      <i class="fas fa-edit" aria-hidden="true"></i>
+      Modification
+    </h3>
 
-  <form (ngSubmit)="onUpdate()" enctype="multipart/form-data">
-    <div class="form-group-inline">
-      <label>Année :</label>
-      <input type="text" [value]="selectedModel.annee" disabled />
-    </div>
+    <form (ngSubmit)="onUpdate()" enctype="multipart/form-data" class="modal-form">
+      <div class="form-group-double">
+        <div class="form-inline" role="group" aria-label="Nom du modèle">
+          <label><strong>Nom du modèle :</strong></label>
+          <span class="file-name-inline" aria-readonly="true">{{ selectedModel.nom }}</span>
+        </div>
+        <br>
+        <div class="col-right">
+          <label for="titre">Modification du titre :</label>
+          <div class="input-wrapper">
+            <i class="fas fa-pen icon-left"
+               (click)="enableEditTitre()"
+               title="Modifier le titre"
+               aria-label="Modifier le titre du modèle"></i>
+            <input type="text"
+                   id="titre"
+                   name="titre"
+                   [(ngModel)]="selectedModel.titre"
+                   [readonly]="!titreEditable"
+                   (dblclick)="enableEditTitre()" />
+          </div>
+        </div>
+      </div>
+      <br>
 
-    <div class="form-group">
-      <label>Remplacer le fichier :</label>
-      <input type="file" (change)="onFileSelected($event)" />
-      <span *ngIf="selectedFile">{{ selectedFile.name }}</span>
-    </div>
+      <div class="form-group">
+        <label for="desc">Description de la modification (optionnel) :</label>
+        <textarea id="desc"
+                  name="desc"
+                  [(ngModel)]="descriptionModification"
+                  placeholder="Ex : Correction du titre, ajout de variable..."></textarea>
+      </div>
 
-    <button type="submit" class="btn-login" [disabled]="isSubmitting || !selectedFile">
-      <i class="fas fa-save"></i> Sauvegarder les modifications
-    </button>
-  </form>
+      <div class="form-group">
+        <label>Remplacer le fichier (optionnel) :</label>
+        <div class="upload-line">
+          <input type="file" id="fichier" (change)="onFileSelected($event)" hidden />
+          <button type="button" class="btn btn-primary btn-sm" (click)="document.getElementById('fichier')?.click()">
+            <i class="fas fa-upload"></i> Choisir un fichier
+          </button>
+          <span *ngIf="selectedFile" class="file-name">{{ selectedFile.name }}</span>
+        </div>
+      </div>
 
-  <div *ngIf="message" class="callout callout-success">{{ message }}</div>
-  <div *ngIf="error" class="callout callout-error">{{ error }}</div>
+      <div class="modal-actions">
+        <button type="button" class="btn btn-secondary" (click)="closeModal()">Annuler</button>
+        <button type="submit" class="btn btn-primary" [disabled]="isSubmitting">
+          <i class="fas fa-save"></i> Sauvegarder
+        </button>
+      </div>
+    </form>
+  </div>
 </div>
+

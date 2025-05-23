@@ -139,26 +139,26 @@
           </button>
 
           <button class="btn-icon ajout"
-                  [routerLink]="['/ajouter-modele']"
-                  [disabled]="!isGestionnaire"
+                  [routerLink]="['/gerer-modeles']"
+                  [queryParams]="{ onglet: 'ajouter' }"
                   [attr.aria-label]="'Ajouter un modèle'"
                   [attr.title]="'Ajouter un modèle'">
             <i class="fas fa-plus" aria-hidden="true"></i>
           </button>
 
           <button class="btn-icon edit"
-                  [routerLink]="['/modifier-modele', modele.id]"
-                  [disabled]="!isGestionnaire"
-                  [attr.aria-label]="'Modifier ce modele'"
-                  [attr.title]="'Modifier ce modele'">
+                  [routerLink]="['/gerer-modeles']"
+                  [queryParams]="{ onglet: 'modifier', id: modele.id }"
+                  [attr.aria-label]="'Modifier ce modèle'"
+                  [attr.title]="'Modifier ce modèle'">
             <i class="fas fa-edit" aria-hidden="true"></i>
           </button>
 
           <button class="btn-icon delete"
-                  [disabled]="!isGestionnaire"
-                  (click)="confirmDelete(modele)"
-                  [attr.aria-label]="'Archiver ce modele'"
-                  [attr.title]="'Archiver ce modele'">
+                  [routerLink]="['/gerer-modeles']"
+                  [queryParams]="{ onglet: 'archiver', id: modele.id }"
+                  [attr.aria-label]="'Archiver ce modèle'"
+                  [attr.title]="'Archiver ce modèle'">
             <i class="fas fa-archive" aria-hidden="true"></i>
           </button>
         </td>

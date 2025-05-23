@@ -125,12 +125,12 @@
     <app-supprimer-modele></app-supprimer-modele>
   </div>
 
-<div class="container-message" aria-live="polite" role="status" *ngIf="message || (error && !showFileErrorModal && isAnneeValid && isFileValid)">
-  <div class="callout" [ngClass]="{ 'callout-success': !!message, 'callout-error': !!error }">
-    <span *ngIf="message">{{ message }}</span>
-    <ng-container *ngIf="error && !showFileErrorModal">
-      <span>{{ error }}</span>
-    </ng-container>
+  <div class="container-message" aria-live="polite" role="status" *ngIf="message || (error && !showFileErrorModal && isAnneeValid && isFileValid)">
+    <div class="callout" [ngClass]="{ 'callout-success': !!message, 'callout-error': !!error }">
+      <span *ngIf="message">{{ message }}</span>
+      <ng-container *ngIf="error && !showFileErrorModal">
+        <span>{{ error }}</span>
+      </ng-container>
+    </div>
   </div>
-</div>
 </main>

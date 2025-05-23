@@ -1,6 +1,6 @@
 import {ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import {Router, RouterLink, RouterLinkActive} from '@angular/router';
+import {ActivatedRoute, Router, RouterLink, RouterLinkActive} from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import {NgClass, NgForOf, NgIf, TitleCasePipe} from '@angular/common';
 import { BreadcrumbComponent } from '../../shared/breadcrumb/breadcrumb.component';
@@ -46,6 +46,7 @@ export class GererModelesComponent implements OnInit {
     private http: HttpClient,
     protected router: Router,
     private authService: AuthService,
+    private route: ActivatedRoute
   ) {}
 
   @ViewChild('modalBox') modalBox: ElementRef | undefined;
@@ -67,6 +68,12 @@ export class GererModelesComponent implements OnInit {
     this.isExploitant = this.authService.isExploitant();
     this.isGestionnaire = this.authService.isGestionnaire();
     this.isConsultant = this.authService.isConsultant();
+    this.route.queryParams.subscribe(params => {
+      const onglet = params['onglet'];
+      if (onglet === 'ajouter' || onglet === 'modifier' || onglet === 'archiver') {
+        this.ongletActif = onglet;
+      }
+    });
 
     if (this.isGestionnaire) {
       this.http.get<any[]>('/api/utilisateurs/non-actifs')
