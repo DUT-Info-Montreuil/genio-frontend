@@ -162,11 +162,12 @@ export class ConsulterModeleTousComponent implements OnInit {
       const annee = m.annee?.toString() || '';
       const desc = m.description?.toLowerCase() || '';
       const statutTexte = m.statutTexte?.toLowerCase() || '';
+      const titre = m.titre?.toLowerCase() || '';
 
       const texteRechercheAvancee = `${nomAffiche} ${annee} ${desc} ${statutTexte}`;
 
       return (
-        (nom.includes(text) || nomAffiche.includes(text)) &&
+        (nom.includes(text) || nomAffiche.includes(text) || titre.includes(text)) &&
         (!year || annee === year) &&
         (!adv || texteRechercheAvancee.includes(adv))
       );
