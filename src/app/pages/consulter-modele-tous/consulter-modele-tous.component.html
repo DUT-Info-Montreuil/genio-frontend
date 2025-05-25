@@ -131,34 +131,41 @@
         <td class="center">{{ modele.annee }}</td>
         <td class="center">Document</td>
         <td class="center actions-col">
+          <!-- Visible pour tout le monde -->
           <button class="btn-icon view"
                   (click)="openDetails(modele)"
-                  [attr.aria-label]="'Voir les détails du modele'"
-                  [attr.title]="'Voir les détails du modele'">
+                  [attr.aria-label]="'Voir les détails du modèle'"
+                  [attr.title]="'Voir les détails du modèle'">
             <i class="fas fa-eye" aria-hidden="true"></i>
           </button>
 
+          <!-- Ajout -->
           <button class="btn-icon ajout"
-                  [routerLink]="['/gerer-modeles']"
+                  [class.disabled-style]="!isGestionnaire"
+                  [routerLink]="isGestionnaire ? ['/gerer-modeles'] : null"
                   [queryParams]="{ onglet: 'ajouter' }"
-                  [attr.aria-label]="'Ajouter un modèle'"
-                  [attr.title]="'Ajouter un modèle'">
+                  [attr.aria-disabled]="!isGestionnaire"
+                  [attr.title]="!isGestionnaire ? 'Réservé au gestionnaire' : 'Ajouter un modèle'">
             <i class="fas fa-plus" aria-hidden="true"></i>
           </button>
 
+          <!-- Modifier -->
           <button class="btn-icon edit"
-                  [routerLink]="['/gerer-modeles']"
+                  [class.disabled-style]="!isGestionnaire"
+                  [routerLink]="isGestionnaire ? ['/gerer-modeles'] : null"
                   [queryParams]="{ onglet: 'modifier', id: modele.id }"
-                  [attr.aria-label]="'Modifier ce modèle'"
-                  [attr.title]="'Modifier ce modèle'">
+                  [attr.aria-disabled]="!isGestionnaire"
+                  [attr.title]="!isGestionnaire ? 'Réservé au gestionnaire' : 'Modifier ce modèle'">
             <i class="fas fa-edit" aria-hidden="true"></i>
           </button>
 
+          <!-- Archiver -->
           <button class="btn-icon delete"
-                  [routerLink]="['/gerer-modeles']"
+                  [class.disabled-style]="!isGestionnaire"
+                  [routerLink]="isGestionnaire ? ['/gerer-modeles'] : null"
                   [queryParams]="{ onglet: 'archiver', id: modele.id }"
-                  [attr.aria-label]="'Archiver ce modèle'"
-                  [attr.title]="'Archiver ce modèle'">
+                  [attr.aria-disabled]="!isGestionnaire"
+                  [attr.title]="!isGestionnaire ? 'Réservé au gestionnaire' : 'Archiver ce modèle'">
             <i class="fas fa-archive" aria-hidden="true"></i>
           </button>
         </td>

@@ -115,6 +115,14 @@ main, .auth-page, .page-contents {
   overflow-x: auto;
 }
 
+.disabled-style {
+  opacity: 0.5;
+  pointer-events: none;
+  filter: grayscale(100%);
+  color: #adb5bd;
+  cursor: not-allowed;
+}
+
 .models-table th:nth-child(1),
 .models-table td:nth-child(1) {
   width: 50%;
