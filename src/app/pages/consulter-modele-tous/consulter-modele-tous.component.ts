@@ -2,7 +2,7 @@ import {Component, ElementRef, HostListener, OnInit, ViewChild} from '@angular/c
 import { HttpClient } from '@angular/common/http';
 import { AuthService } from '../../services/auth.service';
 import { Router, RouterLink } from '@angular/router';
-import {DatePipe, NgClass, NgFor, NgIf} from '@angular/common';
+import {NgClass, NgFor, NgIf} from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import {BreadcrumbComponent} from '../../shared/breadcrumb/breadcrumb.component';
 
@@ -14,6 +14,33 @@ import {BreadcrumbComponent} from '../../shared/breadcrumb/breadcrumb.component'
   imports: [NgClass, NgIf, NgFor, FormsModule, RouterLink, BreadcrumbComponent]
 })
 export class ConsulterModeleTousComponent implements OnInit {
+
+  @HostListener('document:keydown', ['$event'])
+  handleTabKey(e: KeyboardEvent) {
+    if (!this.showModal) return;
+
+    const focusable = Array.from(document.querySelectorAll('.modal-card button, .modal-card [tabindex]'))
+      .filter(el => (el as HTMLElement).offsetParent !== null) as HTMLElement[];
+
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+
+    if (e.key === 'Tab') {
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    }
+  }
+
+  protected readonly Math = Math;
+
+  toastMessage = '';
+  toastVisible = false;
+  isLoading = false;
   modeles: any[] = [];
   filteredModeles: any[] = [];
   selectedModel: any = null;
@@ -24,16 +51,14 @@ export class ConsulterModeleTousComponent implements OnInit {
   advancedSearch = '';
   entriesPerPage = 5;
   currentPage = 1;
-
+  notifMessageVisible = false;
   isGestionnaire = false;
   isExploitant = false;
   isConsultant = false;
 
   utilisateurs: any[] = [];
-  popupVisible = false;
   breadcrumbItems: { label: string, url?: string }[] = [];
   paginatedModeles: any[] = [];
-  integrationOK: boolean = true; // ou false selon ton état
   showInfoModal = false;
 
   openInfoModal() {
@@ -67,10 +92,6 @@ export class ConsulterModeleTousComponent implements OnInit {
     }
   }
 
-  ngOnDestroy() {
-    window.removeEventListener('keydown', this.handleEscape);
-  }
-
   handleEscape = (e: KeyboardEvent) => {
     if (e.key === 'Escape' && this.showModal) this.closeModal();
   };
@@ -89,21 +110,9 @@ export class ConsulterModeleTousComponent implements OnInit {
     for (let i = 0; i < list.length; i += cols) {
       rows.push(list.slice(i, i + cols));
     }
-
     return rows;
   }
 
-  ouvrirPopup() {
-    this.popupVisible = !this.popupVisible;
-  }
-
-  activer(user: any) {
-    this.http.put(`http://localhost:8080/api/utilisateurs/${user.id}/role-activation`, null, {
-      params: { role: 'CONSULTANT', actif: 'true' }
-    }).subscribe(() => {
-      this.utilisateurs = this.utilisateurs.filter(u => u.id !== user.id);
-    });
-  }
 
   updatePaginatedModeles() {
     const start = (this.currentPage - 1) * this.entriesPerPage;
@@ -145,7 +154,7 @@ export class ConsulterModeleTousComponent implements OnInit {
 
         this.modeles = mapped;
         this.filteredModeles = [...mapped];
-        this.applyFilters(); // très important ici
+        this.applyFilters();
       },
       error: () => alert("Erreur lors du chargement des modèles.")
     });
@@ -248,17 +257,6 @@ export class ConsulterModeleTousComponent implements OnInit {
     return (bytes / 1024).toFixed(1) + ' Ko';
   }
 
-  showFallbackModel(data: any) {
-    const annee = data.annee || this.extractAnneeFromNom(data.nom);
-    this.selectedModel = {
-      ...data,
-      annee,
-      nomAffiche: this.formatNom(data.nom),
-      description: `Document officiel pour les conventions de l’année ${annee}.`,
-      utilise: false
-    };
-    this.showModal = true;
-  }
 
   expectedVariables: string[] = [
     "annee", "NOM_ORGANISME", "ADR_ORGANISME", "NOM_REPRESENTANT_ORG",
@@ -296,11 +294,6 @@ export class ConsulterModeleTousComponent implements OnInit {
     return annee ? `Convention ${annee}` : 'Convention';
   }
 
-  confirmDelete(modele: any) {
-    console.log('Suppression demandée pour :', modele);
-  }
-
-  notifMessageVisible = false;
 
   afficherMessageNotif() {
     if (this.notifMessageVisible) return;
@@ -308,42 +301,6 @@ export class ConsulterModeleTousComponent implements OnInit {
     setTimeout(() => {
       this.notifMessageVisible = false;
     }, 2000);
-  }
-
-  @HostListener('document:keydown', ['$event'])
-  handleTabKey(e: KeyboardEvent) {
-    if (!this.showModal) return;
-
-    const focusable = Array.from(document.querySelectorAll('.modal-card button, .modal-card [tabindex]'))
-      .filter(el => (el as HTMLElement).offsetParent !== null) as HTMLElement[];
-
-    const first = focusable[0];
-    const last = focusable[focusable.length - 1];
-
-    if (e.key === 'Tab') {
-      if (e.shiftKey && document.activeElement === first) {
-        e.preventDefault();
-        last.focus();
-      } else if (!e.shiftKey && document.activeElement === last) {
-        e.preventDefault();
-        first.focus();
-      }
-    }
-  }
-
-  protected readonly Math = Math;
-
-  toastMessage = '';
-  toastVisible = false;
-  isLoading = false;
-
-  afficherToast(message: string) {
-    this.toastMessage = message;
-    this.toastVisible = true;
-    setTimeout(() => {
-      this.toastVisible = false;
-      this.toastMessage = '';
-    }, 3000);
   }
 
   getYears(): string[] {

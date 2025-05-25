@@ -4,7 +4,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
-import { NgClass, NgIf } from '@angular/common';
+import {NgIf } from '@angular/common';
 
 @Component({
   selector: 'app-connexion',
@@ -25,7 +25,6 @@ export class ConnexionComponent {
     private http: HttpClient,
     private router: Router,
     private authService: AuthService,
-    private route: ActivatedRoute
   ) {}
 
   togglePasswordVisibility() {

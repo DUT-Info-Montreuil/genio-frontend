@@ -131,7 +131,6 @@
         <td class="center">{{ modele.annee }}</td>
         <td class="center">Document</td>
         <td class="center actions-col">
-          <!-- Visible pour tout le monde -->
           <button class="btn-icon view"
                   (click)="openDetails(modele)"
                   [attr.aria-label]="'Voir les détails du modèle'"
@@ -139,7 +138,6 @@
             <i class="fas fa-eye" aria-hidden="true"></i>
           </button>
 
-          <!-- Ajout -->
           <button class="btn-icon ajout"
                   [class.disabled-style]="!isGestionnaire"
                   [routerLink]="isGestionnaire ? ['/gerer-modeles'] : null"
@@ -149,7 +147,6 @@
             <i class="fas fa-plus" aria-hidden="true"></i>
           </button>
 
-          <!-- Modifier -->
           <button class="btn-icon edit"
                   [class.disabled-style]="!isGestionnaire"
                   [routerLink]="isGestionnaire ? ['/gerer-modeles'] : null"
@@ -159,7 +156,6 @@
             <i class="fas fa-edit" aria-hidden="true"></i>
           </button>
 
-          <!-- Archiver -->
           <button class="btn-icon delete"
                   [class.disabled-style]="!isGestionnaire"
                   [routerLink]="isGestionnaire ? ['/gerer-modeles'] : null"

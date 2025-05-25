@@ -3,7 +3,6 @@ import {FormsModule} from '@angular/forms';
 import {JsonPipe, NgClass, NgForOf, NgIf} from '@angular/common';
 import {HttpClient} from '@angular/common/http';
 import {Router} from '@angular/router';
-import {AuthService} from '../../services/auth.service';
 
 @Component({
   selector: 'app-ajouter-modele',
@@ -40,7 +39,6 @@ export class AjouterModeleComponent {
   constructor(
     private http: HttpClient,
     protected router: Router,
-    private authService: AuthService,
     private cdr: ChangeDetectorRef
   ) {}
 
@@ -81,7 +79,7 @@ export class AjouterModeleComponent {
   }
 
   openFileErrorModal(): void {
-    if (this.showFileErrorModal) return; // ← empêchera la double ouverture
+    if (this.showFileErrorModal) return;
     this.showFileErrorModal = true;
   }
 
@@ -149,7 +147,7 @@ export class AjouterModeleComponent {
   handleFileValidation(file: File): void {
     if (!file.name.endsWith('.docx')) {
       this.removeFile();
-      this.error = '❌ Le fichier doit être au format .docx.';
+      this.error = 'Le fichier doit être au format .docx.';
       return;
     }
 
@@ -185,7 +183,7 @@ export class AjouterModeleComponent {
             if (variablesDetectees.length === 0) {
               this.isFileValid = false;
               this.isNotAModel = true;
-              this.error = '❌ Ce fichier ne semble pas être un modèle de convention (aucun champ détecté).';
+              this.error = 'Ce fichier ne semble pas être un modèle de convention (aucun champ détecté).';
               this.showFileErrorModal = true;
               return;
             }
@@ -204,7 +202,7 @@ export class AjouterModeleComponent {
           } else {
             this.isFileValid = false;
             this.isNotAModel = true;
-            this.error = '❌ Le fichier ne semble pas être un modèle de convention.';
+            this.error = 'Le fichier ne semble pas être un modèle de convention.';
             this.showFileErrorModal = true;
           }
         },
@@ -237,7 +235,7 @@ export class AjouterModeleComponent {
 
                   if (missing.length > 0) {
                     this.isFileValid = false;
-                    this.error = `❌ Le document est un modèle mais il n’est pas complet. Il manque ${missing.length} variable(s) : ${missing.join(', ')}.`;
+                    this.error = `Le document est un modèle mais il n’est pas complet. Il manque ${missing.length} variable(s) : ${missing.join(', ')}.`;
                     this.showFileErrorModal = true;
                   } else {
                     this.isFileValid = true;
@@ -246,7 +244,7 @@ export class AjouterModeleComponent {
 
                 } else {
                   this.isFileValid = false;
-                  this.error = "❌ Format inattendu dans le retour.";
+                  this.error = "Format inattendu dans le retour.";
                 }
 
                 this.showFileErrorModal = true;
@@ -262,7 +260,7 @@ export class AjouterModeleComponent {
   }
 
   enableEditTitre(): void {
-    if (!this.isFileValid) return; // 🔒 sécurité supplémentaire
+    if (!this.isFileValid) return;
     this.titreEditable = true;
     const input = document.getElementById('titre') as HTMLInputElement;
     if (input) {
@@ -322,14 +320,10 @@ export class AjouterModeleComponent {
     return this.allVariablesStatus.some(v => !v.ok);
   }
 
-  get missingVariables() {
-    return this.allVariablesStatus.filter(v => !v.ok);
-  }
-
   get sortedVariables() {
     return this.allVariablesStatus.slice().sort((a, b) => {
       if (a.ok === b.ok) return 0;
-      return a.ok ? 1 : -1; // ko d'abord
+      return a.ok ? 1 : -1;
     });
   }
 

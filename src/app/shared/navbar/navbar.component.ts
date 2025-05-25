@@ -15,8 +15,6 @@ import { NgIf } from '@angular/common';
 export class NavbarComponent {
   navbarOpen = false;
   currentRoute = '';
-  loginError = '';
-  successMessage = '';
 
   constructor(private router: Router) {
     this.router.events.subscribe(() => {

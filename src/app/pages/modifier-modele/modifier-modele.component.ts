@@ -1,7 +1,6 @@
 import {ChangeDetectorRef, Component, ElementRef, input, OnInit, ViewChild} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {ActivatedRoute, Router, RouterLink, RouterLinkActive} from '@angular/router';
-import {AuthService} from '../../services/auth.service';
+import {Router, RouterLink} from '@angular/router';
 import {DatePipe, NgClass, NgForOf, NgIf} from '@angular/common';
 import {BreadcrumbComponent} from '../../shared/breadcrumb/breadcrumb.component';
 import {FormsModule} from '@angular/forms';
@@ -26,19 +25,15 @@ export class ModifierModeleComponent implements OnInit {
   isAnneeValid: boolean = false;
   annee: string = '';
   idModeleActuel: number = 0;
-  currentYear = new Date().getFullYear();
   selectedFile: File | null = null;
   message: string = '';
   error: string = '';
   isSubmitting = false;
-  showAllVariables = false;
   isNotAModel = false;
   utilisateurs: any[] = [];
   isFileValid: boolean = false;
   allVariablesStatus: { name: string; ok: boolean }[] = [];
-  showAnneeErrorModal = false;
   showFileErrorModal: boolean = false;
-  showExpectedVariables = false;
   searchText = '';
   searchYear = '';
   advancedSearch = '';
@@ -47,15 +42,20 @@ export class ModifierModeleComponent implements OnInit {
   filteredModeles: any[] = [];
   paginatedModeles: any[] = [];
   protected readonly document = document;
+  modeles: any[] = [];
+  selectedModel: any = null;
+  descriptionModification: string = '';
+
+  titreEditable = false;
+  showEditModal = false;
+  protected readonly Math = Math;
 
 
 
   constructor(
     private http: HttpClient,
     protected router: Router,
-    private authService: AuthService,
     private cdr: ChangeDetectorRef,
-    private route: ActivatedRoute
   ) {}
 
   @ViewChild('tableStart') tableStart!: ElementRef;
@@ -149,22 +149,22 @@ export class ModifierModeleComponent implements OnInit {
   onUpdate(): void {
     if (!this.selectedModel) return;
 
-    const now = new Date(); // ✅ ici en haut
+    const now = new Date();
 
     const updatePayload = {
       titre: this.selectedModel.titre,
       descriptionModification: this.descriptionModification,
       dateDerniereModification: now.toISOString(),
-      id: this.selectedModel.id, // 💥 Ajoute ça
-      nom: this.selectedModel.nom, // 💥 Ajoute ça
-      annee: this.selectedModel.annee, // 💥 Ajoute ça
+      id: this.selectedModel.id,
+      nom: this.selectedModel.nom,
+      annee: this.selectedModel.annee,
     };
 
     this.http.put(`http://localhost:8080/conventionServices/${this.idModeleActuel}`, updatePayload)
       .subscribe({
         next: () => {
           this.selectedModel.dateDerniereModification = now;
-          this.message = '✅ Modèle mis à jour avec succès !';
+          this.message = 'Modèle mis à jour avec succès !';
           this.error = '';
           this.isSubmitting = false;
           this.showEditModal = false;
@@ -172,7 +172,7 @@ export class ModifierModeleComponent implements OnInit {
           setTimeout(() => this.message = '', 2000);
         },
         error: (err) => {
-          this.error = err.error?.error || '❌ Erreur lors de la mise à jour.';
+          this.error = err.error?.error || 'Erreur lors de la mise à jour.';
           this.message = '';
           this.isSubmitting = false;
 
@@ -188,9 +188,7 @@ export class ModifierModeleComponent implements OnInit {
     }
   }
 
-  descriptionModification: string = '';
 
-  showEditModal = false;
 
   selectModel(modele: any): void {
     this.selectedModel = modele;
@@ -213,14 +211,10 @@ export class ModifierModeleComponent implements OnInit {
     this.showEditModal = false;
   }
 
-
-
   extractAnneeFromNom(nom: string): string {
     const match = nom?.match(/_(\d{4})/);
     return match ? match[1] : '????';
   }
-
-
 
   removeFile(): void {
     this.selectedFile = null;
@@ -246,7 +240,7 @@ export class ModifierModeleComponent implements OnInit {
   handleFileValidation(file: File): void {
     if (!file.name.endsWith('.docx')) {
       this.removeFile();
-      this.error = '❌ Le fichier doit être au format .docx.';
+      this.error = 'Le fichier doit être au format .docx.';
       return;
     }
 
@@ -282,14 +276,14 @@ export class ModifierModeleComponent implements OnInit {
             if (variablesDetectees.length === 0) {
               this.isFileValid = false;
               this.isNotAModel = true;
-              this.error = '❌ Ce fichier ne semble pas être un modèle de convention (aucun champ détecté).';
+              this.error = 'Ce fichier ne semble pas être un modèle de convention (aucun champ détecté).';
               this.showFileErrorModal = true;
               return;
             }
 
             if (missing.length > 0) {
               this.isFileValid = false;
-              this.error = `❌ Le document est un modèle, mais il manque ${missing.length} variable(s) : ${missing.join(', ')}`;
+              this.error = `Le document est un modèle, mais il manque ${missing.length} variable(s) : ${missing.join(', ')}`;
               this.showFileErrorModal = true;
             } else {
               this.isFileValid = true;
@@ -298,7 +292,7 @@ export class ModifierModeleComponent implements OnInit {
           } else {
             this.isFileValid = false;
             this.isNotAModel = true;
-            this.error = '❌ Le fichier ne semble pas être un modèle de convention.';
+            this.error = 'Le fichier ne semble pas être un modèle de convention.';
             this.showFileErrorModal = true;
           }
         },
@@ -331,7 +325,7 @@ export class ModifierModeleComponent implements OnInit {
 
                   if (missing.length > 0) {
                     this.isFileValid = false;
-                    this.error = `❌ Le document est un modèle mais il n’est pas complet. Il manque ${missing.length} variable(s) : ${missing.join(', ')}.`;
+                    this.error = `Le document est un modèle mais il n’est pas complet. Il manque ${missing.length} variable(s) : ${missing.join(', ')}.`;
                     this.showFileErrorModal = true;
                   } else {
                     this.isFileValid = true;
@@ -340,7 +334,7 @@ export class ModifierModeleComponent implements OnInit {
 
                 } else {
                   this.isFileValid = false;
-                  this.error = "❌ Format inattendu dans le retour.";
+                  this.error = "Format inattendu dans le retour.";
                 }
 
                 this.showFileErrorModal = true;
@@ -356,29 +350,6 @@ export class ModifierModeleComponent implements OnInit {
   }
 
 
-  onFileDropped(event: DragEvent): void {
-    event.preventDefault();
-    const dropZone = event.currentTarget as HTMLElement;
-    dropZone.classList.remove('dragover');
-
-    if (event.dataTransfer?.files?.length) {
-      const file = event.dataTransfer.files[0];
-      this.handleFileValidation(file);
-    }
-  }
-
-  onDragOver(event: DragEvent): void {
-    event.preventDefault();
-    const dropZone = event.currentTarget as HTMLElement;
-    dropZone.classList.add('dragover');
-  }
-
-  onDragLeave(event: DragEvent): void {
-    event.preventDefault();
-    const dropZone = event.currentTarget as HTMLElement;
-    dropZone.classList.remove('dragover');
-  }
-
   onFileSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files.length > 0) {
@@ -386,26 +357,6 @@ export class ModifierModeleComponent implements OnInit {
     }
   }
 
-  openAnneeErrorModal(): void {
-    this.showAnneeErrorModal = true;
-  }
-
-  closeAnneeErrorModal(): void {
-    this.showAnneeErrorModal = false;
-    this.cdr.detectChanges();
-  }
-
-  closeFileErrorModal(): void {
-    this.showFileErrorModal = false;
-    this.cdr.detectChanges(); // <-- force le rafraîchissement Angular
-  }
-
-  toggleShowAllVariables(): void {
-    this.showAllVariables = !this.showAllVariables;
-  }
-
-  modeles: any[] = [];
-  selectedModel: any = null;
 
   ngOnInit(): void {
     this.loadModeles();
@@ -419,7 +370,7 @@ export class ModifierModeleComponent implements OnInit {
           dateDerniereModification: m.dateDerniereModification ? new Date(m.dateDerniereModification) : null
         }));
         this.filteredModeles = [...this.modeles];
-        this.applyFilters(); // ← Important aussi
+        this.applyFilters();
       },
       error: () => {
         this.error = "Erreur lors du chargement des modèles.";
@@ -427,8 +378,6 @@ export class ModifierModeleComponent implements OnInit {
     });
   }
 
-
-  titreEditable = false;
 
   enableEditTitre() {
     this.titreEditable = true;
@@ -438,5 +387,5 @@ export class ModifierModeleComponent implements OnInit {
     }, 0);
   }
 
-  protected readonly Math = Math;
+
 }

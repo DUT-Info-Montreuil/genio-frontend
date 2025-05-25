@@ -1,8 +1,8 @@
-import {ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import {ActivatedRoute, Router, RouterLink, RouterLinkActive} from '@angular/router';
+import {ActivatedRoute, Router, RouterLink} from '@angular/router';
 import { AuthService } from '../../services/auth.service';
-import {NgClass, NgForOf, NgIf, TitleCasePipe} from '@angular/common';
+import {NgClass,NgIf, TitleCasePipe} from '@angular/common';
 import { BreadcrumbComponent } from '../../shared/breadcrumb/breadcrumb.component';
 import { FormsModule } from '@angular/forms';
 import {ModifierModeleComponent} from '../modifier-modele/modifier-modele.component';
@@ -50,15 +50,7 @@ export class GererModelesComponent implements OnInit {
   ) {}
 
   @ViewChild('modalBox') modalBox: ElementRef | undefined;
-
-  ngAfterViewChecked() {
-    if (this.showAnneeErrorModal || this.showFileErrorModal) {
-      this.modalBox?.nativeElement?.focus();
-    }
-  }
   showInfoModal = false;
-
-
 
   closeInfoModal() {
     this.showInfoModal = false;
@@ -90,7 +82,7 @@ export class GererModelesComponent implements OnInit {
   }
 
   openInfoModal() {
-    console.log('Ouverture de la modale'); // ← Ajoute ceci pour debug
+    console.log('Ouverture de la modale');
     this.showInfoModal = true;
   }
 

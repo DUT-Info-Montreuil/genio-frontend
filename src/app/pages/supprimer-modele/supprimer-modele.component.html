@@ -1,1 +1,119 @@
-<p>supprimer-modele works!</p>
+<section class="filters-wrapper" aria-label="Filtres">
+  <div class="filters-zone">
+    <div class="input-icon">
+      <i class="fas fa-file-alt" aria-hidden="true"></i>
+      <input type="text" aria-label="Recherche par nom de modèle" placeholder="Modèle" [(ngModel)]="searchText" (input)="applyFilters()" />
+    </div>
+    <div class="input-icon">
+      <i class="fas fa-calendar-alt" aria-hidden="true"></i>
+      <input type="number" list="yearsList" min="2000" max="2099" aria-label="Filtrer par année" placeholder="Année" [(ngModel)]="searchYear" (input)="applyFilters()" />
+      <datalist id="yearsList">
+        <option *ngFor="let year of getYears()" [value]="year"></option>
+      </datalist>
+    </div>
+  </div>
+
+  <div class="reset-icon">
+    <button class="reset-btn" (click)="resetFilters()">
+      <i class="fas fa-sync-alt" aria-hidden="true"></i> Réinitialiser
+    </button>
+  </div>
+</section>
+
+<section class="table-controls">
+  <label for="entriesSelect">Entrées par page</label>
+  <select id="entriesSelect" [(ngModel)]="entriesPerPage" (change)="setEntriesPerPage(entriesPerPage)" aria-label="Nombre d’entrées par page">
+    <option [value]="5">5</option>
+    <option [value]="10">10</option>
+    <option [value]="15">15</option>
+  </select>
+</section>
+
+<div class="table-wrapper">
+  <table class="app-table models-table" *ngIf="modeles.length > 0">
+    <thead>
+    <tr>
+      <th>Titre</th>
+      <th>Année</th>
+      <th>Format</th>
+      <th>Dernière modification</th>
+      <th class="center action-col">Action</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let m of paginatedModeles">
+      <td>{{ m.titre || ('modeleConvention_' + extractAnneeFromNom(m.nom)) }}</td>
+      <td>{{ m.annee || extractAnneeFromNom(m.nom) }}</td>
+      <td>{{ m.format || 'Document' }}</td>
+      <td>
+        {{ m.dateDerniereModification ? (m.dateDerniereModification | date:'dd/MM/yyyy à HH:mm') : '—' }}
+      </td>
+      <td class="center action-col">
+        <button class="btn-icon delete" (click)="selectModel(m)" title="Archiver">
+          <i class="fas fa-archive" aria-hidden="true"></i>
+        </button>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+
+  <div class="table-footer" aria-label="Navigation des pages">
+      <span>
+        Affichage de {{
+          filteredModeles.length === 0 ? 0 : (currentPage - 1) * entriesPerPage + 1
+        }} à {{
+          Math.min(currentPage * entriesPerPage, filteredModeles.length)
+        }} sur {{ filteredModeles.length }} entrées
+      </span>
+
+    <nav class="pagination" role="navigation" aria-label="Pagination">
+      <button (click)="goToPage(currentPage - 1)" [disabled]="currentPage === 1" aria-label="Page précédente">❮</button>
+      <button *ngIf="currentPage > 3" (click)="goToPage(1)">1</button>
+      <span *ngIf="currentPage > 4" aria-hidden="true">…</span>
+      <button *ngFor="let page of visiblePages" (click)="goToPage(page)" [class.active]="currentPage === page" [attr.aria-current]="currentPage === page ? 'page' : null">
+        {{ page }}
+      </button>
+      <span *ngIf="currentPage < totalPages - 3" aria-hidden="true">…</span>
+      <button *ngIf="currentPage < totalPages - 2" (click)="goToPage(totalPages)">{{ totalPages }}</button>
+      <button (click)="goToPage(currentPage + 1)" [disabled]="currentPage === totalPages" aria-label="Page suivante">❯</button>
+    </nav>
+  </div>
+</div>
+
+
+<div *ngIf="modeles.length === 0" class="empty-state">
+  <p>Aucun modèle disponible.</p>
+</div>
+
+<div class="global-alert-wrapper" aria-live="polite" role="status">
+  <div *ngIf="message || (error && !showFileErrorModal)" class="callout"
+       [ngClass]="{ 'callout-success': !!message, 'callout-error': !!error }">
+    <span *ngIf="message">{{ message }}</span>
+    <span *ngIf="error && !showFileErrorModal">{{ error }}</span>
+  </div>
+</div>
+<div *ngIf="modeles.length === 0">
+  <p>Aucun modèle trouvé.</p>
+</div>
+
+<div *ngIf="showDeleteModal" class="modal-overlay" (click)="closeModal()" tabindex="-1">
+  <div class="modal-box" (click)="$event.stopPropagation()" role="dialog" aria-modal="true">
+    <h3 class="modal-title">
+      <i class="fas fa-archive" aria-hidden="true"></i>
+      Archiver un modèle
+    </h3>
+
+    <div class="modal-section">
+      <p><strong>Nom du modèle à archiver :</strong></p>
+      <p style="color: red;">{{ selectedModel?.nom }}</p>
+    </div>
+
+    <div class="modal-actions">
+      <button type="button" class="btn btn-secondary" (click)="closeModal()">Annuler</button>
+      <button type="button" class="btn btn-danger" (click)="deleteModel()">
+        <i class="fas fa-trash"></i> Archiver
+      </button>
+    </div>
+  </div>
+</div>
+
