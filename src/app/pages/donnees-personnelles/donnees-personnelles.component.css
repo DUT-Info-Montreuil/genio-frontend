@@ -1,0 +1,61 @@
+main.modeles-container, .auth-page, .page-contents {
+  padding-top: 130px;
+}
+
+.about-container {
+  margin: 0 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  color: #212529;
+  font-family: 'Segoe UI', sans-serif;
+  text-align: left;
+}
+
+.about-container h1 {
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: #1f3c88;
+}
+
+.about-section {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.about-section h3 {
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: #1f3c88;
+}
+
+.about-section p {
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+.about-section ul {
+  padding-left: 1.2rem;
+  list-style-type: disc;
+}
+
+.about-section li {
+  font-size: 0.95rem;
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.about-container a {
+  color: #1f3c88;
+  text-decoration: underline;
+  font-weight: 500;
+}
+
+.about-container a:hover {
+  color: #0d47a1;
+}
+
+

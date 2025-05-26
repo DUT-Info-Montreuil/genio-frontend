@@ -1,1 +1,67 @@
-<p>mentions-legales works!</p>
+<main class="modeles-container" aria-labelledby="page-title">
+  <header class="page-header-layout">
+    <div class="header-left">
+      <h2 id="page-title">
+        <i class="fas fa-balance-scale" aria-hidden="true"></i>
+        Mentions légales
+      </h2>
+      <app-breadcrumb
+        [items]="[
+          { label: 'Accueil', url: '/' },
+          { label: 'Mentions légales' }
+        ]"
+        aria-labelledby="page-title">
+      </app-breadcrumb>
+    </div>
+  </header>
+
+  <section class="about-section">
+    <h3><i class="fas fa-user"></i> Éditeur du site</h3>
+    <p>Ce site est édité par <strong>GenioService</strong>, une plateforme de gestion de conventions.</p>
+    <p>Adresse : <br> 15 Rue des Conventions, 75000 Paris, France</p>
+    <p><strong>SIRET :</strong> 123 456 789 00019</p>
+    <p><strong>SIREN :</strong> 123 456 789</p>
+  </section>
+
+  <section class="about-section">
+    <h3><i class="fas fa-user-tie"></i> Directeur de publication</h3>
+    <p>M. Karim HADJADJ</p>
+  </section>
+
+  <section class="about-section">
+    <h3><i class="fas fa-code"></i> Conception & Développement</h3>
+    <p>Développement réalisé par l'équipe GenioService.</p>
+    <p>Le code respecte les normes HTML5 / ARIA / WCAG AA pour l’accessibilité.</p>
+  </section>
+
+  <section class="about-section">
+    <h3><i class="fas fa-code-branch"></i> Code source</h3>
+    <p>
+      Le code est disponible sur :
+      <a href="https://github.com/laurent-hadjadj/genioservice" target="_blank" rel="noopener">
+        GitHub - GenioService
+      </a>
+    </p>
+  </section>
+
+  <section class="about-section">
+    <h3><i class="fas fa-copyright"></i> Propriété intellectuelle</h3>
+    <p>
+      Sauf mention contraire, tous les contenus sont publiés sous licence
+      <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr" target="_blank" rel="license noopener">
+        CC BY-NC-SA 4.0
+      </a>.
+    </p>
+    <p>
+      Vous pouvez citer et partager, à condition de ne pas en faire un usage commercial et de conserver cette licence.
+    </p>
+  </section>
+
+  <section class="about-section">
+    <h3><i class="fas fa-server"></i> Hébergement</h3>
+    <p>
+      Le site est hébergé par : <br>
+      OVHcloud – 2 Rue Kellermann, 59100 Roubaix, France
+    </p>
+  </section>
+</main>

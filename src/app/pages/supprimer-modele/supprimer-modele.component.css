@@ -264,3 +264,28 @@ th.action-col, td.action-col {
 .btn-danger:hover {
   background-color: #b71c1c;
 }
+
+.modal-section.model-inline {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  font-size: 1.1em;
+}
+
+.model-inline .label {
+  font-weight: 600;
+  color: #1f3c88;
+}
+
+.model-inline .model-name {
+  font-size: 1rem;
+  color: #d32f2f;
+  background-color: #eee;
+  padding: 6px 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+  font-weight: 500;
+  word-break: break-word;
+}
