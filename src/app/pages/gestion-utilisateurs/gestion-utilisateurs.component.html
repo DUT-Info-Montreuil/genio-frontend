@@ -31,11 +31,19 @@
     <div class="filters-zone">
       <div class="input-icon">
         <i class="fas fa-envelope" aria-hidden="true"></i>
-        <input type="text" [(ngModel)]="searchEmail" (input)="applyFilters()" placeholder="Rechercher par email" />
+        <input
+          type="text"
+          [(ngModel)]="searchEmail"
+          (input)="applyFilters()"
+          placeholder="Rechercher par email"
+          aria-label="Rechercher par email" />
       </div>
       <div class="input-icon">
         <i class="fas fa-user-tag" aria-hidden="true"></i>
-        <select [(ngModel)]="selectedRole" (change)="applyFilters()">
+        <select
+          [(ngModel)]="selectedRole"
+          (change)="applyFilters()"
+          aria-label="Filtrer par rôle">
           <option value="">Tous les rôles</option>
           <option value="NONE">Nouveaux utilisateurs</option>
           <option value="CONSULTANT">Consultant</option>
@@ -45,7 +53,10 @@
       </div>
       <div class="input-icon">
         <i class="fas fa-toggle-on" aria-hidden="true"></i>
-        <select [(ngModel)]="filterActif" (change)="applyFilters()">
+        <select
+          [(ngModel)]="filterActif"
+          (change)="applyFilters()"
+          aria-label="Filtrer par statut du compte">
           <option value="">Tous les comptes</option>
           <option value="true">Actifs</option>
           <option value="false">Non actifs</option>
@@ -73,6 +84,9 @@
   </section>
 
   <div class="table-wrapper">
+    <div id="tableDescription" class="sr-only">
+      Tableau listant tous les utilisateurs avec leur rôle, statut et options d’édition.
+    </div>
     <table class="app-table" aria-describedby="tableDescription">
       <caption class="sr-only">Liste des utilisateurs</caption>
       <thead>
@@ -175,8 +189,8 @@
     </div>
   </div>
   <div class="modal-wrapper" *ngIf="userToDelete">
-    <div class="modal-box alert" role="dialog" aria-modal="true">
-      <h3><i class="fas fa-exclamation-triangle"></i> Confirmer la suppression</h3>
+    <div class="modal-box alert" role="dialog" aria-modal="true" aria-labelledby="modalDeleteTitle">
+      <h3 id="modalDeleteTitle"><i class="fas fa-exclamation-triangle"></i> Confirmer la suppression</h3>
       <p>Voulez-vous vraiment supprimer <strong>{{ userToDelete.nom }} {{ userToDelete.prenom }}</strong> ?</p>
       <div class="modal-actions">
         <button class="danger" (click)="confirmDeleteUser()">Oui, supprimer</button>

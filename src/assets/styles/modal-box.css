@@ -120,6 +120,10 @@
   color: #212121;
 }
 
+*:focus, *:focus-visible {
+  outline: none !important;
+}
+
 @media (max-width: 480px) {
   .modal-box {
     padding: 20px;

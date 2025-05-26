@@ -51,9 +51,9 @@ input, select, textarea {
 
 .card p,
 .main-content p {
-  font-size: 1.1rem;
-  color: #37474f;
-  line-height: 1.5;
+    font-size: 1.1rem;
+    color:#1f3c88;
+    line-height: 1.5;
 }
 
 

@@ -68,3 +68,7 @@ h3.section-title {
   color: #1f3c88;
   margin: 0;
 }
+
+.action-buttons .btn {
+  transition: background-color 0.3s ease;
+}

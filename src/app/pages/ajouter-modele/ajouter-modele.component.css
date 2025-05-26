@@ -12,7 +12,7 @@ button:focus-visible {
 
 *:focus,
 *:focus-visible {
-  outline: none !important;
+  outline: 2px solid #1f3c88 !important;
   box-shadow: none !important;
 }
 
@@ -348,7 +348,7 @@ input[type="file"]::-webkit-file-upload-button:focus {
   background: transparent;
   padding: 12px 0;
   font-size: 1.1rem;
-  color: #0d47a1;
+  color: #212121;
   width: 100%;
   overflow-x: auto;
   white-space: nowrap;
@@ -434,7 +434,11 @@ input[type="file"]::-webkit-file-upload-button:focus {
     overflow-y: auto;
   }
 
-}
+  .modal-box {
+      padding: 20px;
+    }
+  }
+
 .upload-zone-wrapper {
   display: flex;
   gap: 1rem;
@@ -510,4 +514,37 @@ input[type="file"]::-webkit-file-upload-button:focus {
 .custom-drop-area:hover {
   background-color: #e3f2fd;
   border-color: #1976d2;
+}
+
+.file-info-hint {
+  font-size: 0.95rem;
+  color: #0d47a1; /* bleu statique pour le label */
+  margin-top: -10px;
+  margin-bottom: 10px;
+}
+
+.file-info-hint strong {
+  color: #212121; /* noir pour l'info dynamique */
+}
+
+*:focus, *:focus-visible {
+  outline: 2px solid #1f3c88 !important;
+}
+
+.edit-hint {
+  color: #757575;
+  font-size: 0.85rem;
+  margin-left: 0.5rem;
+}
+.error-text {
+  color: #d32f2f;
+  font-size: 0.9rem;
+  margin-top: 4px;
+  margin-left: 48px; /* pour être aligné avec l'input */
+}
+.drop-text {
+  color: #1a237e;
+}
+.icon-left {
+  cursor: pointer;
 }

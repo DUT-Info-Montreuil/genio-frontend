@@ -23,10 +23,15 @@
             autocomplete="off"
           />
           <span class="status-indicator" [ngClass]="{ 'ok': isAnneeValid, 'ko': !isAnneeValid }">
-            {{ isAnneeValid ? '✔️ OK' : '❌ KO' }}
-            <i *ngIf="!isAnneeValid" class="fas fa-question-circle info-icon"
-               (click)="openAnneeErrorModal()" tabindex="0" role="button"
-               title="Pourquoi ce champ est invalide ?" aria-label="Afficher les détails de l’erreur">
+           <span aria-hidden="true">{{ isAnneeValid ? '✔️' : '❌' }}</span>
+            <span class="sr-only">{{ isAnneeValid ? 'Valide' : 'Invalide' }}</span>
+            <i *ngIf="!isAnneeValid"
+               class="fas fa-question-circle info-icon"
+               (click)="openAnneeErrorModal()"
+               tabindex="0"
+               role="button"
+               title="Pourquoi ce champ est invalide ?"
+               aria-label="Afficher les détails de l’erreur">
             </i>
           </span>
         </div>
@@ -64,27 +69,40 @@
             <i class="fas fa-upload"></i> Choisir un fichier
           </button>
           <span class="status-indicator inline-status" [ngClass]="{ 'ok': isFileValid, 'ko': !isFileValid }">
-          {{ isFileValid ? '✔️ OK' : '❌ KO' }}
-
-            <i *ngIf="!isFileValid"
-               class="fas fa-question-circle info-icon"
-               (click)="openFileErrorModal()"
-               tabindex="0"
-               role="button"
-               title="Pourquoi ce champ est invalide ?"
-               aria-label="Afficher les détails de l’erreur">
-            </i>
-             </span>
+          <span aria-hidden="true">{{ isFileValid ? '✔️' : '❌' }}</span>
+          <span class="sr-only">{{ isFileValid ? 'Valide' : 'Invalide' }}</span>
+          <i *ngIf="!isFileValid"
+             class="fas fa-question-circle info-icon"
+             (click)="openFileErrorModal()"
+             tabindex="0"
+             role="button"
+             title="Pourquoi ce champ est invalide ?"
+             aria-label="Afficher les détails de l’erreur">
+          </i>
+        </span>
         </div>
       </div>
       <br>
+      <p class="file-info-hint">
+        <span class="required-star">*</span> Type de fichier attendu : <strong>.docx</strong> – Taille max : <strong>4 Mo</strong>
+      </p>
 
+      <small class="edit-hint" *ngIf="!titreEditable">Double-cliquez pour modifier</small>
       <div class="form-group-inline">
         <label for="titre">
           <span class="label-blue">Titre du modèle</span><span class="required-star">*</span> :
         </label>
         <div class="input-wrapper small-input">
-          <i class="fas fa-pen icon-left" aria-hidden="true"></i>
+          <i
+            class="fas fa-pen icon-left"
+            role="button"
+            tabindex="0"
+            (click)="enableEditTitre()"
+            (keydown.enter)="enableEditTitre()"
+            (keydown.space)="enableEditTitre()"
+            title="Modifier le titre"
+            aria-label="Activer la modification du titre"
+          ></i>
           <input
             type="text"
             id="titre"
@@ -99,7 +117,7 @@
       </div>
 
       <button type="submit" class="btn btn-primary full-width" [disabled]="!isAnneeValid || !isFileValid || isSubmitting">
-        <i class="fas fa-paper-plane"></i> Valider le modèle
+        <i class="fas fa-check-circle" *ngIf="isAnneeValid && isFileValid && !isSubmitting" style="color: limegreen;"></i> Valider le modèle
       </button>
       <div class="modal-wrapper" *ngIf="showAnneeErrorModal">
         <div class="modal-box alert" tabindex="-1" role="dialog" aria-modal="true" aria-labelledby="modalAnneeTitle">
@@ -141,10 +159,10 @@
     </form>
   </div>
 </div>
-<div class="container-message" aria-live="polite" role="status" *ngIf="message">
+<div class="container-message" aria-live="polite" role="status" *ngIf="message || (error && !showFileErrorModal && !showAnneeErrorModal)">
   <div class="callout" [ngClass]="{ 'callout-success': !!message, 'callout-error': !!error }">
     <span *ngIf="message">{{ message }}</span>
-    <ng-container *ngIf="error && !showFileErrorModal">
+    <ng-container *ngIf="error && !showFileErrorModal && !showAnneeErrorModal">
       <span>{{ error }}</span>
     </ng-container>
   </div>

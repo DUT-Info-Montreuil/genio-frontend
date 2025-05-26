@@ -31,11 +31,6 @@
   text-align: center;
 }
 
-.form-instruction {
-  font-size: 1rem;
-  color: #455a64;
-  margin-bottom: 16px;
-}
 
 .form-group-inline {
   display: grid;
@@ -76,7 +71,7 @@
   background: transparent;
   padding: 12px 0;
   font-size: 1.1rem;
-  color: #212121; /* Texte saisi en noir */
+  color: #212121;
   width: 100%;
   overflow-x: auto;
   white-space: nowrap;
@@ -257,7 +252,7 @@
 .form-group-inline label,
 .form-instruction,
 .register-link {
-  color: #1f3c88; /* Couleur statique */
+  color: #0d47a1;
 }
 
 .auth-card h2 {
@@ -267,6 +262,7 @@
 .form-instruction {
   font-size: 1.1rem;
   margin-bottom: 1rem;
+  color: #1f3c88;
 }
 
 .form-group-inline label {
@@ -284,4 +280,9 @@ input:-webkit-autofill {
 input {
   background-color: #f9f9f9;
   color: #212121;
+}
+
+input::placeholder {
+  color: #212121; /* Dynamique */
+  opacity: 1; /* Pour Safari */
 }

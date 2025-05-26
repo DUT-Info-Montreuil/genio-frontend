@@ -231,3 +231,9 @@ main, .auth-page, .page-contents {
   font-weight: 500;
   white-space: nowrap;
 }
+
+*:focus-visible {
+  outline: 2px solid #1f3c88;
+  outline-offset: 3px;
+  border-radius: 4px;
+}

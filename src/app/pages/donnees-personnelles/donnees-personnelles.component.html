@@ -1,78 +1,70 @@
-<main class="modeles-container about-container" aria-labelledby="page-title">
-  <header class="page-header-layout">
-    <div class="header-left">
-      <h2 id="page-title">
-        <i class="fas fa-user-shield" aria-hidden="true"></i>
-        Données personnelles & cookies
-      </h2>
-      <app-breadcrumb [items]="[
-        { label: 'Accueil', url: '/' },
-        { label: 'RGPD' }
-      ]" aria-labelledby="page-title"></app-breadcrumb>
-    </div>
-  </header>
-  <div class="rgpd-card">
-  <section class="about-section">
-    <h3><i class="fas fa-lock"></i> Engagement de GenioService</h3>
-    <p>
-      GenioService respecte le <strong>RGPD</strong> et la loi Informatique et Libertés.
-      Aucune donnée n’est collectée sans finalité claire ni consentement explicite.
-    </p>
-  </section>
+<main class="about-container" aria-labelledby="page-title">
+  <div class="about-box">
+    <header class="about-header">
+      <i class="fas fa-user-shield" aria-hidden="true"></i>
+      <h1 id="page-title">Données personnelles & cookies</h1>
+    </header>
 
-  <section class="about-section">
-    <h3><i class="fas fa-user"></i> Vos droits</h3>
-    <p>
-      Vous pouvez exercer vos droits d'accès, de rectification, de suppression ou de limitation à tout moment.
-      Contactez-nous à : <a href="mailto:genioservice@gmail.com">genioservice3&#64;gmail.com</a>
-    </p>
-  </section>
+    <section class="about-section">
+      <h2><i class="fas fa-lock"></i> Engagement de GenioService</h2>
+      <p>
+        GenioService respecte le <strong>RGPD</strong> et la loi Informatique et Libertés.
+        Aucune donnée n’est collectée sans finalité claire ni consentement explicite.
+      </p>
+    </section>
 
-  <section class="about-section">
-    <h3><i class="fas fa-database"></i> Données collectées via GenioService</h3>
-    <p>
-      Lors de votre utilisation de GenioService, nous collectons certaines données strictement nécessaires au bon fonctionnement :
-    </p>
-    <ul>
-      <li><strong>Inscription :</strong> prénom, nom, adresse email, mot de passe (crypté).</li>
-      <li><strong>Connexion :</strong> adresse email + mot de passe.</li>
-      <li><strong>Réinitialisation :</strong> email pour l’envoi du lien sécurisé.</li>
-      <li><strong>Gestion des comptes (interface gestionnaire) :</strong> consultation, activation/désactivation, modification de rôles.</li>
-    </ul>
-    <p>
-      Aucune donnée n’est transmise à des tiers. Les mots de passe sont chiffrés et aucune donnée sensible n’est stockée en clair.
-    </p>
-  </section>
+    <section class="about-section">
+      <h2><i class="fas fa-user"></i> Vos droits</h2>
+      <p>
+        Vous pouvez exercer vos droits d'accès, de rectification, de suppression ou de limitation à tout moment.
+        Contactez-nous à : <a href="mailto:genioservice3@gmail.com">genioservice3&#64;gmail.com</a>
+      </p>
+    </section>
 
-  <section class="about-section">
-    <h3><i class="fas fa-cookie-bite"></i> Utilisation des cookies</h3>
-    <p>Les cookies utilisés :</p>
-    <ul>
-      <li><strong>Essentiels :</strong> nécessaires au bon fonctionnement du site.</li>
-      <li><strong>Session :</strong> permettent une connexion sécurisée.</li>
-      <li><strong>Pas de traceurs publicitaires.</strong></li>
-    </ul>
-  </section>
+    <section class="about-section">
+      <h2><i class="fas fa-database"></i> Données collectées via GenioService</h2>
+      <p>
+        Lors de votre utilisation de GenioService, nous collectons certaines données strictement nécessaires :
+      </p>
+      <ul>
+        <li><strong>Inscription :</strong> prénom, nom, email, mot de passe (crypté).</li>
+        <li><strong>Connexion :</strong> email + mot de passe.</li>
+        <li><strong>Réinitialisation :</strong> email pour l’envoi du lien sécurisé.</li>
+        <li><strong>Gestion (gestionnaire) :</strong> consultation, activation, rôles.</li>
+      </ul>
+      <p>
+        Aucune donnée n’est transmise à des tiers. Les mots de passe sont chiffrés et aucune info sensible n’est stockée en clair.
+      </p>
+    </section>
 
-  <section class="about-section">
-    <h3><i class="fas fa-cogs"></i> Gérer vos préférences</h3>
-    <p>Vous pouvez désactiver les cookies via votre navigateur :</p>
-    <ul>
-      <li><i class="fab fa-firefox-browser"></i> <a href="https://support.mozilla.org/fr/kb/activer-desactiver-cookies">Firefox</a></li>
-      <li><i class="fab fa-chrome"></i> <a href="https://support.google.com/chrome/answer/95647?hl=fr">Chrome</a></li>
-      <li><i class="fab fa-apple"></i> <a href="https://support.apple.com/fr-fr/HT201265">Safari</a></li>
-      <li><i class="fab fa-edge"></i> <a href="https://support.microsoft.com/fr-fr/help/17442/windows-internet-explorer-delete-manage-cookies">Edge</a></li>
-      <li><i class="fab fa-opera"></i> <a href="https://help.opera.com/en/latest/web-preferences/#cookies">Opera</a></li>
-    </ul>
-  </section>
+    <section class="about-section">
+      <h2><i class="fas fa-cookie-bite"></i> Utilisation des cookies</h2>
+      <ul>
+        <li><strong>Essentiels :</strong> nécessaires au fonctionnement du site.</li>
+        <li><strong>Session :</strong> connexion sécurisée.</li>
+        <li><strong>Pas de traceurs publicitaires.</strong></li>
+      </ul>
+    </section>
 
-  <section class="about-section">
-    <h3><i class="fas fa-link"></i> Liens utiles</h3>
-    <ul>
-      <li><a href="https://www.cnil.fr/fr/cookies-et-autres-traceurs">Cookies et traceurs (CNIL)</a></li>
-      <li><a href="https://www.cnil.fr/fr/reglement-europeen-protection-donnees">Règlement RGPD</a></li>
-      <li><a href="https://www.cnil.fr/fr/les-droits-pour-maitriser-vos-donnees-personnelles">Vos droits</a></li>
-    </ul>
-  </section></div>
+    <section class="about-section">
+      <h2><i class="fas fa-cogs"></i> Gérer vos préférences</h2>
+      <p>Vous pouvez désactiver les cookies dans votre navigateur :</p>
+      <ul>
+        <li><i class="fab fa-firefox-browser"></i> <a href="https://support.mozilla.org/fr/kb/activer-desactiver-cookies">Firefox</a></li>
+        <li><i class="fab fa-chrome"></i> <a href="https://support.google.com/chrome/answer/95647?hl=fr">Chrome</a></li>
+        <li><i class="fab fa-apple"></i> <a href="https://support.apple.com/fr-fr/HT201265">Safari</a></li>
+        <li><i class="fab fa-edge"></i> <a href="https://support.microsoft.com/fr-fr/help/17442/windows-internet-explorer-delete-manage-cookies">Edge</a></li>
+        <li><i class="fab fa-opera"></i> <a href="https://help.opera.com/en/latest/web-preferences/#cookies">Opera</a></li>
+      </ul>
+    </section>
 
+    <section class="about-section">
+      <h2><i class="fas fa-link"></i> Liens utiles</h2>
+      <ul>
+        <li><a href="https://www.cnil.fr/fr/cookies-et-autres-traceurs">Cookies et traceurs (CNIL)</a></li>
+        <li><a href="https://www.cnil.fr/fr/reglement-europeen-protection-donnees">Règlement RGPD</a></li>
+        <li><a href="https://www.cnil.fr/fr/les-droits-pour-maitriser-vos-donnees-personnelles">Vos droits</a></li>
+      </ul>
+    </section>
+  </div>
 </main>
