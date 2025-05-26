@@ -22,14 +22,10 @@
   vertical-align: middle;
 }
 
-.app-table th {
-  background-color: #f1f3f5;
-  font-weight: bold;
-  color: #000000;
-}
+
 
 .app-table td {
-  color: #212529;
+  color: #212121;
 }
 
 .app-table td:first-child,
@@ -49,8 +45,10 @@
 }
 
 .table-controls label {
+  color: #1f3c88;
   font-weight: 500;
 }
+
 
 .table-controls select {
   padding: 6px 10px;
@@ -137,3 +135,11 @@
   outline: 3px solid #0d47a1;
   outline-offset: 2px;
 }
+
+.app-table th {
+  background-color: #f1f3f5;
+  font-weight: bold;
+  color: #1f3c88; /* au lieu de noir */
+}
+
+

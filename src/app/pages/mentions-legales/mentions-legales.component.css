@@ -11,7 +11,6 @@ main, .auth-page, .page-contents {
 }
 
 .about-container h1 {
-  font-size: 1.8rem;
   font-weight: 600;
   color: #1f3c88;
   margin: 0;
@@ -24,21 +23,19 @@ main, .auth-page, .page-contents {
 }
 
 .about-section h2 {
-  font-size: 1.3rem;
   font-weight: 600;
   color: #0d47a1;
   margin: 0;
 }
 
 .about-section h3 {
-  font-size: 1.1rem;
   font-weight: 500;
   color: #1f3c88;
   margin: 0.5rem 0 0;
 }
 
 .about-section p {
-  font-size: 1rem;
+  font-size: 1.1rem;
   margin: 0;
   line-height: 1.6;
 }

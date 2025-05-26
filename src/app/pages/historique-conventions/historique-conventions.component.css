@@ -109,11 +109,11 @@ main, .auth-page, .page-contents {
   cursor: pointer;
   padding: 4px;
   margin-left: 6px;
-  color: #040404;
+  color:  #1f3c88;
   font-size: 1.3rem;
 }
 .info-icon:hover {
-  color: #627280;
+  color: #96c5f4;
 }
 
 .ok i {
@@ -152,6 +152,8 @@ main, .auth-page, .page-contents {
   white-space: nowrap;
   border: 0;
 }
+
+
 
 @media (max-width: 768px) {
   .modeles-container {

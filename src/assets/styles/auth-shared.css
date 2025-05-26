@@ -46,12 +46,6 @@
   width: 100%;
 }
 
-.form-group-inline label {
-  font-weight: 600;
-  font-size: 1.1rem;
-  color: #0d47a1;
-}
-
 .required-star {
   color: #d32f2f;
   font-weight: bold;
@@ -82,7 +76,7 @@
   background: transparent;
   padding: 12px 0;
   font-size: 1.1rem;
-  color: #0d47a1;
+  color: #212121; /* Texte saisi en noir */
   width: 100%;
   overflow-x: auto;
   white-space: nowrap;
@@ -259,3 +253,35 @@
   z-index: 1000;
 }
 
+.auth-card h2,
+.form-group-inline label,
+.form-instruction,
+.register-link {
+  color: #1f3c88; /* Couleur statique */
+}
+
+.auth-card h2 {
+  font-size: 1.5rem;
+}
+
+.form-instruction {
+  font-size: 1.1rem;
+  margin-bottom: 1rem;
+}
+
+.form-group-inline label {
+  font-weight: 600;
+  font-size: 1.15rem;
+}
+
+input:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0 30px white inset !important;
+  box-shadow: 0 0 0 30px white inset !important;
+  -webkit-text-fill-color: #212121 !important;
+  caret-color: #212121;
+}
+
+input {
+  background-color: #f9f9f9;
+  color: #212121;
+}

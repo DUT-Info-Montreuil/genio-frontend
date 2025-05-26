@@ -59,3 +59,34 @@ main.modeles-container, .auth-page, .page-contents {
 }
 
 
+.rgpd-card {
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.08);
+  padding: 2rem;
+  margin: 0 2rem;
+  font-family: 'Segoe UI', sans-serif;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.rgpd-card h2 {
+  font-size: 1.6rem;
+  font-weight: 600;
+  color: #1f3c88;
+  margin-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.about-section h3 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #1f3c88;
+}
+.about-section p,
+.about-section li {
+  font-size: 1.1rem;
+}

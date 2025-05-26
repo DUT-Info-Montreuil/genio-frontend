@@ -106,6 +106,20 @@
   background-color: #a71d2a;
 }
 
+.modal-section p span,
+.modal-section p .badge-used,
+.modal-section p .badge-unused {
+  color: #212121;
+}
+
+.modal-section p strong {
+  color: #1f3c88;
+}
+
+.modal-section p {
+  color: #212121;
+}
+
 @media (max-width: 480px) {
   .modal-box {
     padding: 20px;

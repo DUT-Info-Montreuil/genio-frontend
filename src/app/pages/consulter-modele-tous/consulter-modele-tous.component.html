@@ -210,10 +210,12 @@
         </p>
 
         <div class="variables-zone">
-          <strong>Variables attendues :</strong>
-          <p class="var-subinfo">
-            Affichage de {{ showAllVariables ? expectedVariables.length : previewVariables.length }}
-            / {{ expectedVariables.length }} variables
+          <p class="vars-inline">
+            <strong>Variables attendues :</strong>
+            <span class="var-subinfo">
+               Affichage de {{ showAllVariables ? expectedVariables.length : previewVariables.length }}
+              / {{ expectedVariables.length }} variables
+            </span>
           </p>
 
           <div class="variable-table-wrapper">

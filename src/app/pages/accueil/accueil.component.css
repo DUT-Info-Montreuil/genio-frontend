@@ -1,29 +1,14 @@
-html {
-  scroll-behavior: smooth;
+main, .auth-page, .page-contents {
+  padding-top: 115px;
 }
-
-body {
-  font-family: system-ui, sans-serif;
-  line-height: 1.6;
-}
-
-.main-content {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  background-color: #e1f2ff;
-  padding: 6rem 1rem 2rem;
-}
-
 .main-content h1 {
-  margin: 2rem 0 2.5rem;
-  font-size: 1.8rem;
-  color: #0d47a1;
   text-align: center;
+  color: #1f3c88;
+  font-size: 1.8rem;
+  font-weight: 600;
   line-height: 1.4;
+  margin: 2rem 0 3rem;
 }
-
 .cards-container {
   display: flex;
   flex-wrap: wrap;
@@ -94,41 +79,6 @@ body {
   flex-direction: column;
   justify-content: center;
   text-align: center;
-}
-
-.card h3 {
-  font-size: 1.3rem;
-  color: #0d47a1;
-  margin-bottom: 8px;
-  transition: color 0.3s ease;
-  font-weight: 600;
-}
-
-.card p {
-  font-size: 1.1rem;
-  color: #455a64;
-  line-height: 1.5;
-}
-
-.visually-hidden {
-  position: absolute !important;
-  height: 1px;
-  width: 1px;
-  overflow: hidden;
-  clip: rect(1px, 1px, 1px, 1px);
-  white-space: nowrap;
-}
-
-.focusable:focus {
-  position: static !important;
-  height: auto;
-  width: auto;
-  overflow: visible;
-  clip: auto;
-  padding: 1rem;
-  background: #fff59d;
-  color: #000;
-  z-index: 1000;
 }
 
 @keyframes fadeInUp {

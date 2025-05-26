@@ -1,10 +1,61 @@
-html, body {
-  height: 100%;
+/* === Global HTML structure === */
+html {
+  font-size: 1.1rem;
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: system-ui, sans-serif;
+  line-height: 1.6;
+  color: #212121;
   background-color: #e1f2ff;
   margin: 0;
-  font-size: 1.2rem;
-  font-family: Arial, sans-serif;
 }
+
+/* === Headings === */
+h1, h2, h3, h4, h5, h6 {
+  color: #1f3c88;
+  margin: 1rem 0;
+  font-weight: 600;
+}
+
+h1 {
+  font-size: 1.8rem;
+  text-align: center;
+  line-height: 1.4;
+}
+h2 {
+  font-size: 1.5rem;
+}
+h3 {
+  font-size: 1.3rem;
+}
+
+/* === Forms === */
+label {
+  font-weight: 500;
+  color: #1f3c88;
+  font-size: 1.1rem;
+}
+input, select, textarea {
+  font-size: 1.1rem;
+  color: #212121;
+}
+
+/* === Cards & Main Content === */
+.card h3 {
+  font-size: 1.3rem;
+  color: #0d47a1;
+  font-weight: 600;
+}
+
+.card p,
+.main-content p {
+  font-size: 1.1rem;
+  color: #37474f;
+  line-height: 1.5;
+}
+
 
 app-root, .layout {
   display: flex;
@@ -17,5 +68,4 @@ router-outlet:empty {
 }
 
 
-
-
+.
