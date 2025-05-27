@@ -71,10 +71,7 @@
       <button type="submit" class="btn-login" [disabled]="isSubmitting" [attr.aria-busy]="isSubmitting ? 'true' : null">
         S’enregistrer
       </button>
-      <div class="already-registered">
-        <span>Déjà inscrit ?</span>
-        <a routerLink="/connexion">Connectez-vous</a>
-      </div>
+      <div class="register-link">Déjà inscrit ? <a routerLink="/connexion"><strong>Connectez-vous</strong></a></div>
     </form>
   </div>
 </div>
