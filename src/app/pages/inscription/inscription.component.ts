@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Router } from '@angular/router';
+import {Router, RouterLink} from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { NgIf, NgForOf } from '@angular/common';
 
@@ -8,7 +8,7 @@ import { NgIf, NgForOf } from '@angular/common';
   selector: 'app-inscription',
   templateUrl: './inscription.component.html',
   standalone: true,
-  imports: [FormsModule, NgIf, NgForOf],
+  imports: [FormsModule, NgIf, NgForOf, RouterLink],
   styleUrls: ['./inscription.component.css', '../../../assets/styles/auth-shared.css']
 })
 export class InscriptionComponent {
