@@ -50,7 +50,7 @@
             <i [class]="showPassword ? 'fas fa-eye-slash' : 'fas fa-eye'" aria-hidden="true"></i>
           </button>
         </div>
-        <div class="password-rules-badges" *ngIf="hasInvalidPasswordRule()">
+        <div class="password-rules-badges" *ngIf="password.length >= 4 && hasInvalidPasswordRule()">
           <ng-container *ngFor="let rule of passwordRules">
             <span *ngIf="!rule.valid" class="badge-error">{{ rule.label }}</span>
           </ng-container>
