@@ -1,16 +1,13 @@
 import {ChangeDetectorRef, Component, ElementRef, ViewChild} from '@angular/core';
 import {DatePipe, NgClass, NgForOf, NgIf} from "@angular/common";
-import {FormsModule, ReactiveFormsModule} from "@angular/forms";
+import {FormsModule} from "@angular/forms";
 import {HttpClient} from '@angular/common/http';
-import {Router, RouterLink} from '@angular/router';
-import {BreadcrumbComponent} from '../../shared/breadcrumb/breadcrumb.component';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-supprimer-modele',
   imports: [
     NgClass,
-    BreadcrumbComponent,
-    RouterLink,
     FormsModule,
     NgIf,
     NgForOf,

@@ -1,8 +1,7 @@
 import {ChangeDetectorRef, Component, ElementRef, input, OnInit, ViewChild} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {Router, RouterLink} from '@angular/router';
+import {Router} from '@angular/router';
 import {DatePipe, NgClass, NgForOf, NgIf} from '@angular/common';
-import {BreadcrumbComponent} from '../../shared/breadcrumb/breadcrumb.component';
 import {FormsModule} from '@angular/forms';
 
 @Component({
@@ -11,8 +10,6 @@ import {FormsModule} from '@angular/forms';
   standalone: true,
   imports: [
     NgClass,
-    BreadcrumbComponent,
-    RouterLink,
     FormsModule,
     NgIf,
     NgForOf,

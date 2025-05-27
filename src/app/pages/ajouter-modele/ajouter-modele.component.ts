@@ -1,6 +1,6 @@
 import {ChangeDetectorRef, Component} from '@angular/core';
 import {FormsModule} from '@angular/forms';
-import {JsonPipe, NgClass, NgForOf, NgIf} from '@angular/common';
+import {NgClass, NgForOf, NgIf} from '@angular/common';
 import {HttpClient} from '@angular/common/http';
 import {Router} from '@angular/router';
 
@@ -10,7 +10,6 @@ import {Router} from '@angular/router';
     FormsModule,
     NgClass,
     NgIf,
-    JsonPipe,
     NgForOf
   ],
   templateUrl: './ajouter-modele.component.html',
