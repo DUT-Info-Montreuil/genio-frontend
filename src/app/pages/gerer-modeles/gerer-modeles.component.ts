@@ -41,6 +41,11 @@ export class GererModelesComponent implements OnInit {
   showAnneeErrorModal = false;
   showFileErrorModal: boolean = false;
   ongletActif: 'ajouter' | 'modifier' | 'archiver' = 'ajouter';
+  breadcrumbItems = [
+    { label: 'Accueil', url: '/' },
+    { label: 'Gérer', url: '/gerer-modeles' },
+    { label: 'Ajouter' }
+  ];
 
   constructor(
     private http: HttpClient,
@@ -60,10 +65,18 @@ export class GererModelesComponent implements OnInit {
     this.isExploitant = this.authService.isExploitant();
     this.isGestionnaire = this.authService.isGestionnaire();
     this.isConsultant = this.authService.isConsultant();
+
+    this.breadcrumbItems = [
+      { label: 'Accueil', url: '/' },
+      { label: 'Gérer', url: '/gerer-modeles' },
+      { label: 'Ajouter' } // Valeur par défaut, mise à jour juste après si besoin
+    ];
+
     this.route.queryParams.subscribe(params => {
       const onglet = params['onglet'];
       if (onglet === 'ajouter' || onglet === 'modifier' || onglet === 'archiver') {
         this.ongletActif = onglet;
+        this.breadcrumbItems[2].label = this.capitalizeFirstLetter(onglet); // ← ici !
       }
     });
 
@@ -72,6 +85,12 @@ export class GererModelesComponent implements OnInit {
         .subscribe(data => this.utilisateurs = data);
     }
   }
+
+  capitalizeFirstLetter(value: string): string {
+    return value.charAt(0).toUpperCase() + value.slice(1);
+  }
+
+
 
   afficherMessageNotif(): void {
     if (this.notifMessageVisible) return;
