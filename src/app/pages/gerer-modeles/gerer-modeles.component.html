@@ -65,17 +65,19 @@
     <div class="action-buttons">
       <button class="btn btn-primary"
               [ngClass]="{ 'selected-btn': ongletActif === 'ajouter' }"
-              (click)="ongletActif = 'ajouter'">
+              (click)="changerOnglet('ajouter')">
         <i class="fas fa-plus-circle"></i> Ajouter
       </button>
+
       <button class="btn btn-primary"
               [ngClass]="{ 'selected-btn': ongletActif === 'modifier' }"
-              (click)="ongletActif = 'modifier'">
+              (click)="changerOnglet('modifier')">
         <i class="fas fa-edit"></i> Modifier
       </button>
+
       <button class="btn btn-primary"
               [ngClass]="{ 'selected-btn': ongletActif === 'archiver' }"
-              (click)="ongletActif = 'archiver'">
+              (click)="changerOnglet('archiver')">
         <i class="fas fa-archive"></i> Archiver
       </button>
     </div>

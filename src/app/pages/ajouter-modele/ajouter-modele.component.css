@@ -518,13 +518,13 @@ input[type="file"]::-webkit-file-upload-button:focus {
 
 .file-info-hint {
   font-size: 0.95rem;
-  color: #0d47a1; /* bleu statique pour le label */
+  color: #0d47a1;
   margin-top: -10px;
   margin-bottom: 10px;
 }
 
 .file-info-hint strong {
-  color: #212121; /* noir pour l'info dynamique */
+  color: #212121;
 }
 
 *:focus, *:focus-visible {
@@ -540,7 +540,7 @@ input[type="file"]::-webkit-file-upload-button:focus {
   color: #d32f2f;
   font-size: 0.9rem;
   margin-top: 4px;
-  margin-left: 48px; /* pour être aligné avec l'input */
+  margin-left: 48px;
 }
 .drop-text {
   color: #1a237e;

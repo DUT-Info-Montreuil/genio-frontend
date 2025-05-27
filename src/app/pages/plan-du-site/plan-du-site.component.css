@@ -58,7 +58,7 @@
 }
 
 .about-section ul li i {
-  font-size: 0.85rem; /* réduit la taille */
+  font-size: 0.85rem;
   color: #1f3c88;
   min-width: 16px;
   text-align: center;
@@ -82,7 +82,6 @@
   color: #0d47a1;
 }
 
-/* Sous-pages (ajout, modification, suppression) */
 .sub-pages {
   padding-left: 1.8rem;
 }
@@ -91,7 +90,6 @@
   color: #0d47a1;
 }
 
-/* Modal */
 .modal-wrapper {
   position: fixed;
   inset: 0;
@@ -127,7 +125,6 @@
   margin-top: 1.5rem;
 }
 
-/* Bouton primaire */
 .btn.btn-primary {
   padding: 8px 20px;
   background-color: #1f3c88;

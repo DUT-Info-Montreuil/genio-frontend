@@ -17,7 +17,6 @@ import {BreadcrumbComponent} from '../../shared/breadcrumb/breadcrumb.component'
 export class PlanDuSiteComponent {
   noAccessModalVisible = false;
 
-// Modale refus d'accès
   showNoAccessModal() {
     this.noAccessModalVisible = true;
   }
@@ -28,7 +27,6 @@ export class PlanDuSiteComponent {
 
   modalVisible = false;
 
-  // 💡 Exemples : 'CONSULTANT', 'EXPLOITANT', 'GESTIONNAIRE' ou null
   userRole: string | null = null;
 
   hasAnyRole(): boolean {

@@ -283,6 +283,6 @@ input {
 }
 
 input::placeholder {
-  color: #212121; /* Dynamique */
-  opacity: 1; /* Pour Safari */
+  color: #212121;
+  opacity: 1;
 }

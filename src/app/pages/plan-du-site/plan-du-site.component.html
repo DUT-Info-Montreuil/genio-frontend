@@ -1,13 +1,11 @@
 <main class="about-container" aria-labelledby="page-title">
   <div class="about-box">
 
-    <!-- Titre principal -->
     <header class="about-header">
       <i class="fas fa-sitemap" aria-hidden="true"></i>
       <h1 id="page-title">Plan du site</h1>
     </header>
 
-    <!-- Breadcrumb -->
     <app-breadcrumb
       [items]="[
         { label: 'Accueil', url: '/' },
@@ -16,7 +14,6 @@
       aria-labelledby="page-title">
     </app-breadcrumb>
 
-    <!-- Légende -->
     <section class="about-section">
       <h2>Légende</h2>
       <ul>
@@ -53,12 +50,10 @@
     <section class="about-section">
       <h2> Authentification</h2>
       <ul>
-        <!-- Lien principal -->
         <li>
           <i class="fas fa-circle"></i>
           <a routerLink="/connexion">Se connecter</a>
 
-          <!-- Actions possibles depuis cette page -->
           <ul class="sub-pages">
             <li>
               <i class="fas fa-square"></i>
@@ -160,7 +155,6 @@
     <section class="about-section">
       <h2><i class="fas fa-lock"></i> Rôle : Gestionnaire</h2>
       <ul>
-        <!-- Consultation des modèles -->
         <li>
           <i class="fas fa-circle"></i>
           <button class="fake-link" (click)="showModal()">Consulter les modèles <i class="fas fa-lock"></i></button>
@@ -170,7 +164,6 @@
           </ul>
         </li>
 
-        <!-- Visualisation de l'historique -->
         <li>
           <i class="fas fa-circle"></i>
           <button class="fake-link" (click)="showModal()">Visualiser l’historique <i class="fas fa-lock"></i></button>
@@ -180,7 +173,6 @@
           </ul>
         </li>
 
-        <!-- Gestion des utilisateurs -->
         <li>
           <i class="fas fa-circle"></i>
           <button class="fake-link" (click)="showModal()">Gérer les utilisateurs<i class="fas fa-lock"></i></button>
@@ -191,7 +183,6 @@
           </ul>
         </li>
 
-        <!-- Notifications -->
         <li>
           <i class="fas fa-circle"></i>
           <button class="fake-link" (click)="showModal()">Notifications<i class="fas fa-lock"></i></button>
@@ -201,7 +192,6 @@
           </ul>
         </li>
 
-        <!-- Gestion des modèles -->
         <li>
           <i class="fas fa-circle"></i>
           <button class="fake-link" (click)="showModal()">Gérer les modèles<i class="fas fa-lock"></i></button>
@@ -215,7 +205,6 @@
       </ul>
     </section>
 
-    <!-- Bas de page -->
     <section class="about-section">
       <h2> Bas de page</h2>
       <ul>
@@ -227,7 +216,6 @@
       </ul>
     </section>
 
-    <!-- Modale refus d'accès -->
     <div *ngIf="modalVisible" class="modal-wrapper">
       <div class="modal-box" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
         <h3 id="modalTitle">

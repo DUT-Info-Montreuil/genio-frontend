@@ -69,14 +69,14 @@ export class GererModelesComponent implements OnInit {
     this.breadcrumbItems = [
       { label: 'Accueil', url: '/' },
       { label: 'Gérer', url: '/gerer-modeles' },
-      { label: 'Ajouter' } // Valeur par défaut, mise à jour juste après si besoin
+      { label: 'Ajouter' }
     ];
 
     this.route.queryParams.subscribe(params => {
       const onglet = params['onglet'];
       if (onglet === 'ajouter' || onglet === 'modifier' || onglet === 'archiver') {
         this.ongletActif = onglet;
-        this.breadcrumbItems[2].label = this.capitalizeFirstLetter(onglet); // ← ici !
+        this.breadcrumbItems[2].label = this.capitalizeFirstLetter(onglet);
       }
     });
 
@@ -88,6 +88,14 @@ export class GererModelesComponent implements OnInit {
 
   capitalizeFirstLetter(value: string): string {
     return value.charAt(0).toUpperCase() + value.slice(1);
+  }
+
+  changerOnglet(nouvelOnglet: 'ajouter' | 'modifier' | 'archiver') {
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: { onglet: nouvelOnglet },
+      queryParamsHandling: 'merge'
+    });
   }
 
 
