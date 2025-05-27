@@ -15,29 +15,7 @@ import {BreadcrumbComponent} from '../../shared/breadcrumb/breadcrumb.component'
 })
 export class ConsulterModeleTousComponent implements OnInit {
 
-  @HostListener('document:keydown', ['$event'])
-  handleTabKey(e: KeyboardEvent) {
-    if (!this.showModal) return;
-
-    const focusable = Array.from(document.querySelectorAll('.modal-card button, .modal-card [tabindex]'))
-      .filter(el => (el as HTMLElement).offsetParent !== null) as HTMLElement[];
-
-    const first = focusable[0];
-    const last = focusable[focusable.length - 1];
-
-    if (e.key === 'Tab') {
-      if (e.shiftKey && document.activeElement === first) {
-        e.preventDefault();
-        last.focus();
-      } else if (!e.shiftKey && document.activeElement === last) {
-        e.preventDefault();
-        first.focus();
-      }
-    }
-  }
-
   protected readonly Math = Math;
-
   toastMessage = '';
   toastVisible = false;
   isLoading = false;
@@ -60,6 +38,28 @@ export class ConsulterModeleTousComponent implements OnInit {
   breadcrumbItems: { label: string, url?: string }[] = [];
   paginatedModeles: any[] = [];
   showInfoModal = false;
+
+  @HostListener('document:keydown', ['$event'])
+  handleTabKey(e: KeyboardEvent) {
+    if (!this.showModal) return;
+
+    const focusable = Array.from(document.querySelectorAll('.modal-card button, .modal-card [tabindex]'))
+      .filter(el => (el as HTMLElement).offsetParent !== null) as HTMLElement[];
+
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+
+    if (e.key === 'Tab') {
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    }
+  }
+
 
   openInfoModal() {
     this.showInfoModal = true;

@@ -38,7 +38,6 @@ export class GererModelesComponent implements OnInit {
 
   isAnneeValid: boolean = false;
   isFileValid: boolean = false;
-  showAnneeErrorModal = false;
   showFileErrorModal: boolean = false;
   ongletActif: 'ajouter' | 'modifier' | 'archiver' = 'ajouter';
   breadcrumbItems = [
