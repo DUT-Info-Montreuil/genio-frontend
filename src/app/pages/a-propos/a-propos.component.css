@@ -14,7 +14,7 @@ main, .auth-page, .page-contents {
   display: flex;
   align-items: center;
   gap: 0.8rem;
-  margin-bottom: 2.5rem;
+  margin-bottom: 1rem;
 }
 
 .about-header i {
@@ -93,6 +93,7 @@ a:hover {
     flex-direction: column;
     align-items: flex-start;
     gap: 0.4rem;
+    margin-bottom: 1rem;
   }
 
   .about-header i {

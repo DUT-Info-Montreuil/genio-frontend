@@ -1,1 +1,244 @@
-<p>plan-du-site works!</p>
+<main class="about-container" aria-labelledby="page-title">
+  <div class="about-box">
+
+    <!-- Titre principal -->
+    <header class="about-header">
+      <i class="fas fa-sitemap" aria-hidden="true"></i>
+      <h1 id="page-title">Plan du site</h1>
+    </header>
+
+    <!-- Breadcrumb -->
+    <app-breadcrumb
+      [items]="[
+        { label: 'Accueil', url: '/' },
+        { label: 'Plan du site' }
+      ]"
+      aria-labelledby="page-title">
+    </app-breadcrumb>
+
+    <!-- Légende -->
+    <section class="about-section">
+      <h2>Légende</h2>
+      <ul>
+        <li><i class="fas fa-circle"></i> Lien vers une page</li>
+        <li><i class="fas fa-square"></i> Action (ouvrir, déclencher…)</li>
+        <li><i class="fas fa-lock"></i> Page nécessitant une authentification</li>
+      </ul>
+    </section>
+
+    <section class="about-section">
+      <h2>Accueil</h2>
+      <ul>
+        <li>
+          <i class="fas fa-circle"></i>
+          <a routerLink="/">Accueil</a>
+
+          <ul class="sub-pages">
+            <li>
+              <i class="fas fa-square"></i>
+              <a routerLink="/connexion">Cliquer sur “Consulter les modèles” (redirige vers connexion)</a>
+            </li>
+            <li>
+              <i class="fas fa-square"></i>
+              <a routerLink="/connexion">Cliquer sur “Gérer les modèles” (redirige vers connexion)</a>
+            </li>
+            <li>
+              <i class="fas fa-square"></i>
+              <a routerLink="/connexion">Cliquer sur “Historique des conventions” (redirige vers connexion)</a>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </section>
+    <section class="about-section">
+      <h2> Authentification</h2>
+      <ul>
+        <!-- Lien principal -->
+        <li>
+          <i class="fas fa-circle"></i>
+          <a routerLink="/connexion">Se connecter</a>
+
+          <!-- Actions possibles depuis cette page -->
+          <ul class="sub-pages">
+            <li>
+              <i class="fas fa-square"></i>
+              <span>S’authentifier avec son e-mail et son mot de passe</span>
+            </li>
+            <li>
+              <i class="fas fa-square"></i>
+              <a routerLink="/mot-de-passe-oublie">Aller sur la page mot de passe oublié</a>
+            </li>
+            <li>
+              <i class="fas fa-square"></i>
+              <a routerLink="/inscription">Aller sur la page d’inscription</a>
+            </li>
+          </ul>
+        </li>
+        <li>
+          <i class="fas fa-circle"></i>
+          <a routerLink="/inscription">S’enregistrer</a>
+          <ul class="sub-pages">
+            <li>
+              <i class="fas fa-square"></i>
+              <span>Créer un compte utilisateur GenioService</span>
+            </li>
+          </ul>
+        </li>
+
+        <li>
+          <i class="fas fa-circle"></i>
+          <a routerLink="/mot-de-passe-oublie">Mot de passe oublié</a>
+
+          <ul class="sub-pages">
+            <li>
+              <i class="fas fa-square"></i>
+              <span>Envoyer un lien de réinitialisation de mot de passe</span>
+            </li>
+            <li>
+              <i class="fas fa-square"></i>
+              <a routerLink="/connexion">Retourner à la page de connexion</a>
+            </li>
+          </ul>
+        </li>
+
+        <li>
+          <i class="fas fa-circle"></i>
+          <span>Réinitialiser le mot de passe</span>
+          <ul class="sub-pages">
+            <li>
+              <i class="fas fa-square"></i>
+              <span>Changer son mot de passe</span>
+            </li>
+            <li>
+              <i class="fas fa-square"></i>
+              <a routerLink="/connexion">Retourner à la page de connexion</a>
+            </li>
+          </ul>
+        </li>
+
+
+      </ul>
+
+    </section>
+    <section class="about-section">
+      <h2><i class="fas fa-lock"></i> Rôle : Consultant</h2>
+      <ul>
+        <li>
+          <i class="fas fa-circle"></i>
+          <button class="fake-link" (click)="showModal()">Consulter les modèles <i class="fas fa-lock"></i></button>
+          <ul class="sub-pages">
+            <li><i class="fas fa-square"></i> Rechercher un modèle par nom ou année</li>
+            <li><i class="fas fa-square"></i> Cliquer sur l’icône en forme d’œil pour voir les détails du modèle</li>
+          </ul>
+        </li>
+      </ul>
+    </section>
+
+    <section class="about-section">
+      <h2><i class="fas fa-lock"></i> Rôle : Exploitant</h2>
+      <ul>
+        <li>
+          <i class="fas fa-circle"></i>
+          <button class="fake-link" (click)="showModal()">Consulter les modèles <i class="fas fa-lock"></i></button>
+          <ul class="sub-pages">
+            <li><i class="fas fa-square"></i> Rechercher un modèle par nom ou année</li>
+            <li><i class="fas fa-square"></i> Cliquer sur l’icône en forme d’œil pour voir les détails du modèle</li>
+          </ul>
+        </li>
+
+        <li>
+          <i class="fas fa-circle"></i>
+          <button class="fake-link" (click)="showModal()">Visualiser l’historique <i class="fas fa-lock"></i></button>
+          <ul class="sub-pages">
+            <li><i class="fas fa-square"></i> Rechercher une convention par nom de l’étudiant, année ou promotion</li>
+            <li><i class="fas fa-square"></i> Cliquer sur l’icône œil pour afficher les détails d’une erreur</li>
+          </ul>
+        </li>
+      </ul>
+    </section>
+
+    <section class="about-section">
+      <h2><i class="fas fa-lock"></i> Rôle : Gestionnaire</h2>
+      <ul>
+        <!-- Consultation des modèles -->
+        <li>
+          <i class="fas fa-circle"></i>
+          <button class="fake-link" (click)="showModal()">Consulter les modèles <i class="fas fa-lock"></i></button>
+          <ul class="sub-pages">
+            <li><i class="fas fa-square"></i> Rechercher un modèle par nom ou année</li>
+            <li><i class="fas fa-square"></i> Cliquer sur l’icône en forme d’œil pour voir les détails du modèle</li>
+          </ul>
+        </li>
+
+        <!-- Visualisation de l'historique -->
+        <li>
+          <i class="fas fa-circle"></i>
+          <button class="fake-link" (click)="showModal()">Visualiser l’historique <i class="fas fa-lock"></i></button>
+          <ul class="sub-pages">
+            <li><i class="fas fa-square"></i> Rechercher une convention par nom d’étudiant, année ou promotion</li>
+            <li><i class="fas fa-square"></i> Cliquer sur l’icône en forme d’œil pour afficher les détails d’une erreur</li>
+          </ul>
+        </li>
+
+        <!-- Gestion des utilisateurs -->
+        <li>
+          <i class="fas fa-circle"></i>
+          <button class="fake-link" (click)="showModal()">Gérer les utilisateurs<i class="fas fa-lock"></i></button>
+          <ul class="sub-pages">
+            <li><i class="fas fa-square"></i> Rechercher un utilisateur par e-mail, rôle ou état du compte</li>
+            <li><i class="fas fa-square"></i> Modifier les informations d’un utilisateur (rôle, activation)</li>
+            <li><i class="fas fa-square"></i> Supprimer un utilisateur avec une confirmation via une fenêtre modale</li>
+          </ul>
+        </li>
+
+        <!-- Notifications -->
+        <li>
+          <i class="fas fa-circle"></i>
+          <button class="fake-link" (click)="showModal()">Notifications<i class="fas fa-lock"></i></button>
+          <ul class="sub-pages">
+            <li><i class="fas fa-square"></i> Cliquer sur l’icône cloche pour consulter les nouvelles demandes d’activation</li>
+            <li><i class="fas fa-square"></i> Voir un message du type “Vous avez 1 demande d’habilitation” ou “Aucune nouvelle demande”</li>
+          </ul>
+        </li>
+
+        <!-- Gestion des modèles -->
+        <li>
+          <i class="fas fa-circle"></i>
+          <button class="fake-link" (click)="showModal()">Gérer les modèles<i class="fas fa-lock"></i></button>
+          <ul class="sub-pages">
+            <li><i class="fas fa-square"></i> Ajouter un nouveau modèle en important un fichier .docx</li>
+            <li><i class="fas fa-square"></i> Dans l’onglet "Modifier", cliquer sur l’icône crayon dans le tableau pour ouvrir une fenêtre modale de modification</li>
+            <li><i class="fas fa-square"></i> Dans l’onglet "Archiver", cliquer sur l’icône d'archivage dans le tableau pour afficher une fenêtre de confirmation</li>
+            <li><i class="fas fa-square"></i> Rechercher un modèle par titre ou année dans les zones "Modifier" ou "Archiver"</li>
+          </ul>
+        </li>
+      </ul>
+    </section>
+
+    <!-- Bas de page -->
+    <section class="about-section">
+      <h2> Bas de page</h2>
+      <ul>
+        <li><i class="fas fa-circle"></i> <a routerLink="/a-propos">À propos</a></li>
+        <li><i class="fas fa-circle"></i> <a routerLink="/contact">Contact</a></li>
+        <li><i class="fas fa-circle"></i> <a routerLink="/mentions-legales">Mentions légales</a></li>
+        <li><i class="fas fa-circle"></i> <a routerLink="/donnees-personnelles">Données personnelles & cookies</a></li>
+        <li><i class="fas fa-circle"></i> <a routerLink="/plan-du-site">Plan du site</a></li>
+      </ul>
+    </section>
+
+    <!-- Modale refus d'accès -->
+    <div *ngIf="modalVisible" class="modal-wrapper">
+      <div class="modal-box" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+        <h3 id="modalTitle">
+          <i class="fas fa-lock" aria-hidden="true"></i> Accès restreint
+        </h3>
+        <p>Vous n’avez pas les droits pour accéder à cette page. Connectez-vous avec un compte autorisé.</p>
+        <div class="modal-actions">
+          <button class="btn btn-primary" (click)="closeModal()">Fermer</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</main>

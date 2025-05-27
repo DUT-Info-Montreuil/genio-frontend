@@ -2,36 +2,56 @@ main, .auth-page, .page-contents {
   padding-top: 130px;
 }
 .about-container {
-  margin: 0 2rem;
+  padding: 130px 1rem 2rem;
   display: flex;
-  flex-direction: column;
-  gap: 2rem;
-  color: #212529;
-  font-family: 'Segoe UI', sans-serif;
+  justify-content: center;
+  background-color: #e1f2ff;
 }
 
-.about-container h1 {
-  font-weight: 600;
+
+
+.about-header {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  margin-bottom: 1rem;
+}
+
+.about-header i {
+  font-size: 2rem;
+  color: #1f3c88;
+}
+
+.about-header h1 {
+  font-size: 1.8rem;
   color: #1f3c88;
   margin: 0;
-}
-
-.about-section {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
 }
 
 .about-section h2 {
-  font-weight: 600;
+  font-size: 1.5rem;
   color: #0d47a1;
-  margin: 0;
+  margin-bottom: 1rem;
 }
 
-.about-section h3 {
-  font-weight: 500;
+.about-section ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+.about-section ul li {
+  position: relative;
+  padding-left: 24px;
+  margin-bottom: 10px;
+  line-height: 1.6;
+}
+
+.about-section ul li::before {
+  content: "•";
+  position: absolute;
+  left: 0;
   color: #1f3c88;
-  margin: 0.5rem 0 0;
+  font-weight: bold;
 }
 
 .about-section p {
@@ -41,23 +61,58 @@ main, .auth-page, .page-contents {
   hyphens: auto;
 }
 
-.about-section ul {
-  padding-left: 1.2rem;
-  margin: 0;
-  list-style-type: disc;
-}
-
-.about-section ul li {
-  margin-bottom: 6px;
-  font-size: 0.95rem;
-}
-
-.about-container a {
+a {
   color: #1f3c88;
   text-decoration: underline;
-  font-weight: 500;
 }
 
-.about-container a:hover {
+a:hover {
   color: #0d47a1;
+}
+
+.about-box {
+  max-width: 900px;
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  padding: 2.5rem 2rem;
+  /* color supprimée ici */
+}
+
+.about-section {
+  margin-bottom: 2.5rem;
+  color: #1f3c88;
+}
+@media (max-width: 768px) {
+  .about-box {
+    padding: 2rem 1rem;
+    margin: 0 1rem;
+  }
+
+  .about-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.4rem;
+    margin-bottom: 1rem;
+  }
+
+  .about-header i {
+    font-size: 1.6rem;
+  }
+
+  .about-header h1 {
+    font-size: 1.5rem;
+    text-align: left;
+  }
+
+  .about-section h2 {
+    font-size: 1.25rem;
+  }
+
+  .about-section p,
+  .about-section ul li {
+    font-size: 1rem;
+    line-height: 1.6;
+    hyphens: auto;
+  }
 }

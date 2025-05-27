@@ -1,1 +1,45 @@
-<p>contact works!</p>
+<main class="about-container" aria-labelledby="page-title">
+  <div class="about-box">
+    <header class="about-header">
+      <i class="fas fa-envelope" aria-hidden="true"></i>
+      <h1 id="page-title">Contact</h1>
+    </header>
+    <app-breadcrumb
+      [items]="[
+        { label: 'Accueil', url: '/' },
+        { label: 'Contact' }
+      ]"
+      aria-labelledby="page-title">
+    </app-breadcrumb>
+    <section class="about-section">
+      <h2>Me contacter</h2>
+      <p>
+        Ce site a été réalisé dans le cadre d’un projet de 3e année du BUT Informatique à l’IUT de Montreuil,
+        tutoré par <strong>Jérémy Marcinkowski</strong>.
+      </p>
+      <ul>
+        <li><strong>Email :</strong><a href="mailto:genioservice3@gmail.com">genioservice3&#64;gmail.com</a></li>
+        <li><strong>LinkedIn :</strong>
+          <a href="https://www.linkedin.com/feed/?trk=guest_homepage-basic_google-one-tap-submit" target="_blank" rel="noopener noreferrer">
+            Mon profil LinkedIn
+          </a>
+        </li>
+      </ul>
+      <p>
+        N'hésitez pas à me contacter pour toute question, retour ou simplement un message sympa concernant le projet 😊
+      </p>
+    </section>
+
+    <section class="about-section">
+      <h2>À propos du projet</h2>
+      <p>
+        GenioService est un projet universitaire développé en Angular (front-end) et Spring Boot (back-end),
+        dans le cadre du semestre 5 du BUT Informatique.
+      </p>
+      <p>
+        Il s’agit d’un site pédagogique, sans vocation commerciale, pensé pour appliquer les bonnes pratiques
+        de développement web (UX, accessibilité WCAG, architecture API REST, sécurité, etc).
+      </p>
+    </section>
+  </div>
+</main>

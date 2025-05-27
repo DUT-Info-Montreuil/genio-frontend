@@ -1,67 +1,78 @@
-<main class="modeles-container" aria-labelledby="page-title">
-  <header class="page-header-layout">
-    <div class="header-left">
-      <h2 id="page-title">
-        <i class="fas fa-balance-scale" aria-hidden="true"></i>
-        Mentions légales
-      </h2>
-      <app-breadcrumb
-        [items]="[
-          { label: 'Accueil', url: '/' },
-          { label: 'Mentions légales' }
-        ]"
-        aria-labelledby="page-title">
-      </app-breadcrumb>
-    </div>
-  </header>
+<main class="about-container" aria-labelledby="page-title">
+  <div class="about-box">
+    <header class="about-header">
+      <i class="fas fa-balance-scale" aria-hidden="true"></i>
+      <h1 id="page-title">Mentions légales</h1>
+    </header>
 
-  <section class="about-section">
-    <h3><i class="fas fa-user"></i> Éditeur du site</h3>
-    <p>Ce site est édité par <strong>GenioService</strong>, une plateforme de gestion de conventions.</p>
-    <p>Adresse : <br> 15 Rue des Conventions, 75000 Paris, France</p>
-    <p><strong>SIRET :</strong> 123 456 789 00019</p>
-    <p><strong>SIREN :</strong> 123 456 789</p>
-  </section>
+    <app-breadcrumb
+      [items]="[
+        { label: 'Accueil', url: '/' },
+        { label: 'Mentions légales' }
+      ]"
+      aria-labelledby="page-title">
+    </app-breadcrumb>
 
-  <section class="about-section">
-    <h3><i class="fas fa-user-tie"></i> Directeur de publication</h3>
-    <p>M. Karim HADJADJ</p>
-  </section>
+    <section class="about-section">
+      <h2><i class="fas fa-user"></i> Éditrice du site</h2>
+      <p>
+        Ce site a été conçu et développé par <strong>Elsa Hadjadj</strong>, étudiante en 3e année de BUT Informatique
+        à l’IUT de Montreuil (Université Paris 8), dans le cadre du Semestre 5.
+      </p>
+      <p>
+        Projet encadré par <strong>Jérémy Marcinkowski</strong>, enseignant référent.
+      </p>
+      <p>
+        Adresse de l’établissement :<br>
+        <strong>IUT de Montreuil – 140 rue de la Nouvelle France, 93100 Montreuil</strong>
+      </p>
+      <p><strong>SIRET / SIREN :</strong> (à compléter si applicable – projet étudiant)</p>
+    </section>
 
-  <section class="about-section">
-    <h3><i class="fas fa-code"></i> Conception & Développement</h3>
-    <p>Développement réalisé par l'équipe GenioService.</p>
-    <p>Le code respecte les normes HTML5 / ARIA / WCAG AA pour l’accessibilité.</p>
-  </section>
+    <section class="about-section">
+      <h2><i class="fas fa-code"></i> Technologies utilisées</h2>
+      <ul>
+        <li><strong>Frontend :</strong> Angular (TypeScript, HTML5, CSS3)</li>
+        <li><strong>Backend :</strong> Spring Boot (Java, REST API)</li>
+        <li><strong>Accessibilité :</strong> respect des bonnes pratiques <strong>WCAG 2.1 AA</strong></li>
+        <li><strong>Responsive :</strong> design mobile-friendly avec structure CSS personnalisée</li>
+      </ul>
+    </section>
 
-  <section class="about-section">
-    <h3><i class="fas fa-code-branch"></i> Code source</h3>
-    <p>
-      Le code est disponible sur :
-      <a href="https://github.com/laurent-hadjadj/genioservice" target="_blank" rel="noopener">
-        GitHub - GenioService
-      </a>
-    </p>
-  </section>
+    <section class="about-section">
+      <h2><i class="fas fa-code-branch"></i> Dépôts GitHub</h2>
+      <ul>
+        <li>
+          <strong>Frontend Angular :</strong>
+          <a href="https://github.com/DUT-Info-Montreuil/genio-frontend" target="_blank" rel="noopener">
+            github.com/DUT-Info-Montreuil/genio-frontend
+          </a>
+        </li>
+        <li>
+          <strong>Backend Spring Boot :</strong>
+          <a href="https://github.com/DUT-Info-Montreuil/GenioService" target="_blank" rel="noopener">
+            github.com/DUT-Info-Montreuil/GenioService
+          </a>
+        </li>
+      </ul>
+    </section>
 
-  <section class="about-section">
-    <h3><i class="fas fa-copyright"></i> Propriété intellectuelle</h3>
-    <p>
-      Sauf mention contraire, tous les contenus sont publiés sous licence
-      <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr" target="_blank" rel="license noopener">
-        CC BY-NC-SA 4.0
-      </a>.
-    </p>
-    <p>
-      Vous pouvez citer et partager, à condition de ne pas en faire un usage commercial et de conserver cette licence.
-    </p>
-  </section>
+    <section class="about-section">
+      <h2><i class="fas fa-copyright"></i> Propriété intellectuelle</h2>
+      <p>
+        Ce projet est partagé sous licence
+        <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.fr" target="_blank" rel="license noopener">
+          CC BY-NC-SA 4.0
+        </a> : librement consultable et réutilisable à des fins non commerciales, avec attribution et partage dans les mêmes conditions.
+      </p>
+    </section>
 
-  <section class="about-section">
-    <h3><i class="fas fa-server"></i> Hébergement</h3>
-    <p>
-      Le site est hébergé par : <br>
-      OVHcloud – 2 Rue Kellermann, 59100 Roubaix, France
-    </p>
-  </section>
+    <section class="about-section">
+      <h2><i class="fas fa-server"></i> Hébergement</h2>
+      <p>
+        Ce site a été développé dans un environnement local à des fins de démonstration académique.
+        Aucun hébergeur commercial n’est impliqué dans ce cadre.
+      </p>
+    </section>
+  </div>
 </main>
