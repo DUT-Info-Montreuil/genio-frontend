@@ -59,7 +59,7 @@
          [ngClass]="{ 'active-link': router.url === '/historique-conventions' }">Visualiser</a>
       <a *ngIf="isGestionnaire"
          routerLink="/gerer-modeles"
-         [ngClass]="{ 'active-link': router.url === '/gerer-modeles' }">Gérer</a>
+         [ngClass]="{ 'active-link': router.url.startsWith('/gerer-modeles') }">Gérer</a>
     </nav>
 
     <div class="action-buttons">
