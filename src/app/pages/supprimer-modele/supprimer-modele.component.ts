@@ -114,22 +114,27 @@ export class SupprimerModeleComponent {
     console.log(`Changement à ${this.entriesPerPage} entrées par page`);
   }
 
+  normalize(str: string): string {
+    return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().trim();
+  }
+
   applyFilters() {
-    const text = this.searchText.toLowerCase().trim();
-    const year = this.searchYear?.toString().trim();
-    const adv = this.advancedSearch.toLowerCase().trim();
+    const text = this.normalize(this.searchText);
+    const year = this.searchYear?.trim();
+    const adv = this.normalize(this.advancedSearch);
+
+    const wordRegex = new RegExp(`\\b${text}`, 'i');
 
     this.filteredModeles = this.modeles.filter(m => {
-      const nom = m.nom?.toLowerCase() || '';
-      const titre = m.titre?.toLowerCase() || '';
-      const annee = m.annee?.toString() || this.extractAnneeFromNom(m.nom);
-      const desc = m.description?.toLowerCase() || '';
-      const statutTexte = m.statutTexte?.toLowerCase() || '';
+      const titre = this.normalize(m.titre || '');
+      const annee = m.annee?.toString() || '';
+      const desc = this.normalize(m.description || '');
+      const statutTexte = this.normalize(m.statutTexte || '');
 
-      const texteRechercheAvancee = `${titre} ${nom} ${annee} ${desc} ${statutTexte}`;
+      const texteRechercheAvancee = `${annee} ${desc} ${statutTexte}`;
 
       return (
-        (nom.includes(text) || titre.includes(text)) &&
+        wordRegex.test(titre) &&
         (!year || annee === year) &&
         (!adv || texteRechercheAvancee.includes(adv))
       );
@@ -326,7 +331,7 @@ export class SupprimerModeleComponent {
     this.http.delete(`http://localhost:8080/conventionServices/${this.selectedModel.id}`)
       .subscribe({
         next: () => {
-          this.message = `Le modèle ${this.selectedModel.nom} a bien été supprimé.`;
+          this.message = `Le modèle ${this.selectedModel.nom} a bien été archivé.`;
           this.error = '';
           this.showDeleteModal = false;
 

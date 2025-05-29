@@ -18,15 +18,6 @@ export class AuthService {
     localStorage.setItem('role', user.role);
     localStorage.setItem('username', user.username);
   }
-
-  getRole(): string {
-    return this.role;
-  }
-
-  getUsername(): string {
-    return this.username;
-  }
-
   isGestionnaire(): boolean {
     return this.role === 'GESTIONNAIRE';
   }
@@ -39,10 +30,4 @@ export class AuthService {
     return this.role === 'CONSULTANT';
   }
 
-  clearUser(): void {
-    this.role = '';
-    this.username = '';
-    localStorage.removeItem('role');
-    localStorage.removeItem('username');
-  }
 }

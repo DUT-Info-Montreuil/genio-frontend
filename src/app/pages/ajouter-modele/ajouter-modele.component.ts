@@ -52,6 +52,12 @@ export class AjouterModeleComponent {
       return;
     }
 
+    if (!this.titre || this.titre.trim() === '') {
+      const nomFichier = this.selectedFile?.name || '';
+      const anneeFromNom = nomFichier.match(/_(\d{4})/)?.[1] || this.annee || 'inconnue';
+      this.titre = `modeleConvention_${anneeFromNom}`;
+    }
+
     const formData = new FormData();
     formData.append('file', this.selectedFile);
     formData.append('titre', this.titre);

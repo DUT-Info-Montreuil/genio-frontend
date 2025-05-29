@@ -15,27 +15,7 @@ import {BreadcrumbComponent} from '../../shared/breadcrumb/breadcrumb.component'
   styleUrls: ['./plan-du-site.component.css','../../../assets/styles/header.css','../../../assets/styles/modal-box.css','../../../assets/styles/auth-shared.css']
 })
 export class PlanDuSiteComponent {
-  noAccessModalVisible = false;
-
-  showNoAccessModal() {
-    this.noAccessModalVisible = true;
-  }
-
-  closeNoAccessModal() {
-    this.noAccessModalVisible = false;
-  }
-
   modalVisible = false;
-
-  userRole: string | null = null;
-
-  hasAnyRole(): boolean {
-    return !!this.userRole;
-  }
-
-  hasRole(allowedRoles: string[]): boolean {
-    return this.userRole ? allowedRoles.includes(this.userRole) : false;
-  }
 
   showModal() {
     this.modalVisible = true;

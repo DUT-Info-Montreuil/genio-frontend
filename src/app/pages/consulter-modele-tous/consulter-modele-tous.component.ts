@@ -159,24 +159,27 @@ export class ConsulterModeleTousComponent implements OnInit {
       error: () => alert("Erreur lors du chargement des modèles.")
     });
   }
+  normalize(str: string): string {
+    return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().trim();
+  }
 
   applyFilters() {
-    const text = this.searchText.toLowerCase().trim();
+    const text = this.normalize(this.searchText);
     const year = this.searchYear?.toString().trim();
-    const adv = this.advancedSearch.toLowerCase().trim();
+    const adv = this.normalize(this.advancedSearch);
+
+    const wordRegex = new RegExp(`\\b${text}`, 'i'); // mot commençant par `text`
 
     this.filteredModeles = this.modeles.filter(m => {
-      const nom = m.nom?.toLowerCase() || '';
-      const nomAffiche = m.nomAffiche?.toLowerCase() || '';
+      const titre = this.normalize(m.titre || '');
       const annee = m.annee?.toString() || '';
-      const desc = m.description?.toLowerCase() || '';
-      const statutTexte = m.statutTexte?.toLowerCase() || '';
-      const titre = m.titre?.toLowerCase() || '';
+      const desc = this.normalize(m.description || '');
+      const statutTexte = this.normalize(m.statutTexte || '');
 
-      const texteRechercheAvancee = `${nomAffiche} ${annee} ${desc} ${statutTexte}`;
+      const texteRechercheAvancee = `${annee} ${desc} ${statutTexte}`;
 
       return (
-        (nom.includes(text) || nomAffiche.includes(text) || titre.includes(text)) &&
+        wordRegex.test(titre) && // mot commençant par `text`
         (!year || annee === year) &&
         (!adv || texteRechercheAvancee.includes(adv))
       );
@@ -185,7 +188,6 @@ export class ConsulterModeleTousComponent implements OnInit {
     this.currentPage = 1;
     this.updatePaginatedModeles();
   }
-
   resetFilters() {
     this.searchText = '';
     this.searchYear = '';
