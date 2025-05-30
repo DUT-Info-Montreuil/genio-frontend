@@ -42,6 +42,7 @@ export class ModifierModeleComponent implements OnInit {
   modeles: any[] = [];
   selectedModel: any = null;
   descriptionModification: string = '';
+  nomFichierTentatif: string | null = null;
 
   titreEditable = false;
   showEditModal = false;
@@ -151,42 +152,70 @@ export class ModifierModeleComponent implements OnInit {
   onUpdate(): void {
     if (!this.selectedModel) return;
 
+    this.isSubmitting = true;
+    this.message = '';
+    this.error = '';
+
     const now = new Date();
+    const nomOriginal = this.selectedModel.nom;
 
-    const updatePayload = {
-      titre: this.selectedModel.titre,
-      descriptionModification: this.descriptionModification,
-      dateDerniereModification: now.toISOString(),
-      id: this.selectedModel.id,
-      nom: this.selectedModel.nom,
-      annee: this.selectedModel.annee,
+    const updateModel = () => {
+      const updatePayload = {
+        titre: this.selectedModel.titre,
+        descriptionModification: this.descriptionModification,
+        dateDerniereModification: now.toISOString(),
+        id: this.selectedModel.id,
+        nom: this.selectedModel.nom,
+        annee: this.selectedModel.annee,
+      };
+
+      this.http.put(`http://localhost:8080/conventionServices/${this.idModeleActuel}`, updatePayload)
+        .subscribe({
+          next: () => {
+            this.selectedModel.dateDerniereModification = now;
+            this.message = 'Modèle mis à jour avec succès !';
+            this.error = '';
+            this.showEditModal = false;
+            this.isSubmitting = false;
+            setTimeout(() => this.message = '', 2000);
+          },
+          error: (err) => {
+            this.error = err?.error?.error || 'Erreur lors de la mise à jour.';
+            this.message = '';
+            this.isSubmitting = false;
+            setTimeout(() => this.error = '', 4000);
+          }
+        });
     };
-
-    this.http.put(`http://localhost:8080/conventionServices/${this.idModeleActuel}`, updatePayload)
-      .subscribe({
-        next: () => {
-          this.selectedModel.dateDerniereModification = now;
-          this.message = 'Modèle mis à jour avec succès !';
-          this.error = '';
-          this.isSubmitting = false;
-          this.showEditModal = false;
-
-          setTimeout(() => this.message = '', 2000);
-        },
-        error: (err) => {
-          this.error = err.error?.error || 'Erreur lors de la mise à jour.';
-          this.message = '';
-          this.isSubmitting = false;
-
-          setTimeout(() => this.error = '', 3000);
-        }
-      });
 
     if (this.selectedFile) {
       const formData = new FormData();
       formData.append('file', this.selectedFile);
+
       this.http.put(`http://localhost:8080/conventionServices/${this.idModeleActuel}/file`, formData)
-        .subscribe();
+        .subscribe({
+          next: () => {
+            this.error = '';
+            this.message = 'Fichier remplacé avec succès.';
+
+            if (this.nomFichierTentatif) {
+              this.nomFichierTentatif = null; // 🔁 On nettoie
+            }
+
+            setTimeout(() => this.message = '', 2000);
+            updateModel(); // ✅ Mise à jour du reste uniquement après succès
+          },
+          error: (err) => {
+            this.error = err?.error?.error || "Erreur lors du remplacement du fichier.";
+            this.message = '';
+            this.selectedFile = null;
+            this.nomFichierTentatif = null; // 🚫 On ne touche pas au nom
+            this.isSubmitting = false;
+            setTimeout(() => this.error = '', 4000);
+          }
+        });
+    } else {
+      updateModel(); // 🔄 Si aucun fichier à remplacer, on met juste à jour les métadonnées
     }
   }
 
@@ -195,7 +224,7 @@ export class ModifierModeleComponent implements OnInit {
   selectModel(modele: any): void {
     this.selectedModel = modele;
     this.idModeleActuel = modele.id;
-    this.annee = modele.annee || this.extractAnneeFromNom(modele.nom);
+    this.annee = modele.annee;
     this.descriptionModification = modele.descriptionModification || '';
     this.error = '';
     this.message = '';
@@ -355,7 +384,9 @@ export class ModifierModeleComponent implements OnInit {
   onFileSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files.length > 0) {
-      this.handleFileValidation(input.files[0]);
+      const file = input.files[0];
+      this.nomFichierTentatif = file.name;  // ✅ temporaire seulement
+      this.handleFileValidation(file);
     }
   }
 

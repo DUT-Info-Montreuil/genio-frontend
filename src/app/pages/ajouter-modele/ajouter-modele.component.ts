@@ -54,8 +54,7 @@ export class AjouterModeleComponent {
 
     if (!this.titre || this.titre.trim() === '') {
       const nomFichier = this.selectedFile?.name || '';
-      const anneeFromNom = nomFichier.match(/_(\d{4})/)?.[1] || this.annee || 'inconnue';
-      this.titre = `modeleConvention_${anneeFromNom}`;
+      this.titre = nomFichier;
     }
 
     const formData = new FormData();
@@ -164,6 +163,9 @@ export class AjouterModeleComponent {
       .subscribe({
         next: (response: any) => {
           this.selectedFile = file;
+          if (!this.titre || this.titre === file.name || this.titre.trim() === '') {
+            this.titre = `modeleConvention_${this.annee}`;
+          }
 
           if (typeof response === 'string' && response.includes("Variables détectées")) {
             const variablesDetectees = response
@@ -196,9 +198,6 @@ export class AjouterModeleComponent {
             if (missing.length === 0) {
               this.isFileValid = true;
               this.error = '';
-              if (this.annee) {
-                this.titre = `Convention ${this.annee}`;
-              }
             } else {
               this.isFileValid = false;
               this.error = `Certaines informations sont manquantes. Voici les détails ci-dessous.`;

@@ -43,7 +43,7 @@
     <tbody>
     <tr *ngFor="let m of paginatedModeles">
       <td>{{ m.titre || ('modeleConvention_' + extractAnneeFromNom(m.nom)) }}</td>
-      <td>{{ m.annee || extractAnneeFromNom(m.nom) }}</td>
+      <td>{{ m.annee }}</td>
       <td>{{ m.format || 'Document' }}</td>
       <td>
         {{ m.dateDerniereModification ? (m.dateDerniereModification | date:'dd/MM/yyyy à HH:mm') : '—' }}
@@ -81,9 +81,9 @@
 </div>
 
 
-  <div *ngIf="modeles.length === 0" class="empty-state">
-    <p>Aucun modèle disponible.</p>
-  </div>
+<div *ngIf="modeles.length === 0" class="empty-state">
+  <p>Aucun modèle disponible.</p>
+</div>
 
 <div class="global-alert-wrapper" aria-live="polite" role="status">
   <div *ngIf="message || (error && !showFileErrorModal)" class="callout"
@@ -107,7 +107,7 @@
       <div class="form-group-double">
         <div class="form-inline" role="group" aria-label="Nom du modèle">
           <label><strong>Nom du modèle :</strong></label>
-          <span class="model-name-box" aria-readonly="true">{{ selectedModel.nom }}</span>
+          <span class="model-name-box" aria-readonly="true">modeleConvention_{{ selectedModel.annee }}</span>
         </div>
         <br>
         <div class="col-right">
