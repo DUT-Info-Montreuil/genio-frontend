@@ -299,10 +299,12 @@ export class SupprimerModeleComponent {
   loadModeles(): void {
     this.http.get<any[]>('http://localhost:8080/conventionServices').subscribe({
       next: (data) => {
-        this.modeles = data.map(m => ({
-          ...m,
-          dateDerniereModification: m.dateDerniereModification ? new Date(m.dateDerniereModification) : null
-        }));
+        this.modeles = data
+          .filter(m => !m.archived) // 👈 NE GARDER QUE LES NON ARCHIVÉS
+          .map(m => ({
+            ...m,
+            dateDerniereModification: m.dateDerniereModification ? new Date(m.dateDerniereModification) : null
+          }));
         this.filteredModeles = [...this.modeles];
         this.applyFilters();
       },
@@ -347,6 +349,30 @@ export class SupprimerModeleComponent {
           setTimeout(() => this.error = '', 3000);
         }
       });
+  }
+
+  checkIfModelIsUsedBeforeDelete(id: number): void {
+    this.http.get<{ isUsed: boolean }>(`http://localhost:8080/conventionServices/${id}/isUsed`).subscribe({
+      next: (response) => {
+        if (response.isUsed) {
+          this.error = "Ce modèle est actuellement utilisé dans une convention. Il ne peut pas être archivé.";
+          this.message = '';
+          this.showDeleteModal = false;
+          setTimeout(() => {
+            this.error = '';
+          }, 2000);
+        } else {
+          this.deleteModel(); // autorisé uniquement si non utilisé
+        }
+      },
+      error: () => {
+        this.error = "Erreur lors de la vérification d'utilisation du modèle.";
+        this.message = '';
+        setTimeout(() => {
+          this.error = '';
+        }, 2000);
+      }
+    });
   }
 
 

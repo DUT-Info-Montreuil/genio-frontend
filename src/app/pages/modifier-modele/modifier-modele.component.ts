@@ -407,7 +407,11 @@ export class ModifierModeleComponent implements OnInit {
       },
       error: () => {
         this.error = "Erreur lors du chargement des modèles.";
+        setTimeout(() => {
+          this.error = '';
+        }, 2000);
       }
+
     });
   }
 

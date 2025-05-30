@@ -53,8 +53,9 @@ export class AjouterModeleComponent {
     }
 
     if (!this.titre || this.titre.trim() === '') {
-      const nomFichier = this.selectedFile?.name || '';
-      this.titre = nomFichier;
+      this.error = "⚠️ Le titre du modèle est obligatoire.";
+      setTimeout(() => { this.error = ''; }, 2000);
+      return;
     }
 
     const formData = new FormData();
@@ -68,6 +69,9 @@ export class AjouterModeleComponent {
         this.message = res.message;
         this.error = '';
         this.resetForm();
+        setTimeout(() => {
+          this.message = '';
+        }, 2000);
       },
       error: (err) => {
         const msg = err.error?.error || "Erreur lors de l'ajout du modèle.";
@@ -78,6 +82,9 @@ export class AjouterModeleComponent {
         this.message = '';
         this.isSubmitting = false;
         this.showExpectedVariables = false;
+        setTimeout(() => {
+          this.error = '';
+        }, 2000);
       }
     });
   }
@@ -105,8 +112,14 @@ export class AjouterModeleComponent {
     if (!this.isAnneeValid) {
       if (!/^\d{4}$/.test(this.annee)) {
         this.error = "⚠️ L’année doit contenir 4 chiffres (ex : 2025).";
+        setTimeout(() => {
+          this.error = '';
+        }, 2000);
       } else {
         this.error = `⚠️ L’année doit être comprise entre 2020 et ${this.currentYear + 5}.`;
+        setTimeout(() => {
+          this.error = '';
+        }, 2000);
       }
       this.selectedFile = null;
       this.isFileValid = false;
@@ -208,6 +221,9 @@ export class AjouterModeleComponent {
             this.isNotAModel = true;
             this.error = 'Le fichier ne semble pas être un modèle de convention.';
             this.showFileErrorModal = true;
+            setTimeout(() => {
+              this.error = '';
+            }, 2000);
           }
         },
         error: (err) => {

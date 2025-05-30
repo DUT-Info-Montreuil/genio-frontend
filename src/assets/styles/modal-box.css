@@ -64,18 +64,25 @@
 
 .modal-actions button,
 .close-modal-btn {
-  padding: 10px 16px;
+  min-width: 140px;
+  height: 42px;
+  padding: 10px 20px;
   font-size: 1rem;
   font-weight: 500;
-  border: none;
   border-radius: 6px;
   cursor: pointer;
 }
 
 .modal-actions button.primary,
 .close-modal-btn {
+  padding: 10px 20px;
   background-color: #1f3c88;
+  border: 1px solid #1f3c88;
   color: #fff;
+  border-radius: 6px;
+  font-weight: 500;
+  cursor: pointer;
+  font-size: 1rem;
 }
 
 .modal-actions button.primary:hover,
@@ -84,13 +91,21 @@
 }
 
 .modal-actions button.secondary {
+  padding: 10px 20px;
   background-color: #e9ecef;
+  border: 1px solid #e9ecef;
   color: #212529;
+  border-radius: 6px;
+  font-weight: 500;
+  cursor: pointer;
+  font-size: 1rem;
 }
 
 .modal-actions button.secondary:hover {
   background-color: #dee2e6;
 }
+
+
 
 .modal-box.alert h3 {
   color: #dc3545;

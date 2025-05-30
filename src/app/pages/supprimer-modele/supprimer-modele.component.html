@@ -109,9 +109,9 @@
     </div>
 
     <div class="modal-actions">
-      <button type="button" class="btn btn-secondary" (click)="closeModal()">Annuler</button>
-      <button type="button" class="btn btn-danger" (click)="deleteModel()">
-        <i class="fas fa-archive"></i> Archiver
+      <button type="button" class="secondary" (click)="closeModal()">Annuler</button>
+      <button type="button" class="btn btn-danger" (click)="checkIfModelIsUsedBeforeDelete(selectedModel.id)">
+       Archiver
       </button>
     </div>
   </div>
