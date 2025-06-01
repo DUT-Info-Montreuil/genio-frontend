@@ -1,59 +1,45 @@
-# GenioFrontend
+# GenioService
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.1.4.
+> **Version :** 1.0.0-release  
+> **Auteur :** Elsa HADJADJ  
+> **Email :** elsa.simha.hadjadj@gmail.com  
+> **GitHub Repository :** [https://github.com/DUT-Info-Montreuil/genio-backend](https://github.com/DUT-Info-Montreuil/genio-backend)
 
-## Development server
+---
 
-To start a local development server, run:
+## Projet académique
 
-```bash
-ng serve
-```
+Ce projet a été développé dans le cadre de la troisième année du Bachelor Universitaire de Technologie (BUT Informatique) à l’IUT de Montreuil.
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+**GenioService** est une application de gestion de conventions de stage permettant la génération, l’historisation, la validation et le suivi documentaire.
 
-## Code scaffolding
+---
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+## Audit qualité SonarQube
 
-```bash
-ng generate component component-name
-```
+<div>
+  <img src="docs/assets/images/sonar-audit.png" alt="Audit SonarCube" width="600"/>
+</div>
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
 
-```bash
-ng generate --help
-```
+**Résultat : Quality Gate – Passed  ✅**
+- Sécurité : 0 vulnérabilité
+- Fiabilité : 0 bug
+- Maintenabilité : 0 code smell
+- Couverture de tests : 87.8% (295 tests unitaires)
+- Duplication : 0.7% (3 blocs dupliqués)
 
-## Building
+> OWASP Dependency-Check : 0 failles
+---
 
-To build the project run:
+## Sommaire
 
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+- [00 - Introduction](docs/00-introduction.md)
+- [01 - Architecture technique](docs/01-architecture.md)
+- [02 - Installation & prérequis](docs/02-installation.md)
+- [03 - Déploiement (dev & prod)](docs/03-deploiement.md)
+- [04 - Documentation fonctionnelle](docs/04-doc-fonctionnelle.md)
+- [05 - Design UX & Parcours utilisateur](docs/05-ux)
+- [06 - Sécurité & RGPD](docs/06-rgpd)
+- [Changelog](CHANGELOG.md)
+- [Licence (CC BY-NC-SA 4.0)](licence.md)
