@@ -53,7 +53,7 @@ mkdir frontend
 
 ```bash
 cd backend
-git clone https://github.com/DUT-Info-Montreuil/GenioService.git
+git clone https://github.com/DUT-Info-Montreuil/genio-backend.git
 ```
 
 ---
@@ -248,7 +248,7 @@ ng build --configuration production
 
 ## 16. Liens utiles
 
-- [Backend GitHub](https://github.com/DUT-Info-Montreuil/GenioService)
+- [Backend GitHub](https://github.com/DUT-Info-Montreuil/genio-backend)
 - [Frontend GitHub](https://github.com/DUT-Info-Montreuil/genio-frontend)
 - [Spring Boot Docs](https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/)
 - [Angular Docs](https://angular.io/docs)
