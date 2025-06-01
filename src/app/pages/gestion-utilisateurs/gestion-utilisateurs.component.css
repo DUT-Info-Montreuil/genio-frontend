@@ -11,7 +11,6 @@ main, .auth-page, .page-contents {
   font-size: 1.2rem;
 }
 
-/* ---------- FILTRES ---------- */
 
 .filters-zone-wrapper {
   display: flex;
@@ -69,7 +68,7 @@ main, .auth-page, .page-contents {
   background-size: 14px;
 }
 
-/* ---------- BOUTON RESET ---------- */
+
 
 .reset-icon {
   display: flex;
@@ -97,7 +96,7 @@ main, .auth-page, .page-contents {
 
 
 
-/* ---------- TABLEAU ---------- */
+
 
 .status-success {
   background: #e0f7e9;
@@ -111,7 +110,7 @@ main, .auth-page, .page-contents {
   font-weight: bold;
 }
 
-/* ---------- MODAL ---------- */
+
 
 .modal-field {
   display: flex;
@@ -140,7 +139,7 @@ main, .auth-page, .page-contents {
   box-sizing: border-box;
 }
 
-/* ---------- SELECT ROLE ---------- */
+
 
 .modal-field select {
   width: 60%;
@@ -166,7 +165,7 @@ main, .auth-page, .page-contents {
   text-overflow: ellipsis;
 }
 
-/* ---------- SWITCH ---------- */
+
 
 .modal-field.checkbox-field {
   align-items: center;
@@ -222,7 +221,6 @@ main, .auth-page, .page-contents {
   transform: translateX(16px);
 }
 
-/* ---------- DIVERS ---------- */
 
 .sr-only {
   position: absolute;
@@ -254,8 +252,6 @@ main, .auth-page, .page-contents {
   border-radius: 6px;
 }
 
-
-/* ---------- RESPONSIVE ---------- */
 
 @media (max-width: 768px) {
   .filters-zone {
