@@ -19,7 +19,7 @@ import {HttpClient} from '@angular/common/http';
 import {Router} from '@angular/router';
 
 @Component({
-  selector: 'app-supprimer-modele',
+  selector: 'app-archiver-modele',
   imports: [
     NgClass,
     FormsModule,
@@ -27,12 +27,12 @@ import {Router} from '@angular/router';
     NgForOf,
     DatePipe,
   ],
-  templateUrl: './supprimer-modele.component.html',
+  templateUrl: './archiver-modele.component.html',
   standalone: true,
-  styleUrls: ['./supprimer-modele.component.css', '../../../assets/styles/header.css','../../../assets/styles/modal-box.css','../../../assets/styles/auth-shared.css','../../../assets/styles/ tables-common.css']
+  styleUrls: ['./archiver-modele.component.css', '../../../assets/styles/header.css','../../../assets/styles/modal-box.css','../../../assets/styles/auth-shared.css','../../../assets/styles/ tables-common.css']
 
 })
-export class SupprimerModeleComponent {
+export class ArchiverModeleComponent {
 
   annee: string = '';
   selectedFile: File | null = null;

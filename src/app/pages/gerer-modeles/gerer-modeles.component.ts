@@ -21,7 +21,7 @@ import { BreadcrumbComponent } from '../../shared/breadcrumb/breadcrumb.componen
 import { FormsModule } from '@angular/forms';
 import {ModifierModeleComponent} from '../modifier-modele/modifier-modele.component';
 import {AjouterModeleComponent} from '../ajouter-modele/ajouter-modele.component';
-import {SupprimerModeleComponent} from '../supprimer-modele/supprimer-modele.component';
+import {ArchiverModeleComponent} from '../archiver-modele/archiver-modele.component';
 
 @Component({
   selector: 'app-gerer-modeles',
@@ -33,7 +33,7 @@ import {SupprimerModeleComponent} from '../supprimer-modele/supprimer-modele.com
     RouterLink,
     FormsModule,
     NgIf,
-    ModifierModeleComponent, AjouterModeleComponent, TitleCasePipe,SupprimerModeleComponent
+    ModifierModeleComponent, AjouterModeleComponent, TitleCasePipe,ArchiverModeleComponent
   ],
   styleUrls: ['./gerer-modeles.component.css', '../../../assets/styles/header.css','../../../assets/styles/modal-box.css']
 })

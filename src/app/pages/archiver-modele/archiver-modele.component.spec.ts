@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { SupprimerModeleComponent } from './supprimer-modele.component';
+import { ArchiverModeleComponent } from './archiver-modele.component';
 
-describe('SupprimerModeleComponent', () => {
-  let component: SupprimerModeleComponent;
-  let fixture: ComponentFixture<SupprimerModeleComponent>;
+describe('ArchiverModeleComponent', () => {
+  let component: ArchiverModeleComponent;
+  let fixture: ComponentFixture<ArchiverModeleComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [SupprimerModeleComponent]
+      imports: [ArchiverModeleComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(SupprimerModeleComponent);
+    fixture = TestBed.createComponent(ArchiverModeleComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
