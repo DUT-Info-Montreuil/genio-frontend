@@ -41,6 +41,45 @@
   text-decoration: underline;
 }
 
+.rgpd-checkbox {
+  display: block;
+  margin-top: 1rem;
+  font-size: 0.95rem;
+  color: #333;
+  line-height: 1.4;
+}
+
+.rgpd-checkbox label {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+}
+
+.rgpd-checkbox input[type="checkbox"] {
+  margin-top: 0.3rem;
+  flex-shrink: 0;
+}
+
+.rgpd-checkbox span {
+  display: inline-block;
+  max-width: 100%;
+}
+
+.rgpd-checkbox a {
+  color: #004a99;
+  text-decoration: underline;
+  white-space: normal;
+}
+
+.rgpd-checkbox a:hover {
+  text-decoration: none;
+}
+.form-group-block {
+  display: block;
+  width: 100%;
+  margin-bottom: 20px;
+}
+
 @media (max-width: 480px) {
   .password-rules-badges {
     flex-wrap: wrap;

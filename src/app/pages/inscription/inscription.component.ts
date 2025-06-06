@@ -36,6 +36,7 @@ export class InscriptionComponent {
   isSubmitting = false;
   error = '';
   message = '';
+  consentement = false;
 
   passwordRules = [
     { label: '12 caractères', valid: false },
@@ -102,6 +103,12 @@ export class InscriptionComponent {
 
     if (this.hasInvalidPasswordRule()) {
       this.error = 'Le mot de passe ne respecte pas les règles de sécurité.';
+      setTimeout(() => this.error = '', 3000);
+      return;
+    }
+
+    if (!this.consentement) {
+      this.error = 'Vous devez accepter les conditions pour vous inscrire.';
       setTimeout(() => this.error = '', 3000);
       return;
     }

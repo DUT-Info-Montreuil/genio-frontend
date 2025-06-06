@@ -67,6 +67,17 @@
           </button>
         </div>
       </div>
+      <div class="form-group-block rgpd-checkbox">
+        <label>
+          <input type="checkbox" [(ngModel)]="consentement" name="consentement" required />
+          <span>
+      Je déclare avoir pris connaissance et accepte les
+      <a href="/cgu" target="_blank" rel="noopener">Conditions Générales d’Utilisation</a>
+      et la
+      <a href="/donnees-personnelles" target="_blank" rel="noopener">Politique de confidentialité</a>.
+    </span>
+        </label>
+      </div>
 
       <button type="submit" class="btn-login" [disabled]="isSubmitting" [attr.aria-busy]="isSubmitting ? 'true' : null">
         S’enregistrer
