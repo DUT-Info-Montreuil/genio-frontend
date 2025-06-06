@@ -45,7 +45,8 @@ export class NavbarComponent {
       '/a-propos',
       '/contact',
       '/mentions-legales',
-      '/donnees-personnelles',
+      '/confidentialite',
+      '/cgu',
       '/plan-du-site',
       '/reset-password',
       '/mot-de-passe-oublie'

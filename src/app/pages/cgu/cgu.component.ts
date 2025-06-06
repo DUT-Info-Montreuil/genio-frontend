@@ -1,10 +1,12 @@
 import { Component } from '@angular/core';
 import {BreadcrumbComponent} from '../../shared/breadcrumb/breadcrumb.component';
+import {RouterLink} from '@angular/router';
 
 @Component({
   selector: 'app-cgu',
   imports: [
-    BreadcrumbComponent
+    BreadcrumbComponent,
+    RouterLink
   ],
   templateUrl: './cgu.component.html',
   standalone: true,
