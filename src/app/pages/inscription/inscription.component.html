@@ -37,7 +37,13 @@
         <label for="email">Email <span class="required-star">*</span></label>
         <div class="input-wrapper">
           <i class="fas fa-envelope icon-left" aria-hidden="true"></i>
-          <input id="email" name="email" type="email" [(ngModel)]="email" placeholder="exemple@domaine.com" (blur)="checkEmailUniqueness()" autocomplete="email" required />
+          <input id="email" name="email" type="email"
+                 [(ngModel)]="email"
+                 (input)="error=''"
+                 (blur)="checkEmailUniqueness()"
+                 placeholder="exemple@domaine.com"
+                 autocomplete="email"
+                 required />
         </div>
       </div>
 

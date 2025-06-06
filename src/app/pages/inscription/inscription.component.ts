@@ -70,20 +70,30 @@ export class InscriptionComponent {
   }
 
   checkEmailUniqueness() {
-    if (!this.email.trim()) return;
+    if (!this.checkEmailFormat()) {
+      this.error = 'L\'adresse e-mail est invalide.';
+      return;
+    }
+
     this.http.get<{ exists: boolean }>(`${environment.apiUrl}/api/utilisateurs/exists?email=${this.email.trim()}`)
       .subscribe({
         next: (res) => {
           if (res.exists) {
-            this.error = 'Cet e-mail est déjà utilisé.';
-            setTimeout(() => this.error = '', 3000);
+            // Message générique sans dire explicitement "existe"
+            this.error = 'Cet e-mail est peut-être déjà utilisé. Veuillez en choisir un autre.';
+          } else {
+            this.error = '';  // Pas d’erreur si ok
           }
         },
         error: () => {
           this.error = 'Erreur lors de la vérification de l\'e-mail.';
-          setTimeout(() => this.error = '', 3000);
         }
       });
+  }
+
+  checkEmailFormat(): boolean {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(this.email.trim());
   }
 
   onRegister() {
@@ -113,6 +123,12 @@ export class InscriptionComponent {
       setTimeout(() => this.error = '', 3000);
       return;
     }
+
+    if (this.error.includes('déjà utilisé')) {
+      // Ne pas continuer l’inscription
+      return;
+    }
+
 
     this.isSubmitting = true;
 
