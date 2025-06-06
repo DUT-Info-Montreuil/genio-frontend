@@ -4,7 +4,7 @@
 
 ## Sommaire
 
-- [Page d’accueil](#page-daccueil)
+- [Page d’Accueil](#page-daccueil)
 - [Écran de connexion](#écran-de-connexion)
 - [Écran d’inscription](#écran-dinscription)
 - [Écran de réinitialisation du mot de passe](#écran-de-réinitialisation-du-mot-de-passe)
@@ -26,7 +26,7 @@
 - [Pages - Mentions légales](#page--mentions-légales)
 - [Conditions Générales d’Utilisation (CGU)](#page--conditions-générales-dutilisation-cgu)
 
-## Page d’accueil
+## Page d’Accueil
 
 ### Objectif de page d'accueil
 
@@ -43,14 +43,14 @@ Il permet à l’utilisateur d’accéder aux trois grandes fonctionnalités du 
 
 <!-- markdownlint-disable MD033 -->
 <div>
-  <img src="./assets/images/page-accueil.png" alt="Page d’accueil GenioService" width="600"/>
+  <img src="./assets/images/page-accueil.png" alt="Page d’Accueil GenioService" width="600"/>
 </div>
 
 ---
 
 ### Fonctionnement de page d'accueil
 
-- La page d’accueil est composée de **trois cartes interactives**.
+- La Page d’Accueil est composée de **trois cartes interactives**.
 - Chaque carte redirige vers la page de **connexion** (/connexion) si l’utilisateur n’est pas encore connecté.
 - Une fois connecté, l’utilisateur accède à la fonctionnalité selon ses droits.
 
@@ -1676,7 +1676,7 @@ Cette page précise les droits, responsabilités, et modalités d’accès au se
 
 <!-- markdownlint-disable MD033 -->
 <div>
-  <img src="./assets/images/page-mentions-legales.png" alt="Page Mentions légales – GenioService" width="600"/>
+  <img src="./assets/images/page-cgu.png" alt="Page Conditions Générales d’Utilisation (CGU) – GenioService" width="600"/>
 </div>
 
 ---
@@ -1694,7 +1694,7 @@ Cette page précise les droits, responsabilités, et modalités d’accès au se
   5. **Modifications** : possibilité de modification des CGU à tout moment.
   6. **Droit applicable** : droit français, juridiction compétente = Paris.
 
-### Exigences de la page Mentions légales Conditions Générales d’Utilisation (CGU)
+### Exigences de la page Mentions légales et Conditions Générales d’Utilisation (CGU)
 
 - Texte **clair, synthétique et accessible**, lisible pour tout utilisateur.
 - **Lien vers cette page affiché dans le footer**, à côté des mentions légales et politique de confidentialité.
