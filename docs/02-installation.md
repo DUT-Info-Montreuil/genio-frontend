@@ -98,7 +98,7 @@ modele.conventionServices.directory=src/main/resources/conventionServices
 Utilisez cette commande Maven depuis la racine du backend :
 
 ```bash
-./mvnw spring-boot:run -Dspring-boot.run.arguments="--spring.config.location=file:utils/application-external.properties"
+mvn spring-boot:run -Dspring-boot.run.arguments="--spring.config.location=file:utils/application-external.properties"
 ```
 
 ### 6.2 Depuis IntelliJ avec la flèche verte ("chillish")
@@ -167,7 +167,7 @@ npm start
 ### 10.3 Tests
 
 ```bash
-./mvnw test
+./mvn test
 ```
 
 ---
@@ -193,7 +193,7 @@ server.port=8081
 
 ## 12. Structure du projet
 
-```
+```plaintext
 GenioApp/
 ├── backend/
 │   ├── src/
@@ -232,7 +232,7 @@ ng build --configuration production
 
 ### Exemple `.gitignore`
 
-```
+```plaintext
 # Backend
 /backend/utils/application-external.properties
 
@@ -248,7 +248,7 @@ ng build --configuration production
 
 ## 16. Liens utiles
 
-- [Backend GitHub](https://github.com/DUT-Info-Montreuil/genio-backend)
+- [Backend GitHub](https://github.com/DUT-Info-Montreuil/GenioService)
 - [Frontend GitHub](https://github.com/DUT-Info-Montreuil/genio-frontend)
 - [Spring Boot Docs](https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/)
 - [Angular Docs](https://angular.io/docs)
@@ -273,7 +273,7 @@ Projet sous licence MIT. Voir le fichier `LICENCE.md`.
 ## 19. Contacts
 
 - Elsa Hadjadj
-- elsa.simha.hadjadj@gmail.com
+- <elsa.simha.hadjadj@gmail.com>
 
 ---
 
