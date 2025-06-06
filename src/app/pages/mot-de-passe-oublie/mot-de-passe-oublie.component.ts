@@ -17,6 +17,7 @@ import { FormsModule } from '@angular/forms';
 import { NgClass, NgIf } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import {environment} from '../../../environments/environment';
 
 @Component({
   selector: 'app-mot-de-passe-oublie',
@@ -46,7 +47,7 @@ export class MotDePasseOublieComponent {
     this.resetSuccess = '';
     this.isSubmitting = true;
 
-    this.http.post('http://localhost:8080/auth/mot-de-passe-oublie', {
+    this.http.post(`${environment.apiUrl}/auth/mot-de-passe-oublie`, {
       email: this.email.trim()
     }, {
       headers: new HttpHeaders({ 'Content-Type': 'application/json' })

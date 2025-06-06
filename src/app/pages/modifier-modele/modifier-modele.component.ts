@@ -17,6 +17,7 @@ import {HttpClient} from '@angular/common/http';
 import {Router} from '@angular/router';
 import {DatePipe, NgClass, NgForOf, NgIf} from '@angular/common';
 import {FormsModule} from '@angular/forms';
+import {environment} from '../../../environments/environment';
 
 @Component({
   selector: 'app-modifier-modele',
@@ -183,7 +184,7 @@ export class ModifierModeleComponent implements OnInit {
         annee: this.selectedModel.annee,
       };
 
-      this.http.put(`http://localhost:8080/conventionServices/${this.idModeleActuel}`, updatePayload)
+      this.http.put(`${environment.apiUrl}/conventionServices/${this.idModeleActuel}`, updatePayload)
         .subscribe({
           next: () => {
             this.selectedModel.dateDerniereModification = now;
@@ -206,7 +207,7 @@ export class ModifierModeleComponent implements OnInit {
       const formData = new FormData();
       formData.append('file', this.selectedFile);
 
-      this.http.put(`http://localhost:8080/conventionServices/${this.idModeleActuel}/file`, formData)
+      this.http.put(`${environment.apiUrl}/conventionServices/${this.idModeleActuel}/file`, formData)
         .subscribe({
           next: () => {
             this.error = '';
@@ -293,7 +294,7 @@ export class ModifierModeleComponent implements OnInit {
     formData.append('file', file);
 
     this.http
-      .post('http://localhost:8080/conventionServices/test-generation', formData, { responseType: 'text' })
+      .post(`${environment.apiUrl}/conventionServices/test-generation`, formData, { responseType: 'text' })
       .subscribe({
         next: (response: any) => {
           this.selectedFile = file;
@@ -356,7 +357,7 @@ export class ModifierModeleComponent implements OnInit {
           const formDataRetry = new FormData();
           formDataRetry.append('file', file);
 
-          this.http.post('http://localhost:8080/conventionServices/test-generation', formDataRetry, { responseType: 'text' })
+          this.http.post(`${environment.apiUrl}/conventionServices/test-generation`, formDataRetry, { responseType: 'text' })
             .subscribe({
               next: (res: any) => {
                 if (typeof res === 'string' && res.includes('Variables détectées')) {
@@ -410,7 +411,7 @@ export class ModifierModeleComponent implements OnInit {
   }
 
   loadModeles(): void {
-    this.http.get<any[]>('http://localhost:8080/conventionServices').subscribe({
+    this.http.get<any[]>(`${environment.apiUrl}/conventionServices`).subscribe({
       next: (data) => {
         this.modeles = data.map(m => ({
           ...m,

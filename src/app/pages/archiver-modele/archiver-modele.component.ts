@@ -17,6 +17,7 @@ import {DatePipe, NgClass, NgForOf, NgIf} from "@angular/common";
 import {FormsModule} from "@angular/forms";
 import {HttpClient} from '@angular/common/http';
 import {Router} from '@angular/router';
+import {environment} from '../../../environments/environment';
 
 @Component({
   selector: 'app-archiver-modele',
@@ -196,7 +197,7 @@ export class ArchiverModeleComponent {
     formData.append('file', file);
 
     this.http
-      .post('http://localhost:8080/conventionServices/test-generation', formData, { responseType: 'text' })
+      .post(`${environment.apiUrl}/conventionServices/test-generation`, formData, { responseType: 'text' })
       .subscribe({
         next: (response: any) => {
           this.selectedFile = file;
@@ -259,7 +260,7 @@ export class ArchiverModeleComponent {
           const formDataRetry = new FormData();
           formDataRetry.append('file', file);
 
-          this.http.post('http://localhost:8080/conventionServices/test-generation', formDataRetry, { responseType: 'text' })
+          this.http.post(`${environment.apiUrl}/conventionServices/test-generation`, formDataRetry, { responseType: 'text' })
             .subscribe({
               next: (res: any) => {
                 if (typeof res === 'string' && res.includes('Variables détectées')) {
@@ -311,7 +312,7 @@ export class ArchiverModeleComponent {
   }
 
   loadModeles(): void {
-    this.http.get<any[]>('http://localhost:8080/conventionServices').subscribe({
+    this.http.get<any[]>(`${environment.apiUrl}/conventionServices`).subscribe({
       next: (data) => {
         this.modeles = data
           .filter(m => !m.archived) // 👈 NE GARDER QUE LES NON ARCHIVÉS
@@ -344,7 +345,7 @@ export class ArchiverModeleComponent {
   deleteModel(): void {
     if (!this.selectedModel) return;
 
-    this.http.delete(`http://localhost:8080/conventionServices/${this.selectedModel.id}`)
+    this.http.delete(`${environment.apiUrl}/conventionServices/${this.selectedModel.id}`)
       .subscribe({
         next: () => {
           this.message = `Le modèle ${this.selectedModel.nom} a bien été archivé.`;
@@ -366,7 +367,7 @@ export class ArchiverModeleComponent {
   }
 
   checkIfModelIsUsedBeforeDelete(id: number): void {
-    this.http.get<{ isUsed: boolean }>(`http://localhost:8080/conventionServices/${id}/isUsed`).subscribe({
+    this.http.get<{ isUsed: boolean }>(`${environment.apiUrl}/conventionServices/${id}/isUsed`).subscribe({
       next: (response) => {
         if (response.isUsed) {
           this.error = "Ce modèle est actuellement utilisé dans une convention. Il ne peut pas être archivé.";

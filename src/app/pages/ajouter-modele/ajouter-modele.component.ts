@@ -17,6 +17,7 @@ import {FormsModule} from '@angular/forms';
 import {NgClass, NgForOf, NgIf} from '@angular/common';
 import {HttpClient} from '@angular/common/http';
 import {Router} from '@angular/router';
+import {environment} from '../../../environments/environment';
 
 @Component({
   selector: 'app-ajouter-modele',
@@ -78,7 +79,7 @@ export class AjouterModeleComponent {
     formData.append('annee', this.annee);
     this.isSubmitting = true;
 
-    this.http.post<any>('http://localhost:8080/conventionServices', formData).subscribe({
+    this.http.post<any>(`${environment.apiUrl}/conventionServices`, formData).subscribe({
       next: (res) => {
         this.message = res.message;
         this.error = '';
@@ -140,7 +141,7 @@ export class AjouterModeleComponent {
       return;
     }
 
-    this.http.get<{ exists: boolean }>(`http://localhost:8080/conventionServices/check-nom-exists?annee=${this.annee}`)
+    this.http.get<{ exists: boolean }>(`${environment.apiUrl}/conventionServices/check-nom-exists?annee=${this.annee}`)
       .subscribe(res => {
         if (res.exists) {
           this.error = `⚠️ Un modèle existe déjà pour l’année ${this.annee}.`;
@@ -186,7 +187,7 @@ export class AjouterModeleComponent {
     formData.append('file', file);
 
     this.http
-      .post('http://localhost:8080/conventionServices/test-generation', formData, { responseType: 'text' })
+      .post(`${environment.apiUrl}/conventionServices/test-generation`, formData, { responseType: 'text' })
       .subscribe({
         next: (response: any) => {
           this.selectedFile = file;
@@ -255,7 +256,7 @@ export class AjouterModeleComponent {
           const formDataRetry = new FormData();
           formDataRetry.append('file', file);
 
-          this.http.post('http://localhost:8080/conventionServices/test-generation', formDataRetry, { responseType: 'text' })
+          this.http.post(`${environment.apiUrl}/conventionServices/test-generation`, formDataRetry, { responseType: 'text' })
             .subscribe({
               next: (res: any) => {
                 if (typeof res === 'string' && res.includes('Variables détectées')) {

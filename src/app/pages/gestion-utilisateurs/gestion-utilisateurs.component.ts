@@ -18,6 +18,7 @@ import { FormsModule } from '@angular/forms';
 import {DatePipe, NgClass, NgForOf, NgIf} from '@angular/common';
 import {ActivatedRoute, RouterModule} from '@angular/router';
 import {BreadcrumbComponent} from '../../shared/breadcrumb/breadcrumb.component';
+import {environment} from '../../../environments/environment';
 
 @Component({
   selector: 'app-gestion-utilisateurs',
@@ -103,7 +104,7 @@ export class GestionUtilisateursComponent implements OnInit {
   }
 
   loadUsers(): void {
-    this.http.get<any[]>('http://localhost:8080/api/utilisateurs').subscribe(data => {
+    this.http.get<any[]>(`${environment.apiUrl}/api/utilisateurs`).subscribe(data => {
       this.utilisateurs = data.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
       this.applyFilters();
     });
@@ -147,7 +148,7 @@ export class GestionUtilisateursComponent implements OnInit {
   }
 
   saveUser(): void {
-    this.http.put(`http://localhost:8080/api/utilisateurs/${this.editedUser.id}/admin-update`, this.editedUser)
+    this.http.put(`${environment.apiUrl}/api/utilisateurs/${this.editedUser.id}/admin-update`, this.editedUser)
       .subscribe(() => {
         const index = this.utilisateurs.findIndex(u => u.id === this.editedUser.id);
         if (index !== -1) {
@@ -159,7 +160,7 @@ export class GestionUtilisateursComponent implements OnInit {
   }
 
   deleteUser(user: any): void {
-    this.http.delete(`http://localhost:8080/api/utilisateurs/${user.id}`)
+    this.http.delete(`${environment.apiUrl}/api/utilisateurs/${user.id}`)
       .subscribe(() => {
         this.utilisateurs = this.utilisateurs.filter(u => u.id !== user.id);
         this.applyFilters();

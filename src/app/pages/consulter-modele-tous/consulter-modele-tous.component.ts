@@ -19,6 +19,7 @@ import { Router, RouterLink } from '@angular/router';
 import {NgClass, NgFor, NgIf} from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import {BreadcrumbComponent} from '../../shared/breadcrumb/breadcrumb.component';
+import {environment} from '../../../environments/environment';
 
 @Component({
   selector: 'app-consulter-modele-tous',
@@ -101,7 +102,7 @@ export class ConsulterModeleTousComponent implements OnInit {
     window.addEventListener('keydown', this.handleEscape);
 
     if (this.isGestionnaire) {
-      this.http.get<any[]>('http://localhost:8080/api/utilisateurs/non-actifs')
+      this.http.get<any[]>(`${environment.apiUrl}/api/utilisateurs/non-actifs`)
         .subscribe(data => this.utilisateurs = data);
     }
   }
@@ -141,14 +142,14 @@ export class ConsulterModeleTousComponent implements OnInit {
   }
 
   loadModeles() {
-    this.http.get<any[]>('http://localhost:8080/conventionServices').subscribe({
+    this.http.get<any[]>(`${environment.apiUrl}/conventionServices`).subscribe({
       next: async (data) => {
         const mapped = await Promise.all(data.map(async (m) => {
           const annee = m.annee || this.extractAnneeFromNom(m.nom);
           let utilise = false;
           try {
             const res = await this.http.get<{ isUsed: boolean }>(
-              `http://localhost:8080/conventionServices/${m.id}/isUsed`
+              `${environment.apiUrl}/conventionServices/${m.id}/isUsed`
             ).toPromise();
             utilise = res?.isUsed ?? false;
           } catch (e) {

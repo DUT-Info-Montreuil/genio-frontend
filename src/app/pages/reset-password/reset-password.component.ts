@@ -17,6 +17,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { NgIf, NgForOf } from '@angular/common';
+import {environment} from '../../../environments/environment';
 
 @Component({
   selector: 'app-reset-password',
@@ -81,7 +82,7 @@ export class ResetPasswordComponent {
 
     this.isSubmitting = true;
 
-    this.http.post('http://localhost:8080/auth/reset-password', {
+    this.http.post(`${environment.apiUrl}/auth/reset-password`, {
       token: this.token,
       nouveauMotDePasse: this.nouveauMotDePasse
     }, {

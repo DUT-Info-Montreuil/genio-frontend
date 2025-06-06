@@ -17,6 +17,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import {Router, RouterLink} from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { NgIf, NgForOf } from '@angular/common';
+import {environment} from '../../../environments/environment';
 
 @Component({
   selector: 'app-inscription',
@@ -70,7 +71,7 @@ export class InscriptionComponent {
 
   checkEmailUniqueness() {
     if (!this.email.trim()) return;
-    this.http.get<{ exists: boolean }>(`http://localhost:8080/api/utilisateurs/exists?email=${this.email.trim()}`)
+    this.http.get<{ exists: boolean }>(`${environment.apiUrl}/api/utilisateurs/exists?email=${this.email.trim()}`)
       .subscribe({
         next: (res) => {
           if (res.exists) {
@@ -122,7 +123,7 @@ export class InscriptionComponent {
       motDePasse: this.password
     };
 
-    this.http.post('http://localhost:8080/api/utilisateurs', body, {
+    this.http.post(`${environment.apiUrl}/api/utilisateurs`, body, {
       headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
       withCredentials: true
     }).subscribe({

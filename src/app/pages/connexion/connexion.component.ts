@@ -1,24 +1,12 @@
-/**
- *  GenioService Frontend
- *  ---------------------
- *  Copyright (c) 2025
- *  Elsa HADJADJ <elsa.simha.hadjadj@gmail.com>
- *
- *  Licence sous Creative Commons CC-BY-NC-SA 4.0.
- *  Vous pouvez consulter la licence ici :
- *  https://creativecommons.org/licenses/by-nc-sa/4.0/
- *
- *  Dépôt GitHub (Frontend) :
- *  https://github.com/DUT-Info-Montreuil/genio-frontend
- */
-
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
-import {NgIf } from '@angular/common';
+import { NgIf } from '@angular/common';
+import {environment} from '../../../environments/environment';
+
 
 @Component({
   selector: 'app-connexion',
@@ -54,12 +42,12 @@ export class ConnexionComponent {
     body.set('email', this.email.trim());
     body.set('password', this.password);
 
-    this.http.post('http://localhost:8080/auth/login', body.toString(), {
+    this.http.post(`${environment.apiUrl}/auth/login`, body.toString(), {
       headers: new HttpHeaders({ 'Content-Type': 'application/x-www-form-urlencoded' }),
       withCredentials: true
     }).subscribe({
       next: () => {
-        this.http.get<any>('http://localhost:8080/api/utilisateurs/me', { withCredentials: true }).subscribe({
+        this.http.get<any>(`${environment.apiUrl}/api/utilisateurs/me`, { withCredentials: true }).subscribe({
           next: (user) => {
             this.authService.setUser({
               role: user.role,
