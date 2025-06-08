@@ -25,8 +25,6 @@
   gap: 1rem;
 }
 
-
-
 .modal-box h3 {
   margin: 0;
   font-size: 1.5rem;
@@ -37,6 +35,10 @@
   gap: 0.5rem;
 }
 
+.modal-box.alert h3 {
+  color: #dc3545;
+}
+
 .modal-section {
   font-size: 1rem;
   color: #212529;
@@ -44,6 +46,17 @@
 
 .modal-section p {
   margin-bottom: 0.5rem;
+  color: #212121;
+}
+
+.modal-section p span,
+.modal-section p .badge-used,
+.modal-section p .badge-unused {
+  color: #212121;
+}
+
+.modal-section p strong {
+  color: #1f3c88;
 }
 
 .modal-section ul {
@@ -62,80 +75,52 @@
   margin-top: 1rem;
 }
 
-.modal-actions button,
-.close-modal-btn {
+.modal-actions button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   min-width: 140px;
   height: 42px;
-  padding: 10px 20px;
+  padding: 0 20px;
   font-size: 1rem;
   font-weight: 500;
   border-radius: 6px;
+  border: 1px solid transparent;
   cursor: pointer;
 }
 
-.modal-actions button.primary,
-.close-modal-btn {
-  padding: 10px 20px;
+.modal-actions button.primary {
   background-color: #1f3c88;
-  border: 1px solid #1f3c88;
   color: #fff;
-  border-radius: 6px;
-  font-weight: 500;
-  cursor: pointer;
-  font-size: 1rem;
+  border-color: #1f3c88;
 }
 
-.modal-actions button.primary:hover,
-.close-modal-btn:hover {
+.modal-actions button.primary:hover {
   background-color: #0d47a1;
 }
 
 .modal-actions button.secondary {
-  padding: 10px 20px;
   background-color: #e9ecef;
-  border: 1px solid #e9ecef;
   color: #212529;
-  border-radius: 6px;
-  font-weight: 500;
-  cursor: pointer;
-  font-size: 1rem;
+  border-color: #e9ecef;
 }
 
 .modal-actions button.secondary:hover {
   background-color: #dee2e6;
 }
 
-
-
-.modal-box.alert h3 {
-  color: #dc3545;
-}
-
-
 .modal-actions button.danger {
   background-color: #dc3545;
   color: white;
+  border-color: #dc3545;
 }
 
 .modal-actions button.danger:hover {
   background-color: #a71d2a;
 }
 
-.modal-section p span,
-.modal-section p .badge-used,
-.modal-section p .badge-unused {
-  color: #212121;
-}
-
-.modal-section p strong {
-  color: #1f3c88;
-}
-
-.modal-section p {
-  color: #212121;
-}
-
-*:focus, *:focus-visible {
+*:focus,
+*:focus-visible {
   outline: none !important;
 }
 

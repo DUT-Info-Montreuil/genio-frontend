@@ -140,7 +140,7 @@
         <label>Remplacer le fichier (optionnel) :</label>
         <div class="upload-line">
           <input type="file" id="fichier" (change)="onFileSelected($event)" hidden />
-          <button type="button" class="btn btn-primary btn-sm" (click)="document.getElementById('fichier')?.click()">
+          <button type="button" class="btn btn-primary btn-sm " (click)="document.getElementById('fichier')?.click()">
             <i class="fas fa-upload"></i> Choisir un fichier
           </button>
           <span *ngIf="selectedFile" class="file-name">{{ selectedFile.name }}</span>
