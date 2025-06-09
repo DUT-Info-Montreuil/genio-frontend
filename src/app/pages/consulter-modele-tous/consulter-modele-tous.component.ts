@@ -58,7 +58,7 @@ export class ConsulterModeleTousComponent implements OnInit {
   handleTabKey(e: KeyboardEvent) {
     if (!this.showModal) return;
 
-    const focusable = Array.from(document.querySelectorAll('.modal-card button, .modal-card [tabindex]'))
+    const focusable = Array.from(document.querySelectorAll('.modal-box button, .modal-box [tabindex]'))
       .filter(el => (el as HTMLElement).offsetParent !== null) as HTMLElement[];
 
     const first = focusable[0];
@@ -107,9 +107,6 @@ export class ConsulterModeleTousComponent implements OnInit {
     }
   }
 
-  handleEscape = (e: KeyboardEvent) => {
-    if (e.key === 'Escape' && this.showModal) this.closeModal();
-  };
 
   setBreadcrumb() {
     this.breadcrumbItems = [
@@ -319,6 +316,13 @@ export class ConsulterModeleTousComponent implements OnInit {
       this.notifMessageVisible = false;
     }, 5000);
   }
+
+  handleEscape = (e: KeyboardEvent) => {
+    if (e.key === 'Escape') {
+      if (this.showModal) this.closeModal();
+      if (this.showInfoModal) this.closeInfoModal();
+    }
+  };
 
   getYears(): string[] {
     return [...new Set(this.modeles.map(m => m.annee))].filter(Boolean).sort();
