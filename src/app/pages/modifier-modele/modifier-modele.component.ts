@@ -80,6 +80,28 @@ export class ModifierModeleComponent implements OnInit {
     this.paginatedModeles = this.filteredModeles.slice(start, end);
   }
 
+  isSubmitButtonDisabled(): boolean {
+    if (this.isSubmitting) return true;
+
+    // Désactive si un message d’erreur global est affiché
+    if (this.error && this.error.trim() !== '') return true;
+
+    // Désactive si un fichier est sélectionné mais invalide
+    if (this.selectedFile) {
+      if (!this.isFileValid || this.isNotAModel) return true;
+    }
+
+    return false;
+  }
+
+  getDisabledReason(): string | null {
+    if (this.error && this.error.trim() !== '') return this.error;
+    if (!this.selectedFile) return null;
+    if (this.isNotAModel) return "Ce fichier n’est pas un modèle de convention valide.";
+    if (!this.isFileValid) return "Le fichier contient des erreurs de validation.";
+    return null;
+  }
+
   get visiblePages(): number[] {
     const pages: number[] = [];
     const total = this.totalPages;

@@ -141,9 +141,15 @@
 
       <div class="modal-actions">
         <button type="button" class="secondary" (click)="closeModal()">Annuler</button>
+
         <button type="submit"
-                class="primary"
-                [disabled]="isSubmitting || (selectedFile && (!isFileValid || isNotAModel))">
+                class="btn"
+                [ngClass]="{
+          'btn-primary': !isSubmitButtonDisabled(),
+          'disabled': isSubmitButtonDisabled()
+        }"
+                [disabled]="isSubmitButtonDisabled()"
+                [title]="getDisabledReason() || ''">
           Sauvegarder
         </button>
       </div>
