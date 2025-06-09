@@ -68,8 +68,7 @@ export class AjouterModeleComponent {
     }
 
     if (!this.titre || this.titre.trim() === '') {
-      this.error = "⚠️ Le titre du modèle est obligatoire.";
-      setTimeout(() => { this.error = ''; }, 5000);
+      this.showError("⚠️ Le titre du modèle est obligatoire.");
       return;
     }
 
@@ -90,10 +89,11 @@ export class AjouterModeleComponent {
       },
       error: (err) => {
         const msg = err.error?.error || "Erreur lors de l'ajout du modèle.";
-        this.error = msg;
-        if (msg.includes("déjà été ajouté")) {
-          this.error = "⚠️ Ce fichier a déjà été ajouté.";
-        }
+        this.showError(
+          msg.includes("déjà été ajouté")
+            ? "⚠️ Ce fichier a déjà été ajouté."
+            : msg
+        );
         this.message = '';
         this.isSubmitting = false;
         this.showExpectedVariables = false;
@@ -126,15 +126,9 @@ export class AjouterModeleComponent {
 
     if (!this.isAnneeValid) {
       if (!/^\d{4}$/.test(this.annee)) {
-        this.error = "⚠️ L’année doit contenir 4 chiffres (ex : 2025).";
-        setTimeout(() => {
-          this.error = '';
-        }, 5000);
+        this.showError("⚠️ L’année doit contenir 4 chiffres (ex : 2025).");
       } else {
-        this.error = `⚠️ L’année doit être comprise entre 2020 et ${this.currentYear + 5}.`;
-        setTimeout(() => {
-          this.error = '';
-        }, 5000);
+        this.showError(`⚠️ L’année doit être comprise entre 2020 et ${this.currentYear + 5}.`);
       }
       this.selectedFile = null;
       this.isFileValid = false;
@@ -144,7 +138,7 @@ export class AjouterModeleComponent {
     this.http.get<{ exists: boolean }>(`${environment.apiUrl}/conventionServices/check-annee-exists?annee=${this.annee}`)
       .subscribe(res => {
         if (res.exists) {
-          this.error = `⚠️ Un modèle "non archivé" existe déjà pour l’année ${this.annee}. Veuillez en choisir une autre ou archiver le modèle existant.`;
+          this.showError(`⚠️ Un modèle "non archivé" existe déjà pour l’année ${this.annee}. Veuillez en choisir une autre ou archiver le modèle existant.`);
           this.isAnneeValid = false;
           this.selectedFile = null;
           this.isFileValid = false;
@@ -179,7 +173,7 @@ export class AjouterModeleComponent {
   handleFileValidation(file: File): void {
     if (!file.name.endsWith('.docx')) {
       this.removeFile();
-      this.error = 'Le fichier doit être au format .docx.';
+      this.showError('Le fichier doit être au format .docx.');
       return;
     }
 
@@ -234,11 +228,8 @@ export class AjouterModeleComponent {
           } else {
             this.isFileValid = false;
             this.isNotAModel = true;
-            this.error = 'Le fichier ne semble pas être un modèle de convention.';
             this.showFileErrorModal = true;
-            setTimeout(() => {
-              this.error = '';
-            }, 5000);
+            this.showError('Le fichier ne semble pas être un modèle de convention.');
           }
         },
         error: (err) => {
@@ -246,7 +237,7 @@ export class AjouterModeleComponent {
           const rawMessage = err?.error || '';
           if (rawMessage.includes('Aucun contenu exploitable')) {
             this.isNotAModel = true;
-            this.error = rawMessage;
+            this.showError(rawMessage);
             this.isFileValid = false;
             this.showFileErrorModal = true;
             return;
@@ -279,7 +270,7 @@ export class AjouterModeleComponent {
 
                 } else {
                   this.isFileValid = false;
-                  this.error = "Format inattendu dans le retour.";
+                  this.showError("Format inattendu dans le retour.");
                 }
 
                 this.showFileErrorModal = true;
@@ -342,6 +333,14 @@ export class AjouterModeleComponent {
     this.showAnneeErrorModal = false;
     this.cdr.detectChanges();
   }
+
+  showError(msg: string): void {
+    this.error = msg;
+    setTimeout(() => {
+      this.error = '';
+    }, 5000);
+  }
+
 
 
   toggleShowAllVariables(): void {

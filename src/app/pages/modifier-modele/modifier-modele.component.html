@@ -87,12 +87,6 @@
 
 <div *ngIf="error" class="floating-error-alert" role="alert" aria-live="assertive">
   {{ error }}
-  <button (click)="error = ''"
-          class="close-btn"
-          title="Fermer l'alerte"
-          aria-label="Fermer l'alerte">
-    ✖
-  </button>
 </div>
 <div *ngIf="modeles.length === 0">
   <p>Aucun modèle trouvé.</p>
@@ -147,7 +141,9 @@
 
       <div class="modal-actions">
         <button type="button" class="secondary" (click)="closeModal()">Annuler</button>
-        <button type="submit" class="primary" [disabled]="isSubmitting || (selectedFile && !isFileValid)">
+        <button type="submit"
+                class="primary"
+                [disabled]="isSubmitting || (selectedFile && (!isFileValid || isNotAModel))">
           Sauvegarder
         </button>
       </div>

@@ -1,0 +1,102 @@
+<main class="about-container" aria-labelledby="page-title">
+  <div class="about-box">
+    <header class="about-header">
+      <i class="fas fa-user-shield" aria-hidden="true"></i>
+      <h1 id="page-title">Données personnelles & cookies</h1>
+    </header>
+    <app-breadcrumb
+      [items]="[
+        { label: 'Accueil', url: '/' },
+        { label: 'Données personnelles & cookies' }
+      ]"
+      aria-labelledby="page-title">
+    </app-breadcrumb>
+
+    <section class="about-section">
+      <h2><i class="fas fa-lock"></i> Engagement de GenioService</h2>
+      <p>
+        GenioService respecte le <strong>RGPD</strong> et la loi Informatique et Libertés.
+        Aucune donnée n’est collectée sans finalité claire ni consentement explicite.
+      </p>
+    </section>
+
+    <section class="about-section">
+      <h2><i class="fas fa-user"></i> Vos droits</h2>
+      <p>
+        Vous pouvez demander les informations vous concernant et en demander la suppression.
+        Vous disposez également d’un droit d’opposition (pour des raisons tenant à votre situation particulière)
+        et d’un droit à la limitation du traitement de vos données
+        (<a href="https://www.cnil.fr" target="_blank" rel="noopener">www.cnil.fr</a> pour plus d’informations).
+      </p>
+      <p>
+        Pour exercer ces droits ou pour toute question sur le traitement de vos données,
+        vous pouvez contacter notre déléguée à la protection des données (DPO), Mme Elsa HADJADJ :
+      </p>
+      <ul>
+        <li>
+          par courriel, accompagné d’une copie d’une pièce d’identité en cours de validité :<br />
+          <a href="mailto:elsa.simha.hadjadj@gmail.com">elsa.simha.hadjadj&#64;gmail.com</a>
+        </li>
+        <li>
+          par courrier postal, signé et accompagné d’une copie d’une pièce d’identité, à l’adresse suivante :<br />
+         <br>
+          <strong>GenioService</strong><br />
+          À l’attention de Mme Elsa HADJADJ, Déléguée à la Protection des Données (DPO)<br />
+          Département Informatique – IUT de Montreuil<br />
+          140 Rue de la Nouvelle France<br />
+          93100 Montreuil – France
+        </li>
+      </ul>
+      <p>
+        Si vous estimez, après nous avoir contactés, que vos droits "Informatique et Libertés" ne sont pas respectés,
+        vous pouvez adresser une réclamation à la CNIL : <a href="https://www.cnil.fr">www.cnil.fr</a>.
+      </p>
+    </section>
+
+    <section class="about-section">
+      <h2><i class="fas fa-database"></i> Données collectées via GenioService</h2>
+      <p>
+        Lors de votre utilisation de GenioService, nous collectons certaines données strictement nécessaires :
+      </p>
+      <ul>
+        <li><strong>Inscription :</strong> prénom, nom, email, mot de passe (crypté).</li>
+        <li><strong>Connexion :</strong> email + mot de passe.</li>
+        <li><strong>Réinitialisation :</strong> email pour l’envoi du lien sécurisé.</li>
+        <li><strong>Gestion (gestionnaire) :</strong> consultation, activation, rôles.</li>
+      </ul>
+      <p>
+        Aucune donnée n’est transmise à des tiers. Les mots de passe sont chiffrés et aucune info sensible n’est stockée en clair.
+      </p>
+    </section>
+
+    <section class="about-section">
+      <h2><i class="fas fa-cookie-bite"></i> Utilisation des cookies</h2>
+      <ul>
+        <li><strong>Essentiels :</strong> nécessaires au fonctionnement du site.</li>
+        <li><strong>Session :</strong> connexion sécurisée.</li>
+        <li><strong>Pas de traceurs publicitaires.</strong></li>
+      </ul>
+    </section>
+
+    <section class="about-section">
+      <h2><i class="fas fa-cogs"></i> Gérer vos préférences</h2>
+      <p>Vous pouvez désactiver les cookies dans votre navigateur :</p>
+      <ul>
+        <li><i class="fab fa-firefox-browser"></i> <a href="https://support.mozilla.org/fr/kb/activer-desactiver-cookies">Firefox</a></li>
+        <li><i class="fab fa-chrome"></i> <a href="https://support.google.com/chrome/answer/95647?hl=fr">Chrome</a></li>
+        <li><i class="fab fa-apple"></i> <a href="https://support.apple.com/fr-fr/HT201265">Safari</a></li>
+        <li><i class="fab fa-edge"></i> <a href="https://support.microsoft.com/fr-fr/help/17442/windows-internet-explorer-delete-manage-cookies">Edge</a></li>
+        <li><i class="fab fa-opera"></i> <a href="https://help.opera.com/en/latest/web-preferences/#cookies">Opera</a></li>
+      </ul>
+    </section>
+
+    <section class="about-section">
+      <h2><i class="fas fa-link"></i> Liens utiles</h2>
+      <ul>
+        <li><a href="https://www.cnil.fr/fr/cookies-et-autres-traceurs">Cookies et traceurs (CNIL)</a></li>
+        <li><a href="https://www.cnil.fr/fr/reglement-europeen-protection-donnees">Règlement RGPD</a></li>
+        <li><a href="https://www.cnil.fr/fr/les-droits-pour-maitriser-vos-donnees-personnelles">Vos droits</a></li>
+      </ul>
+    </section>
+  </div>
+</main>

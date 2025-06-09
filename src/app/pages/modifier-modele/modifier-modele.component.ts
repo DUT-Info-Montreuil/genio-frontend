@@ -172,6 +172,13 @@ export class ModifierModeleComponent implements OnInit {
   onUpdate(): void {
     if (!this.selectedModel) return;
 
+    if (this.selectedFile && (!this.isFileValid || this.isNotAModel)) {
+      this.error = "⚠️ Le fichier sélectionné est invalide. Veuillez le corriger avant de sauvegarder.";
+      this.isSubmitting = false;
+      setTimeout(() => this.error = '', 5000);
+      return;
+    }
+
     this.isSubmitting = true;
     this.message = '';
     this.error = '';
@@ -209,7 +216,8 @@ export class ModifierModeleComponent implements OnInit {
 
     if (this.selectedFile) {
       if (!this.isFileValid) {
-        this.error = "  Le fichier n’est pas un modèle valide.";
+        this.error = "Le fichier n’est pas un modèle valide.";
+        setTimeout(() => this.error = '', 5000);
         this.isSubmitting = false;
         return;
       }
@@ -360,6 +368,7 @@ export class ModifierModeleComponent implements OnInit {
           if (raw && typeof raw === 'string') {
             if (raw.includes("Aucun contenu exploitable")) {
               this.error = "Aucun contenu exploitable dans le document.";
+              setTimeout(() => this.error = '', 5000);
               this.showValidationModal = false; // ✅ pas de modale
             } else {
               this.error = `Erreur : ${raw}`;
