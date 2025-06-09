@@ -85,75 +85,104 @@
   <p>Aucun modèle disponible.</p>
 </div>
 
-<div class="global-alert-wrapper" aria-live="polite" role="status">
-  <div *ngIf="message || (error && !showFileErrorModal)" class="callout"
-       [ngClass]="{ 'callout-success': !!message, 'callout-error': !!error }">
-    <span *ngIf="message">{{ message }}</span>
-    <span *ngIf="error && !showFileErrorModal">{{ error }}</span>
-  </div>
+<div *ngIf="error" class="floating-error-alert" role="alert" aria-live="assertive">
+  {{ error }}
+  <button (click)="error = ''"
+          class="close-btn"
+          title="Fermer l'alerte"
+          aria-label="Fermer l'alerte">
+    ✖
+  </button>
 </div>
 <div *ngIf="modeles.length === 0">
   <p>Aucun modèle trouvé.</p>
 </div>
 
+
 <div *ngIf="showEditModal" class="modal-overlay" (click)="closeModal()" tabindex="-1">
-  <div class="modal-box" (click)="$event.stopPropagation()" role="dialog" aria-modal="true">
-    <h3 class="modal-title">
+  <div class="modal-box" (click)="$event.stopPropagation()" role="dialog" aria-modal="true" aria-labelledby="editModalTitle">
+    <h2 id="editModalTitle" class="modal-title">
       <i class="fas fa-edit" aria-hidden="true"></i>
-      Modification
-    </h3>
+      Modifier le modèle
+    </h2>
 
     <form (ngSubmit)="onUpdate()" enctype="multipart/form-data" class="modal-form">
-      <div class="form-group-double">
-        <div class="form-inline" role="group" aria-label="Nom du modèle">
-          <label><strong>Nom du modèle :</strong></label>
-          <span class="model-name-box" aria-readonly="true">modeleConvention_{{ selectedModel.annee }}</span>
-        </div>
-        <br>
-        <div class="col-right">
-          <label for="titre">Modification du titre :</label>
-          <div class="input-wrapper">
-            <i class="fas fa-pen icon-left"
-               (click)="enableEditTitre()"
-               title="Modifier le titre"
-               aria-label="Modifier le titre du modèle"></i>
-            <input type="text"
-                   id="titre"
-                   name="titre"
-                   [(ngModel)]="selectedModel.titre"
-                   [readonly]="!titreEditable"
-                   (dblclick)="enableEditTitre()" />
-          </div>
+      <div class="form-group form-row">
+        <label for="model-name" style="margin-bottom: 0;">Nom du modèle :</label>
+        <div id="model-name" class="model-name-box">
+          modeleConvention_{{ selectedModel.annee }}
         </div>
       </div>
-      <br>
 
       <div class="form-group">
-        <label for="desc">Description de la modification (optionnel) :</label>
-        <textarea id="desc"
-                  name="desc"
+        <label for="titre">Modification du titre :</label>
+        <div class="input-icon large-input">
+          <i class="fas fa-pen"></i>
+          <input id="titre" name="titre" type="text"
+                 [(ngModel)]="selectedModel.titre"
+                 [readonly]="!titreEditable"
+                 (dblclick)="enableEditTitre()" />
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="desc">Description de la modification (facultatif)</label>
+        <textarea id="desc" name="desc"
                   [(ngModel)]="descriptionModification"
                   placeholder="Ex : Correction du titre, ajout de variable..."></textarea>
       </div>
 
       <div class="form-group">
-        <label>Remplacer le fichier (optionnel) :</label>
+        <label>Remplacer le fichier .docx (facultatif)</label>
         <div class="upload-line">
-          <input type="file" id="fichier" (change)="onFileSelected($event)" hidden />
-          <button type="button" class="btn btn-primary btn-sm " (click)="document.getElementById('fichier')?.click()">
+          <button type="button" class="btn btn-primary" (click)="document.getElementById('fichier')?.click()">
             <i class="fas fa-upload"></i> Choisir un fichier
           </button>
-          <span *ngIf="selectedFile" class="file-name">{{ selectedFile.name }}</span>
+          <input id="fichier" type="file" (change)="onFileSelected($event)" hidden />
+          <span *ngIf="selectedFile" class="file-name" aria-live="polite">
+            {{ selectedFile.name }}
+          </span>
         </div>
       </div>
 
       <div class="modal-actions">
         <button type="button" class="secondary" (click)="closeModal()">Annuler</button>
-        <button type="submit" class="primary" [disabled]="isSubmitting">
-         Sauvegarder
+        <button type="submit" class="primary" [disabled]="isSubmitting || (selectedFile && !isFileValid)">
+          Sauvegarder
         </button>
       </div>
     </form>
+  </div>
+</div>
+<!-- ✅ MODALE SECONDAIRE (imbriquée) -->
+<div *ngIf="showValidationModal" class="modal-overlay validation-overlay" (click)="showValidationModal = false">
+  <div class="modal-box alert" (click)="$event.stopPropagation()" role="dialog" aria-modal="true">
+    <h3><i class="fas fa-exclamation-triangle" aria-hidden="true"></i> Erreur sur le fichier</h3>
+    <p>Des variables attendues sont absentes dans le fichier sélectionné :</p>
+
+    <div class="variable-grid-compact">
+      <div *ngFor="let variable of allVariablesStatus"
+           class="variable-cell"
+           [ngClass]="{
+             'visible-ko': !variable.ok,
+             'hidden-ok': variable.ok && !showAllVariables,
+             'visible-ok': variable.ok && showAllVariables
+           }">
+        {{ variable.name }}
+      </div>
+    </div>
+
+    <div class="voir-plus-btn" *ngIf="getValidVariablesCount() > 0">
+      <button (click)="toggleShowAllVariables()" type="button">
+        {{ showAllVariables ? 'Réduire' : 'Afficher aussi les variables valides' }}
+      </button>
+    </div>
+
+    <div class="modal-actions">
+      <button type="button" class="btn btn-primary" (click)="showValidationModal = false">
+        Fermer
+      </button>
+    </div>
   </div>
 </div>
 

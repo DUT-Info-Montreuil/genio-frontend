@@ -33,7 +33,8 @@ import {environment} from '../../../environments/environment';
   styleUrls: ['./modifier-modele.component.css', '../../../assets/styles/header.css','../../../assets/styles/modal-box.css','../../../assets/styles/auth-shared.css','../../../assets/styles/ tables-common.css']
 })
 export class ModifierModeleComponent implements OnInit {
-
+  showValidationModal = false; // pour afficher ou non la modale secondaire
+  showAllVariables = false;    // pour basculer entre variables manquantes et toutes
   isAnneeValid: boolean = false;
   annee: string = '';
   idModeleActuel: number = 0;
@@ -117,6 +118,10 @@ export class ModifierModeleComponent implements OnInit {
     return total;
   }
 
+  toggleShowAllVariables(): void {
+    this.showAllVariables = !this.showAllVariables;
+  }
+
   goToPage(page: number) {
     if (page >= 1 && page <= this.totalPages) {
       this.currentPage = page;
@@ -143,7 +148,7 @@ export class ModifierModeleComponent implements OnInit {
     const year = this.searchYear?.trim();
     const adv = this.normalize(this.advancedSearch);
 
-    const wordRegex = new RegExp(`\\b${text}`, 'i'); // mot commençant par `text`
+    const wordRegex = new RegExp(`\\b${text}`, 'i');
 
     this.filteredModeles = this.modeles.filter(m => {
       const titre = this.normalize(m.titre || '');
@@ -154,7 +159,7 @@ export class ModifierModeleComponent implements OnInit {
       const texteRechercheAvancee = `${annee} ${desc} ${statutTexte}`;
 
       return (
-        wordRegex.test(titre) && // mot commençant par `text`
+        wordRegex.test(titre) &&
         (!year || annee === year) &&
         (!adv || texteRechercheAvancee.includes(adv))
       );
@@ -172,7 +177,6 @@ export class ModifierModeleComponent implements OnInit {
     this.error = '';
 
     const now = new Date();
-    const nomOriginal = this.selectedModel.nom;
 
     const updateModel = () => {
       const updatePayload = {
@@ -188,7 +192,7 @@ export class ModifierModeleComponent implements OnInit {
         .subscribe({
           next: () => {
             this.selectedModel.dateDerniereModification = now;
-            this.message = 'Modèle mis à jour avec succès !';
+            this.message = '✅ Modèle mis à jour avec succès.';
             this.error = '';
             this.showEditModal = false;
             this.isSubmitting = false;
@@ -204,46 +208,54 @@ export class ModifierModeleComponent implements OnInit {
     };
 
     if (this.selectedFile) {
+      if (!this.isFileValid) {
+        this.error = "  Le fichier n’est pas un modèle valide.";
+        this.isSubmitting = false;
+        return;
+      }
+
       const formData = new FormData();
       formData.append('file', this.selectedFile);
 
       this.http.put(`${environment.apiUrl}/conventionServices/${this.idModeleActuel}/file`, formData)
         .subscribe({
           next: () => {
-            this.error = '';
             this.message = 'Fichier remplacé avec succès.';
-
-            if (this.nomFichierTentatif) {
-              this.nomFichierTentatif = null; // 🔁 On nettoie
-            }
-
+            this.error = '';
+            this.nomFichierTentatif = null;
             setTimeout(() => this.message = '', 5000);
-            updateModel(); // ✅ Mise à jour du reste uniquement après succès
+            updateModel();
           },
           error: (err) => {
-            this.error = err?.error?.error || "Erreur lors du remplacement du fichier.";
+            this.error = err?.error?.error || "Le fichier n’a pas été accepté par le backend.";
             this.message = '';
             this.selectedFile = null;
-            this.nomFichierTentatif = null; // 🚫 On ne touche pas au nom
+            this.nomFichierTentatif = null;
             this.isSubmitting = false;
-            setTimeout(() => this.error = '', 4000);
+            setTimeout(() => this.error = '', 5000);
           }
         });
     } else {
-      updateModel(); // 🔄 Si aucun fichier à remplacer, on met juste à jour les métadonnées
+      updateModel();
     }
   }
 
 
 
   selectModel(modele: any): void {
+    this.selectedFile = null;
+    this.nomFichierTentatif = null;
+    this.allVariablesStatus = [];
+    this.isFileValid = false;
+    this.isNotAModel = false;
+    this.showFileErrorModal = false;
+    this.error = '';
+    this.message = '';
+
     this.selectedModel = modele;
     this.idModeleActuel = modele.id;
     this.annee = modele.annee;
     this.descriptionModification = modele.descriptionModification || '';
-    this.error = '';
-    this.message = '';
-    this.selectedFile = null;
     this.isAnneeValid = true;
 
     if (!this.selectedModel.titre || this.selectedModel.titre.trim() === '') {
@@ -283,6 +295,7 @@ export class ModifierModeleComponent implements OnInit {
   }
 
 
+
   handleFileValidation(file: File): void {
     if (!file.name.endsWith('.docx')) {
       this.removeFile();
@@ -298,6 +311,7 @@ export class ModifierModeleComponent implements OnInit {
       .subscribe({
         next: (response: any) => {
           this.selectedFile = file;
+          this.nomFichierTentatif = file.name;
 
           if (typeof response === 'string' && response.includes("Variables détectées")) {
             const variablesDetectees = response
@@ -306,104 +320,81 @@ export class ModifierModeleComponent implements OnInit {
               .map(v => v.trim());
 
             const expected = this.getExpectedVariables();
-            const found = variablesDetectees;
-
             this.allVariablesStatus = expected.map(v => ({
               name: v,
-              ok: found.includes(v)
+              ok: variablesDetectees.includes(v)
             }));
-            this.cdr.detectChanges();
 
             const missing = this.allVariablesStatus.filter(v => !v.ok);
-            this.isFileValid = missing.length === 0;
-            this.isNotAModel = false;
-            this.error = this.isFileValid ? '' : `Le document est un modèle, mais il manque ${missing.length} variable(s).`;
-            this.showFileErrorModal = !this.isFileValid;
+            this.cdr.detectChanges();
+
             if (variablesDetectees.length === 0) {
               this.isFileValid = false;
               this.isNotAModel = true;
-              this.error = 'Ce fichier ne semble pas être un modèle de convention (aucun champ détecté).';
-              this.showFileErrorModal = true;
-              return;
-            }
-
-            if (missing.length > 0) {
+              this.error = 'Ce fichier ne semble pas être un modèle de convention (aucune variable détectée).';
+              this.showValidationModal = false; // ✅ pas de modale
+            } else if (missing.length > 0) {
               this.isFileValid = false;
-              this.error = `Le document est un modèle, mais il manque ${missing.length} variable(s) : ${missing.join(', ')}`;
-              this.showFileErrorModal = true;
+              this.isNotAModel = false;
+              this.error = `Le document est un modèle, mais il manque ${missing.length} variable(s).`;
+              this.showValidationModal = true; // ✅ modale secondaire
             } else {
               this.isFileValid = true;
+              this.isNotAModel = false;
               this.error = '';
+              this.showValidationModal = false;
             }
           } else {
             this.isFileValid = false;
             this.isNotAModel = true;
-            this.error = 'Le fichier ne semble pas être un modèle de convention.';
-            this.showFileErrorModal = true;
+            this.error = 'Le fichier n’est pas un modèle de convention reconnu.';
+            this.showValidationModal = false; // ✅ pas de modale
           }
         },
+
         error: (err) => {
-          this.selectedFile = file;
-          const rawMessage = err?.error || '';
-          if (rawMessage.includes('Aucun contenu exploitable')) {
-            this.isNotAModel = true;
-            this.error = rawMessage;
-            this.isFileValid = false;
-            this.showFileErrorModal = true;
-            return;
+          this.selectedFile = null;
+          this.isFileValid = false;
+
+          const raw = err?.error;
+          if (raw && typeof raw === 'string') {
+            if (raw.includes("Aucun contenu exploitable")) {
+              this.error = "Aucun contenu exploitable dans le document.";
+              this.showValidationModal = false; // ✅ pas de modale
+            } else {
+              this.error = `Erreur : ${raw}`;
+              this.showValidationModal = true;
+            }
+          } else {
+            this.error = 'Une erreur est survenue lors de la validation du fichier.';
+            this.showValidationModal = true;
           }
-          this.isNotAModel = false;
-
-          const formDataRetry = new FormData();
-          formDataRetry.append('file', file);
-
-          this.http.post(`${environment.apiUrl}/conventionServices/test-generation`, formDataRetry, { responseType: 'text' })
-            .subscribe({
-              next: (res: any) => {
-                if (typeof res === 'string' && res.includes('Variables détectées')) {
-                  const variablesDetectees = res
-                    .replace("Variables détectées :", "")
-                    .split(",")
-                    .map(v => v.trim());
-
-                  const missing = this.getExpectedVariables().filter(expected => !variablesDetectees.includes(expected));
-
-
-                  if (missing.length > 0) {
-                    this.isFileValid = false;
-                    this.error = `Le document est un modèle mais il n’est pas complet. Il manque ${missing.length} variable(s) : ${missing.join(', ')}.`;
-                    this.showFileErrorModal = true;
-                  } else {
-                    this.isFileValid = true;
-                    this.error = '';
-                  }
-
-                } else {
-                  this.isFileValid = false;
-                  this.error = "Format inattendu dans le retour.";
-                }
-
-                this.showFileErrorModal = true;
-              },
-              error: (err2) => {
-                this.error = err2?.error || "Erreur inconnue lors de la relecture.";
-                this.isFileValid = false;
-                this.showFileErrorModal = true;
-              }
-            });
         }
       });
+  }
+
+  getMissingVariablesCount(): number {
+    return this.allVariablesStatus.filter(variable => !variable.ok).length;
+  }
+
+  getValidVariablesCount(): number {
+    return this.allVariablesStatus.filter(variable => variable.ok).length;
   }
 
 
   onFileSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
+
     if (input.files && input.files.length > 0) {
       const file = input.files[0];
-      this.nomFichierTentatif = file.name;  // ✅ temporaire seulement
-      this.handleFileValidation(file);
+      this.selectedFile = file;
+      this.nomFichierTentatif = file.name;
+
+      this.handleFileValidation(file); // ✔ Appelle la vraie fonction qui fait l’analyse
     }
   }
+
+
 
 
   ngOnInit(): void {
@@ -430,6 +421,10 @@ export class ModifierModeleComponent implements OnInit {
     });
   }
 
+  hasMissingVariables(): boolean {
+    return this.allVariablesStatus.some(v => !v.ok);
+  }
+
 
   enableEditTitre() {
     this.titreEditable = true;
@@ -440,4 +435,5 @@ export class ModifierModeleComponent implements OnInit {
   }
 
 
+  protected readonly length = length;
 }
