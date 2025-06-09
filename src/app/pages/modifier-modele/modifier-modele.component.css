@@ -225,7 +225,7 @@ th.action-col, td.action-col {
   left: 10px;
   top: 50%;
   transform: translateY(-50%);
-  color: #6c757d; /* gris élégant */
+  color: #6c757d;
 }
 
 .input-icon.large-input input {
@@ -262,7 +262,7 @@ th.action-col, td.action-col {
   padding: 4px 10px;
   font-size: 0.85rem;
   font-weight: 500;
-  position: static; /* 🔑 important ici */
+  position: static;
 }
 
 .badge-list {
@@ -415,7 +415,7 @@ th.action-col, td.action-col {
 .form-row {
   display: flex;
   align-items: center;
-  gap: 12px; /* 👈 espace horizontal entre le label et la valeur */
+  gap: 12px;
   margin-bottom: 1.5rem;
 }
 
@@ -423,7 +423,7 @@ th.action-col, td.action-col {
   font-weight: 600;
   color: #0d47a1;
   white-space: nowrap;
-  min-width: 160px; /* ou ajuste selon ta préférence */
+  min-width: 160px;
 }
 
 .model-name-box {
@@ -446,7 +446,7 @@ th.action-col, td.action-col {
   border-radius: 6px;
   background: #fff;
   color: #212529;
-  width: 280px; /* fixe et égale pour tous */
+  width: 280px;
   box-sizing: border-box;
 }
 
@@ -464,7 +464,7 @@ th.action-col, td.action-col {
   font-weight: 500;
   border-radius: 8px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-  z-index: 2001; /* au-dessus de la modale */
+  z-index: 2001;
   text-align: center;
   max-width: 90%;
   display: flex;
@@ -482,13 +482,11 @@ th.action-col, td.action-col {
   cursor: pointer;
 }
 
-/* Amélioration WCAG : focus visible partout */
 *:focus-visible {
   outline: 3px solid #1f3c88;
   outline-offset: 2px;
 }
 
-/* Bouton secondaire : style accessible */
 .modal-actions .secondary {
   background-color: #f0f0f0;
   color: #333;
@@ -499,25 +497,20 @@ th.action-col, td.action-col {
   background-color: #e0e0e0;
 }
 
-/* Style focus sur les boutons */
 button:focus-visible {
   outline: 3px solid #0d47a1;
   outline-offset: 2px;
 }
 
-/* Texte suffisamment grand */
 body, input, button, select, textarea {
   font-size: 1rem;
 }
 
-
-/* Bouton Réduire / Voir + */
 .voir-plus-btn {
   text-align: center;
   margin-bottom: 1rem;
 }
 
-/* Boutons bas de modale */
 .modal-actions {
   display: flex;
   justify-content: center;
@@ -542,7 +535,7 @@ body, input, button, select, textarea {
 .modal-actions .btn.btn-primary:hover {
   background-color: #0d47a1;
 }
-/* Modale secondaire : centrage propre */
+
 .modal-box.alert {
   padding: 2rem;
   max-width: 700px;
@@ -550,17 +543,14 @@ body, input, button, select, textarea {
   text-align: center;
 }
 
-/* Grille des variables : plus stable */
 .variable-grid-compact {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); /* largeur minimum lisible */
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
   gap: 12px 16px;
   justify-content: center;
   margin: 1.5rem auto;
 }
 
-
-/* Style commun aux badges */
 .variable-cell {
   font-family: monospace;
   padding: 8px 12px;
@@ -573,14 +563,12 @@ body, input, button, select, textarea {
   transition: 0.2s ease-in-out;
 }
 
-/* Badges ok */
 .variable-cell.visible-ok {
   background-color: #e8f5e9;
   color: #2e7d32;
   border-color: #c8e6c9;
 }
 
-/* Badges ko */
 .variable-cell.visible-ko {
   background-color: #fdecea;
   color: #c62828;

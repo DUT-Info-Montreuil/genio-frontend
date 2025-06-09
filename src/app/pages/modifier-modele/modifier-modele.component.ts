@@ -249,7 +249,6 @@ export class ModifierModeleComponent implements OnInit {
   }
 
 
-
   selectModel(modele: any): void {
     this.selectedFile = null;
     this.nomFichierTentatif = null;
@@ -386,9 +385,6 @@ export class ModifierModeleComponent implements OnInit {
       });
   }
 
-  getMissingVariablesCount(): number {
-    return this.allVariablesStatus.filter(variable => !variable.ok).length;
-  }
 
   getValidVariablesCount(): number {
     return this.allVariablesStatus.filter(variable => variable.ok).length;
@@ -443,11 +439,6 @@ export class ModifierModeleComponent implements OnInit {
 
     });
   }
-
-  hasMissingVariables(): boolean {
-    return this.allVariablesStatus.some(v => !v.ok);
-  }
-
 
   enableEditTitre() {
     this.titreEditable = true;
