@@ -141,10 +141,10 @@ export class AjouterModeleComponent {
       return;
     }
 
-    this.http.get<{ exists: boolean }>(`${environment.apiUrl}/conventionServices/check-nom-exists?annee=${this.annee}`)
+    this.http.get<{ exists: boolean }>(`${environment.apiUrl}/conventionServices/check-annee-exists?annee=${this.annee}`)
       .subscribe(res => {
         if (res.exists) {
-          this.error = `⚠️ Un modèle existe déjà pour l’année ${this.annee}.`;
+          this.error = `⚠️ Un modèle "non archivé" existe déjà pour l’année ${this.annee}. Veuillez en choisir une autre ou archiver le modèle existant.`;
           this.isAnneeValid = false;
           this.selectedFile = null;
           this.isFileValid = false;
