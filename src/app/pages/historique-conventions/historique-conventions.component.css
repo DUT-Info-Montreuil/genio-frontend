@@ -58,15 +58,7 @@ main, .auth-page, .page-contents {
   transform: translateY(-50%);
   color: #6c757d;
 }
-.input-icon input {
-  padding: 10px 12px 10px 40px;
-  border: 1px solid #ced4da;
-  border-radius: 6px;
-  font-size: 1.2rem;
-  width: 300px;
-  color: #212529;
 
-}
 
 .info-btn {
   background: none;
@@ -180,3 +172,40 @@ main, .auth-page, .page-contents {
     justify-content: flex-start;
   }
 }
+
+.input-icon input {
+  padding: 10px 12px 10px 40px;
+  font-size: 1.1rem;
+  border: 1px solid #ced4da;
+  border-radius: 6px;
+  background: #fff;
+  color: #212529;
+  width: 250px;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* Hover */
+.input-icon input:hover {
+  border-color: #5b85c2;
+}
+
+/* Focus visible — UX & WCAG */
+.input-icon input:focus,
+.input-icon input:focus-visible {
+  border-color: #0d47a1;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(13, 71, 161, 0.25);
+}
+
+/* Dark mode ou contraste élevé (facultatif) */
+@media (prefers-contrast: more) {
+  .input-icon input:focus {
+    box-shadow: 0 0 0 3px #000;
+  }
+}
+
+/* Responsive input large */
+.input-icon.large-input input {
+  width: 320px;
+}
+

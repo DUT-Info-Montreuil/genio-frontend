@@ -59,7 +59,7 @@ export class ConnexionComponent {
 
             setTimeout(() => {
               this.router.navigate(['/consulter-modeles']);
-            }, 5000);
+            }, 2000);
           },
           error: () => {
             this.loginError = "Impossible de récupérer les informations utilisateur.";
@@ -77,7 +77,7 @@ export class ConnexionComponent {
         }
 
         this.isSubmitting = false;
-        setTimeout(() => this.loginError = '', 5000);
+        setTimeout(() => this.loginError = '', 4000);
       }
     });
   }

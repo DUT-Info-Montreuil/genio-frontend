@@ -81,6 +81,31 @@
   margin-bottom: 20px;
 }
 
+.input-icon input:hover,
+.input-icon select:hover {
+  border-color: #5b85c2;
+}
+
+.input-icon input:focus,
+.input-icon input:focus-visible,
+.input-icon select:focus,
+.input-icon select:focus-visible {
+  border-color: #0d47a1;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(13, 71, 161, 0.25);
+}
+
+@media (prefers-contrast: more) {
+  .input-icon input:focus,
+  .input-icon select:focus {
+    box-shadow: 0 0 0 3px #000;
+  }
+}
+
+.input-icon.large-input input {
+  width: 320px;
+}
+
 @media (max-width: 480px) {
   .password-rules-badges {
     flex-wrap: wrap;

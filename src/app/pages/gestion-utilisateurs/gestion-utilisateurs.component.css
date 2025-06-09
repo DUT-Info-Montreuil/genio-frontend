@@ -1,3 +1,8 @@
+/* ================================
+   🎨 GENIOSERVICE ACCESSIBLE UI CSS
+   Amélioré avec focus visible, contrastes WCAG, responsive filters, modales accessibles
+   ================================= */
+
 main, .auth-page, .page-contents {
   padding-top: 70px;
 }
@@ -10,7 +15,6 @@ main, .auth-page, .page-contents {
   box-sizing: border-box;
   font-size: 1.2rem;
 }
-
 
 .filters-zone-wrapper {
   display: flex;
@@ -57,6 +61,7 @@ main, .auth-page, .page-contents {
   color: #212529;
   background-color: #fff;
   box-sizing: border-box;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .input-icon select {
@@ -68,7 +73,30 @@ main, .auth-page, .page-contents {
   background-size: 14px;
 }
 
+.input-icon input:hover,
+.input-icon select:hover {
+  border-color: #5b85c2;
+}
 
+.input-icon input:focus,
+.input-icon input:focus-visible,
+.input-icon select:focus,
+.input-icon select:focus-visible {
+  border-color: #0d47a1;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(13, 71, 161, 0.25);
+}
+
+@media (prefers-contrast: more) {
+  .input-icon input:focus,
+  .input-icon select:focus {
+    box-shadow: 0 0 0 3px #000;
+  }
+}
+
+.input-icon.large-input input {
+  width: 320px;
+}
 
 .reset-icon {
   display: flex;
@@ -93,11 +121,6 @@ main, .auth-page, .page-contents {
   background-color: #0d47a1;
 }
 
-
-
-
-
-
 .status-success {
   background: #e0f7e9;
   color: #2e7d32;
@@ -109,8 +132,6 @@ main, .auth-page, .page-contents {
   color: #c62828;
   font-weight: bold;
 }
-
-
 
 .modal-field {
   display: flex;
@@ -139,8 +160,6 @@ main, .auth-page, .page-contents {
   box-sizing: border-box;
 }
 
-
-
 .modal-field select {
   width: 60%;
   height: 48px;
@@ -164,8 +183,6 @@ main, .auth-page, .page-contents {
   white-space: nowrap;
   text-overflow: ellipsis;
 }
-
-
 
 .modal-field.checkbox-field {
   align-items: center;
@@ -221,7 +238,6 @@ main, .auth-page, .page-contents {
   transform: translateX(16px);
 }
 
-
 .sr-only {
   position: absolute;
   width: 1px;
@@ -251,7 +267,6 @@ main, .auth-page, .page-contents {
   outline-offset: 2px;
   border-radius: 6px;
 }
-
 
 @media (max-width: 768px) {
   .filters-zone {
