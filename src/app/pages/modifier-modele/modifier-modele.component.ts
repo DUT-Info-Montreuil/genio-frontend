@@ -175,7 +175,7 @@ export class ModifierModeleComponent implements OnInit {
     if (this.selectedFile && (!this.isFileValid || this.isNotAModel)) {
       this.error = "⚠️ Le fichier sélectionné est invalide. Veuillez le corriger avant de sauvegarder.";
       this.isSubmitting = false;
-      setTimeout(() => this.error = '', 5000);
+      this.clearErrorAfterDelay();
       return;
     }
 
@@ -203,13 +203,13 @@ export class ModifierModeleComponent implements OnInit {
             this.error = '';
             this.showEditModal = false;
             this.isSubmitting = false;
-            setTimeout(() => this.message = '', 5000);
+            this.clearMessageAfterDelay();
           },
           error: (err) => {
             this.error = err?.error?.error || 'Erreur lors de la mise à jour.';
             this.message = '';
             this.isSubmitting = false;
-            setTimeout(() => this.error = '', 4000);
+            this.clearErrorAfterDelay();
           }
         });
     };
@@ -217,8 +217,8 @@ export class ModifierModeleComponent implements OnInit {
     if (this.selectedFile) {
       if (!this.isFileValid) {
         this.error = "Le fichier n’est pas un modèle valide.";
-        setTimeout(() => this.error = '', 5000);
         this.isSubmitting = false;
+        this.clearErrorAfterDelay();
         return;
       }
 
@@ -231,7 +231,7 @@ export class ModifierModeleComponent implements OnInit {
             this.message = 'Fichier remplacé avec succès.';
             this.error = '';
             this.nomFichierTentatif = null;
-            setTimeout(() => this.message = '', 5000);
+            this.clearMessageAfterDelay();
             updateModel();
           },
           error: (err) => {
@@ -240,7 +240,7 @@ export class ModifierModeleComponent implements OnInit {
             this.selectedFile = null;
             this.nomFichierTentatif = null;
             this.isSubmitting = false;
-            setTimeout(() => this.error = '', 5000);
+            this.clearErrorAfterDelay();
           }
         });
     } else {
@@ -340,12 +340,14 @@ export class ModifierModeleComponent implements OnInit {
               this.isFileValid = false;
               this.isNotAModel = true;
               this.error = 'Ce fichier ne semble pas être un modèle de convention (aucune variable détectée).';
-              this.showValidationModal = false; // ✅ pas de modale
+              this.showValidationModal = false;
+              this.clearErrorAfterDelay();
             } else if (missing.length > 0) {
               this.isFileValid = false;
               this.isNotAModel = false;
               this.error = `Le document est un modèle, mais il manque ${missing.length} variable(s).`;
-              this.showValidationModal = true; // ✅ modale secondaire
+              this.showValidationModal = true;
+              this.clearErrorAfterDelay();
             } else {
               this.isFileValid = true;
               this.isNotAModel = false;
@@ -356,7 +358,8 @@ export class ModifierModeleComponent implements OnInit {
             this.isFileValid = false;
             this.isNotAModel = true;
             this.error = 'Le fichier n’est pas un modèle de convention reconnu.';
-            this.showValidationModal = false; // ✅ pas de modale
+            this.showValidationModal = false;
+            this.clearErrorAfterDelay();
           }
         },
 
@@ -368,7 +371,7 @@ export class ModifierModeleComponent implements OnInit {
           if (raw && typeof raw === 'string') {
             if (raw.includes("Aucun contenu exploitable")) {
               this.error = "Aucun contenu exploitable dans le document.";
-              setTimeout(() => this.error = '', 5000);
+              this.clearErrorAfterDelay();
               this.showValidationModal = false; // ✅ pas de modale
             } else {
               this.error = `Erreur : ${raw}`;
@@ -377,6 +380,7 @@ export class ModifierModeleComponent implements OnInit {
           } else {
             this.error = 'Une erreur est survenue lors de la validation du fichier.';
             this.showValidationModal = true;
+            this.clearErrorAfterDelay();
           }
         }
       });
@@ -403,7 +407,19 @@ export class ModifierModeleComponent implements OnInit {
     }
   }
 
+  clearErrorAfterDelay(ms: number = 5000): void {
+    setTimeout(() => {
+      this.error = '';
+      this.cdr.detectChanges(); // ✅ Forcer le rafraîchissement Angular
+    }, ms);
+  }
 
+  clearMessageAfterDelay(ms: number = 5000): void {
+    setTimeout(() => {
+      this.message = '';
+      this.cdr.detectChanges(); // ✅ Pour les messages de succès
+    }, ms);
+  }
 
 
   ngOnInit(): void {
@@ -422,9 +438,7 @@ export class ModifierModeleComponent implements OnInit {
       },
       error: () => {
         this.error = "Erreur lors du chargement des modèles.";
-        setTimeout(() => {
-          this.error = '';
-        }, 5000);
+        this.clearErrorAfterDelay();
       }
 
     });
