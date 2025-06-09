@@ -91,8 +91,8 @@ export class ResetPasswordComponent {
       next: () => {
         this.message = 'Mot de passe réinitialisé avec succès ! Redirection...';
         this.isSubmitting = false;
-        setTimeout(() => this.router.navigate(['/connexion']), 2000);
-        setTimeout(() => this.message = '', 2000);
+        setTimeout(() => this.router.navigate(['/connexion']), 5000);
+        setTimeout(() => this.message = '', 5000);
       },
       error: (err) => {
         this.error = err.error?.message || 'Erreur lors de la réinitialisation.';

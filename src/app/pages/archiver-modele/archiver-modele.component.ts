@@ -355,13 +355,13 @@ export class ArchiverModeleComponent {
           this.modeles = this.modeles.filter(m => m.id !== this.selectedModel.id);
           this.applyFilters();
 
-          setTimeout(() => this.message = '', 3000);
+          setTimeout(() => this.message = '', 5000);
         },
         error: (err) => {
           const msg = err?.error?.error || 'Une erreur est survenue lors de la suppression.';
           this.error = msg;
           this.message = '';
-          setTimeout(() => this.error = '', 3000);
+          setTimeout(() => this.error = '', 5000);
         }
       });
   }
@@ -375,9 +375,9 @@ export class ArchiverModeleComponent {
           this.showDeleteModal = false;
           setTimeout(() => {
             this.error = '';
-          }, 2000);
+          }, 5000);
         } else {
-          this.deleteModel(); // autorisé uniquement si non utilisé
+          this.deleteModel();
         }
       },
       error: () => {
@@ -385,7 +385,7 @@ export class ArchiverModeleComponent {
         this.message = '';
         setTimeout(() => {
           this.error = '';
-        }, 2000);
+        }, 5000);
       }
     });
   }

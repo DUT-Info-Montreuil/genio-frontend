@@ -58,7 +58,7 @@ export class MotDePasseOublieComponent {
 
         setTimeout(() => {
           this.resetSuccess = '';
-        }, 2000);
+        }, 5000);
       },
       error: (err) => {
         this.resetError = err.error?.message || 'Erreur lors de la demande.';

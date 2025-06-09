@@ -192,7 +192,7 @@ export class ModifierModeleComponent implements OnInit {
             this.error = '';
             this.showEditModal = false;
             this.isSubmitting = false;
-            setTimeout(() => this.message = '', 2000);
+            setTimeout(() => this.message = '', 5000);
           },
           error: (err) => {
             this.error = err?.error?.error || 'Erreur lors de la mise à jour.';
@@ -217,7 +217,7 @@ export class ModifierModeleComponent implements OnInit {
               this.nomFichierTentatif = null; // 🔁 On nettoie
             }
 
-            setTimeout(() => this.message = '', 2000);
+            setTimeout(() => this.message = '', 5000);
             updateModel(); // ✅ Mise à jour du reste uniquement après succès
           },
           error: (err) => {
@@ -424,7 +424,7 @@ export class ModifierModeleComponent implements OnInit {
         this.error = "Erreur lors du chargement des modèles.";
         setTimeout(() => {
           this.error = '';
-        }, 2000);
+        }, 5000);
       }
 
     });

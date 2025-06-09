@@ -102,25 +102,25 @@ export class InscriptionComponent {
 
     if (!this.prenom || !this.nom || !this.email || !this.password || !this.confirmPassword) {
       this.error = 'Veuillez remplir tous les champs obligatoires.';
-      setTimeout(() => this.error = '', 3000);
+      setTimeout(() => this.error = '', 5000);
       return;
     }
 
     if (this.password !== this.confirmPassword) {
       this.error = 'Les mots de passe ne correspondent pas.';
-      setTimeout(() => this.error = '', 3000);
+      setTimeout(() => this.error = '', 5000);
       return;
     }
 
     if (this.hasInvalidPasswordRule()) {
       this.error = 'Le mot de passe ne respecte pas les règles de sécurité.';
-      setTimeout(() => this.error = '', 3000);
+      setTimeout(() => this.error = '', 5000);
       return;
     }
 
     if (!this.consentement) {
       this.error = 'Vous devez accepter les conditions pour vous inscrire.';
-      setTimeout(() => this.error = '', 3000);
+      setTimeout(() => this.error = '', 5000);
       return;
     }
 
@@ -145,13 +145,13 @@ export class InscriptionComponent {
     }).subscribe({
       next: () => {
         this.message = 'Inscription réussie ! Redirection...';
-        setTimeout(() => this.router.navigate(['/connexion']), 2000);
-        setTimeout(() => this.message = '', 2000);
+        setTimeout(() => this.router.navigate(['/connexion']), 5000);
+        setTimeout(() => this.message = '', 5000);
       },
       error: (err) => {
         this.error = err.error?.error || 'Erreur lors de l\'inscription.';
         this.isSubmitting = false;
-        setTimeout(() => this.error = '', 3000);
+        setTimeout(() => this.error = '', 5000);
       }
     });
   }

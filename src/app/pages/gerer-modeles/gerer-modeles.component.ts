@@ -118,7 +118,7 @@ export class GererModelesComponent implements OnInit {
     this.notifMessageVisible = true;
     setTimeout(() => {
       this.notifMessageVisible = false;
-    }, 2000);
+    }, 5000);
   }
 
   openInfoModal() {

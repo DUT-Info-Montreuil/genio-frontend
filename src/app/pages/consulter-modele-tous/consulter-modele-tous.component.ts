@@ -317,7 +317,7 @@ export class ConsulterModeleTousComponent implements OnInit {
     this.notifMessageVisible = true;
     setTimeout(() => {
       this.notifMessageVisible = false;
-    }, 2000);
+    }, 5000);
   }
 
   getYears(): string[] {

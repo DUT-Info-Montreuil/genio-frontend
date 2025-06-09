@@ -93,7 +93,7 @@ export class HistoriqueConventionsComponent implements OnInit {
     this.notifMessageVisible = true;
     setTimeout(() => {
       this.notifMessageVisible = false;
-    }, 2000);
+    }, 5000);
   }
 
   applyFilters(): void {
