@@ -1,6 +1,7 @@
 main, .auth-page, .page-contents {
   padding-top: 115px;
 }
+
 .main-content h1 {
   text-align: center;
   color: #1f3c88;
@@ -9,6 +10,7 @@ main, .auth-page, .page-contents {
   line-height: 1.4;
   margin: 2rem 0 3rem;
 }
+
 .cards-container {
   display: flex;
   flex-wrap: wrap;
@@ -62,9 +64,8 @@ main, .auth-page, .page-contents {
 .card:hover,
 .card:focus-within {
   transform: scale(1.02);
-  box-shadow: 0 8px 20px rgba(13, 71, 161, 0.2);
-  outline: 3px solid #90caf9;
-  outline-offset: -3px;
+  box-shadow: 0 0 0 3px rgba(13, 71, 161, 0.35), 0 5px 10px rgba(13, 71, 161, 0.2);
+  outline: none;
 }
 
 .card:hover img,

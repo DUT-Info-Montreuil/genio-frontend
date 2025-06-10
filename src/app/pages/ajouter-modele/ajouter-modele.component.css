@@ -337,10 +337,6 @@ input[type="file"]::-webkit-file-upload-button:focus {
   width: 100%;
 }
 
-.input-wrapper:focus-within {
-  border-color: #0d47a1;
-  background-color: #fff;
-}
 
 .input-wrapper input {
   flex: 1;
@@ -562,6 +558,17 @@ input[type="file"]::-webkit-file-upload-button:focus {
   outline: none;
   box-shadow: 0 0 0 3px rgba(13, 71, 161, 0.25);
 }
+
+.input-wrapper:focus-within {
+  border-color: #0d47a1;
+  background-color: #fff;
+  box-shadow:
+    0 0 0 3px rgba(13, 71, 161, 0.35),
+    0 5px 10px rgba(13, 71, 161, 0.2);
+  transition: box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+
 
 @media (prefers-contrast: more) {
   .input-icon input:focus,

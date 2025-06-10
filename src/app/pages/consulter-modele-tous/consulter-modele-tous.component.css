@@ -93,12 +93,14 @@ main, .auth-page, .page-contents {
   border-color: #5b85c2;
 }
 
-/* Focus visible — UX & WCAG */
 .input-icon input:focus,
 .input-icon input:focus-visible {
   border-color: #0d47a1;
   outline: none;
-  box-shadow: 0 0 0 3px rgba(13, 71, 161, 0.25);
+  box-shadow:
+    0 0 0 3px rgba(13, 71, 161, 0.35),
+    0 5px 10px rgba(13, 71, 161, 0.2);
+  background-color: #fff;
 }
 
 /* Dark mode ou contraste élevé (facultatif) */
@@ -262,9 +264,18 @@ main, .auth-page, .page-contents {
 }
 
 *:focus-visible {
-  outline: 2px solid #1f3c88;
-  outline-offset: 3px;
-  border-radius: 4px;
+  outline: none;
+  border-radius: 6px;
+  box-shadow:
+    0 0 0 3px rgba(13, 71, 161, 0.35),
+    0 5px 10px rgba(13, 71, 161, 0.2);
 }
 
 
+button,
+input,
+select,
+textarea,
+a {
+  transition: box-shadow 0.2s ease, border-color 0.2s ease, background-color 0.2s ease;
+}

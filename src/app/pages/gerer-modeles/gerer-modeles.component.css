@@ -73,3 +73,13 @@ h3.section-title {
 .action-buttons .btn {
   transition: background-color 0.3s ease;
 }
+
+.btn:focus-visible,
+.info-btn:focus-visible {
+  outline: none;
+  box-shadow:
+    0 0 0 3px rgba(13, 71, 161, 0.35),
+    0 5px 10px rgba(13, 71, 161, 0.2);
+  border-radius: 6px;
+  background-color: rgba(13, 71, 161, 0.05);
+}

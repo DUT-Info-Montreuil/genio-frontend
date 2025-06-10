@@ -305,7 +305,10 @@ th.action-col, td.action-col {
 .input-icon select:focus-visible {
   border-color: #0d47a1;
   outline: none;
-  box-shadow: 0 0 0 3px rgba(13, 71, 161, 0.25);
+  background-color: #fff;
+  box-shadow:
+    0 0 0 3px rgba(13, 71, 161, 0.35),
+    0 5px 10px rgba(13, 71, 161, 0.2);
 }
 
 @media (prefers-contrast: more) {
@@ -317,4 +320,22 @@ th.action-col, td.action-col {
 
 .input-icon.large-input input {
   width: 320px;
+}
+
+button:focus-visible,
+.reset-btn:focus-visible,
+.btn.btn-primary:focus-visible,
+.btn-danger:focus-visible {
+  outline: none;
+  box-shadow:
+    0 0 0 3px rgba(13, 71, 161, 0.35),
+    0 5px 10px rgba(13, 71, 161, 0.2);
+  border-radius: 6px;
+}
+
+input,
+select,
+button,
+textarea {
+  transition: box-shadow 0.2s ease, border-color 0.2s ease, background-color 0.2s ease;
 }
