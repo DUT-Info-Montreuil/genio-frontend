@@ -88,6 +88,9 @@
 <div *ngIf="error" class="floating-error-alert" role="alert" aria-live="assertive">
   {{ error }}
 </div>
+<div *ngIf="message" class="floating-success-alert" role="status" aria-live="polite">
+  {{ message }}
+</div>
 <div *ngIf="modeles.length === 0">
   <p>Aucun modèle trouvé.</p>
 </div>
@@ -156,7 +159,7 @@
     </form>
   </div>
 </div>
-<!-- ✅ MODALE SECONDAIRE (imbriquée) -->
+
 <div *ngIf="showValidationModal" class="modal-overlay validation-overlay" (click)="showValidationModal = false">
   <div class="modal-box alert" (click)="$event.stopPropagation()" role="dialog" aria-modal="true">
     <h3><i class="fas fa-exclamation-triangle" aria-hidden="true"></i> Erreur sur le fichier</h3>

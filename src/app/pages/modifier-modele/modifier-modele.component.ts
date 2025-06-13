@@ -221,7 +221,7 @@ export class ModifierModeleComponent implements OnInit {
         .subscribe({
           next: () => {
             this.selectedModel.dateDerniereModification = now;
-            this.message = '✅ Modèle mis à jour avec succès.';
+            this.message = 'Modèle mis à jour avec succès.';
             this.error = '';
             this.showEditModal = false;
             this.isSubmitting = false;
