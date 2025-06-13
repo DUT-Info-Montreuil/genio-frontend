@@ -252,15 +252,15 @@ input[type="file"]::-webkit-file-upload-button:focus {
 }
 
 .callout-success {
-  background-color: #e8f5e9;
-  color: #2e7d32;
-  border-color: #c8e6c9;
+  background-color: #e6f4ea;
+  color: #256029;
+  border: 1px solid #c8e6c9;
 }
 
 .callout-error {
   background-color: #fdecea;
   color: #d32f2f;
-  border-color: #f5c6cb;
+  border: 1px solid #f5c6cb;
 }
 
 @keyframes fadeInUp {
